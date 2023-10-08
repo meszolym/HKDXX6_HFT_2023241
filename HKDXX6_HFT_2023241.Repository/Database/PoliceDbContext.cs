@@ -13,7 +13,7 @@ namespace HKDXX6_HFT_2023241.Repository
 
         public PoliceDbContext()
         {
-            this.Database.EnsureCreated();
+            Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder builder)

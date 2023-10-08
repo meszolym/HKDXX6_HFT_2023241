@@ -44,5 +44,13 @@ namespace HKDXX6_HFT_2023241.Models
 
             }
         }
+
+        public Precinct() { }
+        public Precinct(uint iD, uint cOBadgeNo, string address)
+        {
+            ID = iD;
+            COBadgeNo = cOBadgeNo;
+            Address = address;
+        }
     }
 }

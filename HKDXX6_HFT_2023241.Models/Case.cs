@@ -10,6 +10,8 @@ namespace HKDXX6_HFT_2023241.Models
 {
     public class Case
     {
+        
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public uint ID { get; set; }
@@ -20,5 +22,14 @@ namespace HKDXX6_HFT_2023241.Models
 
         [Required]
         public string Description { get; set; }
+
+        public Case() { }
+
+        public Case(uint iD, string name, string description)
+        {
+            ID = iD;
+            Name = name;
+            Description = description;
+        }
     }
 }

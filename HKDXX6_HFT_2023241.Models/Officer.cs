@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace HKDXX6_HFT_2023241.Models
 {
-    public enum Rank
+    public enum Ranks
     {
         Recruit = 1,
-        Officer = 2,
+        PatrolOfficer = 2,
         Detective = 3,
         Sergeant = 4,
         Lieutenant = 5,
@@ -46,17 +46,27 @@ namespace HKDXX6_HFT_2023241.Models
 
         [Required]
         [Range(1,6)]
-        public Rank Rank { get; set; }
-
-        [Required]
-        public DateTime RecruitmentDate { get; set; }
+        public Ranks Rank { get; set; }
 
         //BadgeNo of officer directly "above" the given officer (Direct Commanding Officer), if any
         [Range(1000, 9999)]
-        public uint DirectCO_BadgeNo { get; set; }
+        public uint? DirectCO_BadgeNo { get; set; }
 
         [Required]
         [Range(1, 139)]
         public uint PrecinctID { get; set; }
+
+        public Officer() { }
+
+        public Officer(uint BadgeNo, string FirstName, string LastName, Ranks Rank, uint? DirectCO_BadgeNo = null, uint PrecintID)
+        {
+            this.BadgeNo = BadgeNo;
+            this.FirstName = FirstName;
+            this.LastName = LastName;
+            this.Rank = Rank;
+            this.DirectCO_BadgeNo = DirectCO_BadgeNo;
+            this.PrecinctID = PrecintID;
+        }
+
     }
 }

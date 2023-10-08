@@ -21,44 +21,64 @@ namespace HKDXX6_HFT_2023241.Models
     }
     public class Officer
     {
+        //The badge number (ID) of the officer
         [Key]
-        [Range(1000,9999)]
+        [Range(1000, 99999)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public uint BadgeNo { get; set; }
 
+        //The first name of the officer
         [Required]
         [StringLength(100)]
         public string FirstName { get; set; }
 
+        //The last name of the officer
         [Required]
         [StringLength(100)]
         public string LastName { get; set; }
 
-        [NotMapped]
-        [JsonIgnore]
-        public string Name
-        { 
-            get
-            {
-                return FirstName + " " + LastName;
-            }
-        }
-
+        //The rank of the officer
         [Required]
-        [Range(1,6)]
+        [Range(1, 6)]
         public Ranks Rank { get; set; }
 
-        //BadgeNo of officer directly "above" the given officer (Direct Commanding Officer), if any
-        [Range(1000, 9999)]
+        //BadgeNo of officer directly "above" the officer (Direct Commanding Officer), if any
+        [Range(1000, 99999)]
         public uint? DirectCO_BadgeNo { get; set; }
 
+        //Lazyload the DCO of the officer
+        [NotMapped]
+        [JsonIgnore]
+        public virtual Officer? DirectCO { get; set; }
+
+        //Lazyload officers who are under the command of officer (officers where this officer is DCO)
+        [NotMapped]
+        [JsonIgnore]
+        public virtual ICollection<Officer> OfficersUnderCommand { get; set; }
+
+        //The id of the precinct of the officer, where they are working
         [Required]
         [Range(1, 139)]
         public uint PrecinctID { get; set; }
 
-        public Officer() { }
+        //Lazyload the precinct
+        [NotMapped]
+        [JsonIgnore]
+        public virtual Precinct Precinct { get; set; }
 
-        public Officer(uint BadgeNo, string FirstName, string LastName, Ranks Rank, uint? DirectCO_BadgeNo = null, uint PrecintID)
+        //Lazyload all cases where the officer is attached
+        [NotMapped]
+        [JsonIgnore]
+        public virtual ICollection<Case> Cases { get; set; }
+
+
+        public Officer()
+        {
+            Cases = new HashSet<Case>();
+            OfficersUnderCommand = new HashSet<Officer>();
+        }
+
+        public Officer(uint BadgeNo, string FirstName, string LastName, Ranks Rank, uint? DirectCO_BadgeNo, uint PrecintID)
         {
             this.BadgeNo = BadgeNo;
             this.FirstName = FirstName;
@@ -66,6 +86,8 @@ namespace HKDXX6_HFT_2023241.Models
             this.Rank = Rank;
             this.DirectCO_BadgeNo = DirectCO_BadgeNo;
             this.PrecinctID = PrecintID;
+            Cases = new HashSet<Case>();
+            OfficersUnderCommand = new HashSet<Officer>();
         }
 
     }

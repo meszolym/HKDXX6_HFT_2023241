@@ -26,17 +26,38 @@ namespace HKDXX6_HFT_2023241.Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //TO CHECK!
+
             modelBuilder.Entity<Officer>(officer => officer
-                .HasOne<Precinct>() //Officer has a precinct
-                .WithMany() //One precinct has many officers
+                .HasOne(officer => officer.Precinct) //Officer has a precinct
+                .WithMany(precinct => precinct.Officers) //One precinct has many officers
                 .HasForeignKey(officer => officer.PrecinctID) //FK assignment
                 .OnDelete(DeleteBehavior.Restrict)); //If any officers are in precinct, it cannot be deleted
 
+            modelBuilder.Entity<Officer>(officer => officer
+                .HasOne(officer => officer.DirectCO) //Officer has a direct CO
+                .WithMany(CO => CO.OfficersUnderCommand) //Who has multiple officers under command
+                .HasForeignKey(officer => officer.DirectCO_BadgeNo) //FK assignment
+                .OnDelete(DeleteBehavior.ClientSetNull)); //If CO is deleted, the officers CO is set to null
+
+            modelBuilder.Entity<Case>()
+                .HasMany(x => x.Officers) //A case has multiple officers
+                .WithMany(x => x.Cases) //An officer has multiple cases
+                .UsingEntity<OfficerOnCase>( //Using this connector table
+                    x => x.HasOne(x => x.Officer) //OfficerOnCase has an officer
+                        .WithMany() //The officer has many OfficerOnCase entries => Many cases
+                        .HasForeignKey(x => x.OfficerBadgeNo) //FK assignment
+                        .OnDelete(DeleteBehavior.Cascade), //If officer is deleted, delete the OfficerOnCase entries
+                    x => x.HasOne(x => x.Case) //OfficerOnCase has a case
+                        .WithMany() //The case has many OfficerOnCase entries => Many officers
+                        .HasForeignKey(x => x.CaseID) //FK assignment
+                        .OnDelete(DeleteBehavior.Cascade)); //If case is deleted, delete the OfficerOnCase entries
+
+
+
             modelBuilder.Entity<Precinct>().HasData(new Precinct[]
             {
-                new Precinct(93,1973,"100 Meserole Avenue"),
-                new Precinct(99,6382,"211 Union Avenue")
+                new Precinct(93,"100 Meserole Avenue"),
+                new Precinct(99,"211 Union Avenue")
 
             });
 
@@ -59,7 +80,7 @@ namespace HKDXX6_HFT_2023241.Repository
             {
                 new Case(1,"Missing ham","A Jamón Iberico ham was stolen valued at $6000. According to Charles it is an amazing cured ham from Spain."),
                 new Case(2,"Blackmail of Parlov","Famous writer D.C. Parlov's manuscript of his upcoming book was stolen, and some of it was leaked online. The culprit wants a ransom or they will release the rest of the manuscript."),
-                new Case(3,"Kidnapping of Cheddar the dog","Someone kidnapped the captain's dog, and demands ransom.")
+                new Case(3,"Kidnapping of Cheddar the dog","Someone kidnapped the captain's dog, Cheddar (the fluffy boy), and demands ransom.")
             });
 
             modelBuilder.Entity<OfficerOnCase>().HasData(new OfficerOnCase[]

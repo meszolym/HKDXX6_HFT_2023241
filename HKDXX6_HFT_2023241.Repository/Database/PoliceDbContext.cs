@@ -53,10 +53,11 @@ namespace HKDXX6_HFT_2023241.Repository
                         .OnDelete(DeleteBehavior.Cascade)); //If case is deleted, delete the OfficerOnCase entries
 
             modelBuilder.Entity<Case>()
-                .HasOne(c => c.PrimaryOfficer)
-                .WithMany(o => o.CasesAsPrimary)
-                .HasForeignKey(c => c.PrimaryOfficerBadgeNo)
-                .IsRequired(false);
+                .HasOne(c => c.PrimaryOfficer) //A case has a primary officer (this will be ensured by logic, if any officers are attached, a primary officer is a must)
+                .WithMany(o => o.CasesAsPrimary) //An officer has many cases to which they are attached as primary
+                .HasForeignKey(c => c.PrimaryOfficerBadgeNo) //FK assignment
+                .OnDelete(DeleteBehavior.Restrict) //Cannot delete officer if there are any cases to which they are attached as primary
+                .IsRequired(false); // When a case is first added, it is not required to have a primary
 
             modelBuilder.Entity<Precinct>().HasData(new Precinct[]
             {

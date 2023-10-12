@@ -31,6 +31,13 @@ namespace HKDXX6_HFT_2023241.Models
         [JsonIgnore]
         public virtual ICollection<Officer> Officers { get; set; }
 
+        //The badge number of the primary officer
+        [Range(1000, 99999)]
+        public uint? PrimaryOfficerBadgeNo { get; set; }
+
+        //Lazyload the primary officer
+        public virtual Officer? PrimaryOfficer { get; set; }
+
         public Case()
         {
             Officers = new HashSet<Officer>();
@@ -44,6 +51,14 @@ namespace HKDXX6_HFT_2023241.Models
             Officers = new HashSet<Officer>();
         }
 
+        public Case(uint iD, string name, string description, uint primaryOfficerBadgeNo)
+        {
+            ID = iD;
+            Name = name;
+            Description = description;
+            Officers = new HashSet<Officer>();
+            PrimaryOfficerBadgeNo = primaryOfficerBadgeNo;
+        }
 
     }
 }

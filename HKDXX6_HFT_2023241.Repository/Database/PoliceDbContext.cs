@@ -52,7 +52,11 @@ namespace HKDXX6_HFT_2023241.Repository
                         .HasForeignKey(x => x.CaseID) //FK assignment
                         .OnDelete(DeleteBehavior.Cascade)); //If case is deleted, delete the OfficerOnCase entries
 
-
+            modelBuilder.Entity<Case>()
+                .HasOne(c => c.PrimaryOfficer)
+                .WithMany(o => o.CasesAsPrimary)
+                .HasForeignKey(c => c.PrimaryOfficerBadgeNo)
+                .IsRequired(false);
 
             modelBuilder.Entity<Precinct>().HasData(new Precinct[]
             {
@@ -78,21 +82,21 @@ namespace HKDXX6_HFT_2023241.Repository
 
             modelBuilder.Entity<Case>().HasData(new Case[]
             {
-                new Case(1,"Missing ham","A Jamón Iberico ham was stolen valued at $6000. According to Charles it is an amazing cured ham from Spain."),
-                new Case(2,"Blackmail of Parlov","Famous writer D.C. Parlov's manuscript of his upcoming book was stolen, and some of it was leaked online. The culprit wants a ransom or they will release the rest of the manuscript."),
-                new Case(3,"Kidnapping of Cheddar the dog","Someone kidnapped the captain's dog, Cheddar (the fluffy boy), and demands ransom.")
+                new Case(1,"Missing ham","A Jamón Iberico ham was stolen valued at $6000. According to Charles it is an amazing cured ham from Spain.", 9544),
+                new Case(2,"Blackmail of Parlov","Famous writer D.C. Parlov's manuscript of his upcoming book was stolen, and some of it was leaked online. The culprit wants a ransom or they will release the rest of the manuscript.",378),
+                new Case(3,"Kidnapping of Cheddar the dog","Someone kidnapped the captain's dog, Cheddar (the fluffy boy), and demands ransom.",6382)
             });
 
             modelBuilder.Entity<OfficerOnCase>().HasData(new OfficerOnCase[]
             {
-                new OfficerOnCase(1,1,9544,true),
-                new OfficerOnCase(2,1,426,false),
-                new OfficerOnCase(3,2,378,true),
-                new OfficerOnCase(4,2,9544,false),
-                new OfficerOnCase(5,2,3118,false),
-                new OfficerOnCase(6,3,6382,true),
-                new OfficerOnCase(7,3,9544,false),
-                new OfficerOnCase(8,3,426,false)
+                new OfficerOnCase(1,1,9544),
+                new OfficerOnCase(2,1,426),
+                new OfficerOnCase(3,2,378),
+                new OfficerOnCase(4,2,9544),
+                new OfficerOnCase(5,2,3118),
+                new OfficerOnCase(6,3,6382),
+                new OfficerOnCase(7,3,9544),
+                new OfficerOnCase(8,3,426)
 
             });
 

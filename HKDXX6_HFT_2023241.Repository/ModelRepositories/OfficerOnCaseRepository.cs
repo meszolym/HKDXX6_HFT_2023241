@@ -25,7 +25,6 @@ namespace HKDXX6_HFT_2023241.Repository
 
             old.Case = item.Case;
             old.CaseID = item.CaseID;
-            old.IsPrimary = item.IsPrimary;
             old.Officer = item.Officer;
             old.OfficerBadgeNo = item.OfficerBadgeNo;
 

@@ -71,10 +71,16 @@ namespace HKDXX6_HFT_2023241.Models
         [JsonIgnore]
         public virtual ICollection<Case> Cases { get; set; }
 
+        //Lazyload cases where the officer is attached as primary
+        [NotMapped]
+        [JsonIgnore]
+        public virtual ICollection<Case> CasesAsPrimary { get; set; }
+
 
         public Officer()
         {
             Cases = new HashSet<Case>();
+            CasesAsPrimary = new HashSet<Case>();
             OfficersUnderCommand = new HashSet<Officer>();
         }
 
@@ -87,6 +93,7 @@ namespace HKDXX6_HFT_2023241.Models
             this.DirectCO_BadgeNo = DirectCO_BadgeNo;
             this.PrecinctID = PrecintID;
             Cases = new HashSet<Case>();
+            CasesAsPrimary = new HashSet<Case>();
             OfficersUnderCommand = new HashSet<Officer>();
         }
 

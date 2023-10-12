@@ -36,17 +36,12 @@ namespace HKDXX6_HFT_2023241.Models
         [JsonIgnore]
         public virtual Officer Officer { get; set; }
 
-        //Wheter the officer is primary on the case
-        [Required]
-        public bool IsPrimary { get; set; }
-
         public OfficerOnCase() { }
-        public OfficerOnCase(uint id, uint caseID, uint officerBadgeNo, bool isPrimary)
+        public OfficerOnCase(uint id, uint caseID, uint officerBadgeNo)
         {
             ID = id;
             CaseID = caseID;
             OfficerBadgeNo = officerBadgeNo;
-            IsPrimary = isPrimary;
         }
     }
 }

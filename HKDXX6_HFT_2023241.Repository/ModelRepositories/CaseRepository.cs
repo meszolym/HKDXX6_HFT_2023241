@@ -15,7 +15,7 @@ namespace HKDXX6_HFT_2023241.Repository
         {
         }
 
-        public override Case Read(uint id)
+        public override Case Read(int id)
         {
             return ctx.Cases.FirstOrDefault(x => x.ID == id);
         }

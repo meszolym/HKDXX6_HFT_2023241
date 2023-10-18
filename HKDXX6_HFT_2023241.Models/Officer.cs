@@ -25,7 +25,7 @@ namespace HKDXX6_HFT_2023241.Models
         [Key]
         [Range(1000, 99999)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public uint BadgeNo { get; set; }
+        public int BadgeNo { get; set; }
 
         //The first name of the officer
         [Required]
@@ -44,7 +44,7 @@ namespace HKDXX6_HFT_2023241.Models
 
         //BadgeNo of officer directly "above" the officer (Direct Commanding Officer), if any
         [Range(1000, 99999)]
-        public uint? DirectCO_BadgeNo { get; set; }
+        public int? DirectCO_BadgeNo { get; set; }
 
         //Lazyload the DCO of the officer
         [NotMapped]
@@ -59,7 +59,7 @@ namespace HKDXX6_HFT_2023241.Models
         //The id of the precinct of the officer, where they are working
         [Required]
         [Range(1, 139)]
-        public uint PrecinctID { get; set; }
+        public int PrecinctID { get; set; }
 
         //Lazyload the precinct
         [NotMapped]
@@ -84,7 +84,7 @@ namespace HKDXX6_HFT_2023241.Models
             OfficersUnderCommand = new HashSet<Officer>();
         }
 
-        public Officer(uint BadgeNo, string FirstName, string LastName, Ranks Rank, uint? DirectCO_BadgeNo, uint PrecintID)
+        public Officer(int BadgeNo, string FirstName, string LastName, Ranks Rank, int? DirectCO_BadgeNo, int PrecintID)
         {
             this.BadgeNo = BadgeNo;
             this.FirstName = FirstName;

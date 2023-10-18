@@ -21,7 +21,7 @@ namespace HKDXX6_HFT_2023241.Repository
             ctx.SaveChanges();
         }
 
-        public void Delete(uint id)
+        public void Delete(int id)
         {
             ctx.Set<T>().Remove(Read(id));
             ctx.SaveChanges();
@@ -34,6 +34,6 @@ namespace HKDXX6_HFT_2023241.Repository
 
         public abstract void Update(T item);
 
-        public abstract T Read(uint id);
+        public abstract T Read(int id);
     }
 }

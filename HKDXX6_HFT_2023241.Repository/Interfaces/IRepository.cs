@@ -9,9 +9,9 @@ namespace HKDXX6_HFT_2023241.Repository
     public interface IRepository<T> where T : class
     {
         IQueryable<T> ReadAll();
-        T Read(uint id);
+        T Read(int id);
         void Create(T item);
         void Update(T item);
-        void Delete(uint id);
+        void Delete(int id);
     }
 }

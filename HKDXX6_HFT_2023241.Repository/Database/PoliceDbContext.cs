@@ -83,9 +83,9 @@ namespace HKDXX6_HFT_2023241.Repository
 
             modelBuilder.Entity<Case>().HasData(new Case[]
             {
-                new Case(1,"Missing ham","A Jamón Iberico ham was stolen valued at $6000. According to Charles it is an amazing cured ham from Spain.", 9544),
-                new Case(2,"Blackmail of Parlov","Famous writer D.C. Parlov's manuscript of his upcoming book was stolen, and some of it was leaked online. The culprit wants a ransom or they will release the rest of the manuscript.",378),
-                new Case(3,"Kidnapping of Cheddar the dog","Someone kidnapped the captain's dog, Cheddar (the fluffy boy), and demands ransom.",6382)
+                new Case(1,"Missing ham","A Jamón Iberico ham was stolen valued at $6000. According to Charles it is an amazing cured ham from Spain.", 9544,new DateTime(2013,09,17,19,00,00)),
+                new Case(2,"Blackmail of Parlov","Famous writer D.C. Parlov's manuscript of his upcoming book was stolen, and some of it was leaked online. The culprit wants a ransom or they will release the rest of the manuscript.",378, new DateTime(2013,09,17,19,00,00)),
+                new Case(3,"Kidnapping of Cheddar the dog","Someone kidnapped the captain's dog, Cheddar (the fluffy boy), and demands ransom.",6382, new DateTime(2013, 09, 17, 19, 00, 00))
             });
 
             modelBuilder.Entity<OfficerOnCase>().HasData(new OfficerOnCase[]

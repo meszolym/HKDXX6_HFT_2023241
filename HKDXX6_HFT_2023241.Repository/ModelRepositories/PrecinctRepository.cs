@@ -14,7 +14,7 @@ namespace HKDXX6_HFT_2023241.Repository
         {
         }
 
-        public override Precinct Read(uint id)
+        public override Precinct Read(int id)
         {
             return ctx.Precincts.FirstOrDefault(x => x.ID == id);
         }

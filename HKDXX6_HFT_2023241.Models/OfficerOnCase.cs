@@ -15,11 +15,11 @@ namespace HKDXX6_HFT_2023241.Models
         //The ID of the connection
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public uint ID { get; set; }
+        public int ID { get; set; }
 
         //The ID of the case
         [Required]
-        public uint CaseID { get; set; }
+        public int CaseID { get; set; }
 
         //Lazyload the case
         [NotMapped]
@@ -29,7 +29,7 @@ namespace HKDXX6_HFT_2023241.Models
         //The ID of the officer attached to the case
         [Required]
         [Range(1000, 99999)]
-        public uint OfficerBadgeNo { get; set; }
+        public int OfficerBadgeNo { get; set; }
 
         //Lazyload the officer
         [NotMapped]
@@ -37,7 +37,7 @@ namespace HKDXX6_HFT_2023241.Models
         public virtual Officer Officer { get; set; }
 
         public OfficerOnCase() { }
-        public OfficerOnCase(uint id, uint caseID, uint officerBadgeNo)
+        public OfficerOnCase(int id, int caseID, int officerBadgeNo)
         {
             ID = id;
             CaseID = caseID;

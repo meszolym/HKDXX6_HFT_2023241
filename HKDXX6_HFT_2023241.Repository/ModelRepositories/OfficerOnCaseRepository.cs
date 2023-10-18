@@ -14,7 +14,7 @@ namespace HKDXX6_HFT_2023241.Repository
         {
         }
 
-        public override OfficerOnCase Read(uint id)
+        public override OfficerOnCase Read(int id)
         {
             return ctx.Officer_x_Case.FirstOrDefault(x => x.ID == id);
         }

@@ -14,7 +14,7 @@ namespace HKDXX6_HFT_2023241.Repository
         {
         }
             
-        public override Officer Read(uint id)
+        public override Officer Read(int id)
         {
             return ctx.Officers.FirstOrDefault(t => t.BadgeNo == id);
         }

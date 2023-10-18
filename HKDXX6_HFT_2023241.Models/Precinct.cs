@@ -11,7 +11,7 @@ namespace HKDXX6_HFT_2023241.Models
         //ID of the precinct
         [Key]
         [Range(1, 139)]
-        public uint ID { get; set; }
+        public int ID { get; set; }
 
         //Lazyload the officers of the precinct
         [NotMapped]
@@ -27,7 +27,7 @@ namespace HKDXX6_HFT_2023241.Models
         {
             Officers = new HashSet<Officer>();
         }
-        public Precinct(uint iD, string address)
+        public Precinct(int iD, string address)
         {
             ID = iD;
             Address = address;

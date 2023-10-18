@@ -15,7 +15,7 @@ namespace HKDXX6_HFT_2023241.Models
         //ID of the case
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public uint ID { get; set; }
+        public int ID { get; set; }
 
         //Name of the case
         [Required]
@@ -26,6 +26,19 @@ namespace HKDXX6_HFT_2023241.Models
         [Required]
         public string Description { get; set; }
 
+        //Opening timestamp
+        [Required]
+        public DateTime OpenedAt { get; set; }
+
+        //Closing timestamp
+        public DateTime? ClosedAt { get; set; }
+
+        public bool IsClosed
+        {
+            get { return ClosedAt != null; }
+        }
+
+
         // Lazyload the officers on the case
         [NotMapped]
         [JsonIgnore]
@@ -33,31 +46,41 @@ namespace HKDXX6_HFT_2023241.Models
 
         //The badge number of the primary officer
         [Range(1000, 99999)]
-        public uint? PrimaryOfficerBadgeNo { get; set; }
+        public int? PrimaryOfficerBadgeNo { get; set; }
 
         //Lazyload the primary officer
         public virtual Officer? PrimaryOfficer { get; set; }
+
+        public Precinct? Precinct
+        {
+            get
+            {
+                return PrimaryOfficer.Precinct;
+            }
+        }
 
         public Case()
         {
             Officers = new HashSet<Officer>();
         }
 
-        public Case(uint iD, string name, string description)
+        public Case(int iD, string name, string description, DateTime openDT)
         {
             ID = iD;
             Name = name;
             Description = description;
             Officers = new HashSet<Officer>();
+            OpenedAt = openDT;
         }
 
-        public Case(uint iD, string name, string description, uint primaryOfficerBadgeNo)
+        public Case(int iD, string name, string description, int primaryOfficerBadgeNo, DateTime openDT)
         {
             ID = iD;
             Name = name;
             Description = description;
             Officers = new HashSet<Officer>();
             PrimaryOfficerBadgeNo = primaryOfficerBadgeNo;
+            OpenedAt = openDT;
         }
 
     }

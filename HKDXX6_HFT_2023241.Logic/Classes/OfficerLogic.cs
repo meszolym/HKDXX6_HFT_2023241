@@ -19,7 +19,7 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Officer item)
         {
-            if(item.Rank == Ranks.Captain && item.Precinct.Officers.Any(t => t.Rank == Ranks.Captain))
+            if (item.Rank == Ranks.Captain && item.Precinct.Officers.Any(t => t.Rank == Ranks.Captain))
             {
                 throw new ArgumentException("Can't have a second captain to precinct.");
             }

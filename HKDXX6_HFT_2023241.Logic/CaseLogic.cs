@@ -110,6 +110,8 @@ namespace HKDXX6_HFT_2023241.Logic
             c.Officers = Officers as ICollection<Officer>;
 
             c.PrimaryOfficerBadgeNo = Officers.OrderByDescending(t => t.Rank).First().BadgeNo;
+
+            CaseRepo.Update(c);
         }
     }
 }

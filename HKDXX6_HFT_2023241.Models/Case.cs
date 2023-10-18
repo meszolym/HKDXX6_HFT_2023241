@@ -38,6 +38,13 @@ namespace HKDXX6_HFT_2023241.Models
             get { return ClosedAt != null; }
         }
 
+        public TimeSpan? OpenTimeSpan
+        {
+            get
+            {
+                return ClosedAt - OpenedAt;
+            }
+        }
 
         // Lazyload the officers on the case
         [NotMapped]

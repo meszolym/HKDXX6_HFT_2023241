@@ -24,10 +24,14 @@ namespace HKDXX6_HFT_2023241.Models
         [StringLength(100)]
         public string Address { get; set; }
 
-        public Officer Captain
+        public Officer? Captain
         {
             get
             {
+                if (!Officers.Any(t => t.Rank == Ranks.Captain))
+                {
+                    return null;
+                }
                 return Officers.Single(t => t.Rank == Ranks.Captain);
             }
         }

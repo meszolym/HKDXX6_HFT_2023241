@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace HKDXX6_HFT_2023241.Logic
 {
-    public class OfficerLogic
+    public class OfficerLogic : IOfficerLogic
     {
         IRepository<Officer> OfficerRepo;
 
-        public OfficerLogic(IRepository<Officer> caseRepo)
+        public OfficerLogic(IRepository<Officer> officerRepo, IRepository<Precinct> precinctRepo)
         {
-            OfficerRepo = caseRepo;
+            OfficerRepo = officerRepo;
         }
 
         public void Create(Officer item)
         {
             if (item.Rank == Ranks.Captain && item.Precinct.Officers.Any(t => t.Rank == Ranks.Captain))
             {
-                throw new ArgumentException("Can't have a second captain to precinct.");
+                throw new ArgumentException("Can't have two captains at one precinct.");
             }
             OfficerRepo.Create(item);
         }
@@ -30,7 +30,7 @@ namespace HKDXX6_HFT_2023241.Logic
         {
             if (item.Rank == Ranks.Captain && item.Precinct.Officers.Any(t => t.Rank == Ranks.Captain && t.BadgeNo != item.BadgeNo))
             {
-                throw new ArgumentException("Can't have a second captain to precinct.");
+                throw new ArgumentException("Can't have two captains at one precinct.");
             }
 
             OfficerRepo.Update(item);

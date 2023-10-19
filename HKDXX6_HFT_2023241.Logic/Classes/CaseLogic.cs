@@ -1,5 +1,4 @@
 ﻿using Castle.Core.Internal;
-using HKDXX6_HFT_2023241.Logic;
 using HKDXX6_HFT_2023241.Models;
 using HKDXX6_HFT_2023241.Repository;
 using System;
@@ -64,6 +63,8 @@ namespace HKDXX6_HFT_2023241.Logic
             return CaseRepo.ReadAll();
         }
 
+
+        //NonCrud 1
         public IEnumerable<OfficerCaseStatistic> officerCaseStatistics()
         {
             return from x in ReadAll()
@@ -83,6 +84,7 @@ namespace HKDXX6_HFT_2023241.Logic
             public int OpenCases { get; set; }
         }
 
+        //NonCrud 2
         public IEnumerable<PrecinctCaseStatistic> precinctCaseStatistics()
         {
             return from x in officerCaseStatistics()
@@ -102,13 +104,14 @@ namespace HKDXX6_HFT_2023241.Logic
             public int OpenCases { get; set; }
         }
 
+        //NonCrud 3
         public void AutoAssignCase(int id, int precintID, int numberOfOfficers)
         {
             Case c = Read(id).First();
 
-            if (!c.Officers.IsNullOrEmpty())
+            if (!c.Officers.IsNullOrEmpty() || c.IsClosed)
             {
-                throw new InvalidOperationException("Cannot auto-assign already assigned case.");
+                throw new InvalidOperationException("Cannot auto-assign already assigned/closed case.");
             }
             var Officers = officerCaseStatistics().OrderBy(t => t.OpenCases).Where(t => t.Officer.PrecinctID == precintID).Take(numberOfOfficers).Select(t => t.Officer);
 
@@ -119,6 +122,7 @@ namespace HKDXX6_HFT_2023241.Logic
             Update(c);
         }
 
+        //NonCrud 4
         public IEnumerable<KeyValuePair<Officer, TimeSpan>> OfficerCaseAverageOpenTime()
         {
             return from x in ReadAll()
@@ -130,6 +134,7 @@ namespace HKDXX6_HFT_2023241.Logic
                    );
         }
 
+        //NonCrud 5
         public IEnumerable<KeyValuePair<Precinct, TimeSpan>> PrecinctCaseAverageOpenTime()
         {
             return from x in ReadAll()
@@ -141,16 +146,7 @@ namespace HKDXX6_HFT_2023241.Logic
                    );
         }
 
-        public IEnumerable<Case> CasesOfOfficer(int OfficerID)
-        {
-            return ReadAll().Where(t => t.Officers.Any(x => x.BadgeNo == OfficerID));
-        }
-
-        public IEnumerable<Case> CasesOfOfficerAsPrimary(int OfficerID)
-        {
-            return ReadAll().Where(t => t.PrimaryOfficerBadgeNo == OfficerID);
-        }
-
+        //NonCrud 6
         public IEnumerable<Case> CasesOfPrecint(int PrecintID)
         {
             var p = PrecinctRepo.Read(PrecintID);
@@ -161,6 +157,7 @@ namespace HKDXX6_HFT_2023241.Logic
             return ReadAll().Where(t => t.Precinct == p);
         }
 
+        //NonCrud 7
         public IEnumerable<KeyValuePair<Precinct, IEnumerable<Case>>> CasesOfPrecincts()
         {
             return from x in ReadAll()
@@ -172,10 +169,21 @@ namespace HKDXX6_HFT_2023241.Logic
                    );
         }
 
+        //IDK if needed
         public void AddOfficerToCase(int officerID, int caseID, bool primary = false)
         {
             Case c = Read(caseID).First();
-            c.Officers.Add(OfficerRepo.Read(officerID));
+            Officer o = OfficerRepo.Read(officerID);
+            if (o == null)
+            {
+                throw new ArgumentException("Officer not found.");
+            }
+            if (c.IsClosed || c.Officers.Contains(o))
+            {
+                throw new InvalidOperationException("Cannot assign already assigned/closed case.");
+            }
+
+            c.Officers.Add(o);
             if (primary)
             {
                 c.PrimaryOfficerBadgeNo = officerID;

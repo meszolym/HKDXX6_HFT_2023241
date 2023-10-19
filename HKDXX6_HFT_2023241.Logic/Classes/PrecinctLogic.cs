@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HKDXX6_HFT_2023241.Logic
 {
-    public class PrecinctLogic
+    public class PrecinctLogic : IPrecinctLogic
     {
         IRepository<Precinct> PrecinctRepo;
 
@@ -19,11 +19,19 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Precinct item)
         {
+            if (item.Officers.Count(t => t.Rank == Ranks.Captain) > 1)
+            {
+                throw new ArgumentException("Can't have two captains at one precinct.");
+            }
             PrecinctRepo.Create(item);
         }
 
         public void Update(Precinct item)
         {
+            if (item.Officers.Count(t => t.Rank == Ranks.Captain) > 1)
+            {
+                throw new ArgumentException("Can't have two captains at one precinct.");
+            }
             PrecinctRepo.Update(item);
         }
 

@@ -1,5 +1,4 @@
-﻿using HKDXX6_HFT_2023241.Logic;
-using HKDXX6_HFT_2023241.Models;
+﻿using HKDXX6_HFT_2023241.Models;
 using System;
 using System.Collections.Generic;
 
@@ -9,8 +8,6 @@ namespace HKDXX6_HFT_2023241.Logic
     {
         void AddOfficerToCase(int officerID, int caseID, bool primary = false);
         void AutoAssignCase(int id, int precintID, int numberOfOfficers);
-        IEnumerable<Case> CasesOfOfficer(int OfficerID);
-        IEnumerable<Case> CasesOfOfficerAsPrimary(int OfficerID);
         IEnumerable<KeyValuePair<Precinct, IEnumerable<Case>>> CasesOfPrecincts();
         IEnumerable<Case> CasesOfPrecint(int PrecintID);
         void Create(Case item);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace HKDXX6_HFT_2023241.Models
@@ -22,6 +23,14 @@ namespace HKDXX6_HFT_2023241.Models
         [Required]
         [StringLength(100)]
         public string Address { get; set; }
+
+        public Officer Captain
+        {
+            get
+            {
+                return Officers.Single(t => t.Rank == Ranks.Captain);
+            }
+        }
 
         public Precinct()
         {

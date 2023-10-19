@@ -33,11 +33,13 @@ namespace HKDXX6_HFT_2023241.Models
         //Closing timestamp
         public DateTime? ClosedAt { get; set; }
 
+        [NotMapped]
         public bool IsClosed
         {
             get { return ClosedAt != null; }
         }
 
+        [NotMapped]
         public TimeSpan? OpenTimeSpan
         {
             get
@@ -56,8 +58,12 @@ namespace HKDXX6_HFT_2023241.Models
         public int? PrimaryOfficerBadgeNo { get; set; }
 
         //Lazyload the primary officer
+        [NotMapped]
+        [JsonIgnore]
         public virtual Officer? PrimaryOfficer { get; set; }
 
+        [NotMapped]
+        [JsonIgnore]
         public Precinct? Precinct
         {
             get

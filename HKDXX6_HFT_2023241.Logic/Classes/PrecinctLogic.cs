@@ -57,5 +57,36 @@ namespace HKDXX6_HFT_2023241.Logic
         {
             return PrecinctRepo.ReadAll();
         }
+
+        /// <summary>
+        /// Gets captain or ranking officer (acting captain) of precinct
+        /// </summary>
+        /// <param name="precintID">ID of the precinct in question</param>
+        /// <returns>IEnumerable<Officer> with one entry for captain/ranking officer</returns>
+        public IEnumerable<Officer> GetCaptain(int precintID)
+        {
+            var p = Read(precintID).First();
+
+            Officer c;
+
+            if (p.Officers.Any(t => t.Rank == Ranks.Captain))
+            {
+                c = p.Officers.Single(t => t.Rank == Ranks.Captain);
+            }
+            else
+            {
+                c = p.Officers
+                    .OrderByDescending(t => t.Rank)
+                    .ThenBy(t => t.HireDate)
+                    .ThenBy(t => t.CasesAsPrimary.Count())
+                    .ThenBy(t => t.Cases.Count())
+                    .ThenBy(t => t.FirstName+ " "+t.LastName)
+                    .First();
+            }
+
+            IEnumerable<Officer> result = new Officer[] { c };
+
+            return result;
+        }
     }
 }

@@ -76,6 +76,8 @@ namespace HKDXX6_HFT_2023241.Models
         [JsonIgnore]
         public virtual ICollection<Case> CasesAsPrimary { get; set; }
 
+        [Required]
+        public DateTime HireDate { get; set; }
 
         public Officer()
         {
@@ -84,7 +86,7 @@ namespace HKDXX6_HFT_2023241.Models
             OfficersUnderCommand = new HashSet<Officer>();
         }
 
-        public Officer(int BadgeNo, string FirstName, string LastName, Ranks Rank, int? DirectCO_BadgeNo, int PrecintID)
+        public Officer(int BadgeNo, string FirstName, string LastName, Ranks Rank, int? DirectCO_BadgeNo, int PrecintID, DateTime hireDate)
         {
             this.BadgeNo = BadgeNo;
             this.FirstName = FirstName;
@@ -95,6 +97,7 @@ namespace HKDXX6_HFT_2023241.Models
             Cases = new HashSet<Case>();
             CasesAsPrimary = new HashSet<Case>();
             OfficersUnderCommand = new HashSet<Officer>();
+            HireDate = hireDate;
         }
 
     }

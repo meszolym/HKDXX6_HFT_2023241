@@ -168,27 +168,5 @@ namespace HKDXX6_HFT_2023241.Logic
                        g
                    );
         }
-
-        //IDK if needed
-        public void AddOfficerToCase(int officerID, int caseID, bool primary = false)
-        {
-            Case c = Read(caseID).First();
-            Officer o = OfficerRepo.Read(officerID);
-            if (o == null)
-            {
-                throw new ArgumentException("Officer not found.");
-            }
-            if (c.IsClosed || c.Officers.Contains(o))
-            {
-                throw new InvalidOperationException("Cannot assign already assigned/closed case.");
-            }
-
-            c.Officers.Add(o);
-            if (primary)
-            {
-                c.PrimaryOfficerBadgeNo = officerID;
-            }
-            Update(c);
-        }
     }
 }

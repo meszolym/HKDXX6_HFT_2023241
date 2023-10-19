@@ -58,11 +58,6 @@ namespace HKDXX6_HFT_2023241.Logic
             return PrecinctRepo.ReadAll();
         }
 
-        /// <summary>
-        /// Gets captain or ranking officer (acting captain) of precinct
-        /// </summary>
-        /// <param name="precintID">ID of the precinct in question</param>
-        /// <returns>IEnumerable<Officer> with one entry for captain/ranking officer</returns>
         public IEnumerable<Officer> GetCaptain(int precintID)
         {
             var p = Read(precintID).First();

@@ -7,8 +7,10 @@ namespace HKDXX6_HFT_2023241.Logic
     {
         void Create(Precinct item);
         void Delete(int ID);
+        IEnumerable<Officer> GetCaptain(int precintID);
         IEnumerable<Precinct> Read(int ID);
         IEnumerable<Precinct> ReadAll();
         void Update(Precinct item);
+        
     }
 }

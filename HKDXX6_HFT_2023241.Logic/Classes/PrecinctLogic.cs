@@ -19,18 +19,25 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Precinct item)
         {
-            if (item.Officers.Count(t => t.Rank == Ranks.Captain) > 1)
+            if (item.Officers.Count != 0)
             {
-                throw new ArgumentException("Can't have two captains at one precinct.");
+                throw new ArgumentException("Officers must be empty when creating.");
             }
             PrecinctRepo.Create(item);
         }
 
         public void Update(Precinct item)
         {
-            if (item.Officers.Count(t => t.Rank == Ranks.Captain) > 1)
+            var p = PrecinctRepo.Read(item.ID);
+
+            if (p == null)
             {
-                throw new ArgumentException("Can't have two captains at one precinct.");
+                throw new ArgumentException("Precinct does not exist.");
+            }
+
+            if (item.Officers.Count != p.Officers.Count)
+            {
+                throw new ArgumentException("Officers cannot be changed from this side of the relationship.");
             }
             PrecinctRepo.Update(item);
         }

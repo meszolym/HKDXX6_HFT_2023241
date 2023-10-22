@@ -24,13 +24,13 @@ namespace HKDXX6_HFT_2023241.Repository
             var old = Read(item.BadgeNo);
 
             old.Cases = item.Cases;
+            old.CasesAsPrimary = item.CasesAsPrimary;
             old.DirectCO = item.DirectCO;
-            old.DirectCO_BadgeNo = item.DirectCO_BadgeNo;
             old.FirstName = item.FirstName;
+            old.HireDate = item.HireDate;
             old.LastName = item.LastName;
             old.OfficersUnderCommand = item.OfficersUnderCommand;
             old.Precinct = item.Precinct;
-            old.PrecinctID = item.PrecinctID;
             old.Rank = item.Rank;
 
             ctx.SaveChanges();

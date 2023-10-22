@@ -37,6 +37,14 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("Primary officer must be in the officers collection.");
             }
+            if (CaseRepo.Read(item.ID) == null)
+            {
+                throw new ArgumentException("Case not found.");
+            }
+            if (CaseRepo.Read(item.ID).IsClosed && item.IsClosed)
+            {
+                throw new ArgumentException("Case has to be open to be updated.");
+            }
             CaseRepo.Update(item);
         }
 

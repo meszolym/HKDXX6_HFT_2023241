@@ -24,7 +24,6 @@ namespace HKDXX6_HFT_2023241.Repository
             var old = Read(item.BadgeNo);
 
             old.Cases = item.Cases;
-            old.CasesAsPrimary = item.CasesAsPrimary;
             old.DirectCO = item.DirectCO;
             old.FirstName = item.FirstName;
             old.HireDate = item.HireDate;

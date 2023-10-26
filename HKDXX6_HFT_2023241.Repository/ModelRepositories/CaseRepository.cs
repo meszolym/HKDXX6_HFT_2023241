@@ -27,9 +27,8 @@ namespace HKDXX6_HFT_2023241.Repository
             old.ClosedAt = item.ClosedAt;
             old.Description = item.Description;
             old.Name = item.Name;
-            old.Officers = item.Officers;
+            old.OfficerOnCaseID = item.OfficerOnCaseID;
             old.OpenedAt = item.OpenedAt;
-            old.PrimaryOfficerBadgeNo = item.PrimaryOfficerBadgeNo;
 
             ctx.SaveChanges();
         }

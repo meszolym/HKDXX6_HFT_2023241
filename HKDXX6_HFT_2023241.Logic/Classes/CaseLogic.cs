@@ -24,19 +24,11 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Case item)
         {
-            if (item.PrimaryOfficer != null && !item.Officers.Any(t => t.BadgeNo == item.PrimaryOfficerBadgeNo))
-            {
-                throw new ArgumentException("Primary officer must be in the officers collection.");
-            }
             CaseRepo.Create(item);
         }
 
         public void Update(Case item)
         {
-            if (item.PrimaryOfficer != null && !item.Officers.Any(t => t.BadgeNo == item.PrimaryOfficerBadgeNo))
-            {
-                throw new ArgumentException("Primary officer must be in the officers collection.");
-            }
             if (CaseRepo.Read(item.ID) == null)
             {
                 throw new ArgumentException("Case not found.");
@@ -76,7 +68,7 @@ namespace HKDXX6_HFT_2023241.Logic
         public IEnumerable<OfficerCaseStatistic> officerCaseStatistics()
         {
             return from x in ReadAll()
-                   group x by x.PrimaryOfficer into g
+                   group x by x.OfficerOnCase into g
                    select new OfficerCaseStatistic
                    {
                        Officer = g.Key,
@@ -113,19 +105,17 @@ namespace HKDXX6_HFT_2023241.Logic
         }
 
         //NonCrud 3
-        public void AutoAssignCase(int id, int precintID, int numberOfOfficers)
+        public void AutoAssignCase(int id, int precintID)
         {
             Case c = Read(id).First();
 
-            if (!c.Officers.IsNullOrEmpty() || c.IsClosed)
+            if (c.OfficerOnCase != null || c.IsClosed)
             {
                 throw new InvalidOperationException("Cannot auto-assign already assigned/closed case.");
             }
-            var Officers = officerCaseStatistics().OrderBy(t => t.OpenCases).Where(t => t.Officer.PrecinctID == precintID).Take(numberOfOfficers).Select(t => t.Officer);
+            var Officer = officerCaseStatistics().OrderBy(t => t.OpenCases).First(t => t.Officer.PrecinctID == precintID).Officer;
 
-            c.Officers = Officers as ICollection<Officer>;
-
-            c.PrimaryOfficerBadgeNo = Officers.OrderByDescending(t => t.Rank).First().BadgeNo;
+            c.OfficerOnCaseID = Officer.BadgeNo;
 
             Update(c);
         }
@@ -134,7 +124,7 @@ namespace HKDXX6_HFT_2023241.Logic
         public IEnumerable<KeyValuePair<Officer, TimeSpan>> OfficerCaseAverageOpenTime()
         {
             return from x in ReadAll()
-                   group x by x.PrimaryOfficer into g
+                   group x by x.OfficerOnCase into g
                    select new KeyValuePair<Officer, TimeSpan>
                    (
                        g.Key,

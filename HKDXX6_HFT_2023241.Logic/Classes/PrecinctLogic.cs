@@ -80,7 +80,6 @@ namespace HKDXX6_HFT_2023241.Logic
                 c = p.Officers
                     .OrderByDescending(t => t.Rank)
                     .ThenBy(t => t.HireDate)
-                    .ThenBy(t => t.CasesAsPrimary.Count())
                     .ThenBy(t => t.Cases.Count())
                     .ThenBy(t => t.FirstName+ " "+t.LastName)
                     .First();

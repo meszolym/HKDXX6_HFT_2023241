@@ -6,7 +6,7 @@ namespace HKDXX6_HFT_2023241.Logic
 {
     public interface ICaseLogic
     {
-        void AutoAssignCase(int id, int precintID, int numberOfOfficers);
+        void AutoAssignCase(int id, int precintID);
         IEnumerable<KeyValuePair<Precinct, IEnumerable<Case>>> CasesOfPrecincts();
         IEnumerable<Case> CasesOfPrecint(int PrecintID);
         void Create(Case item);

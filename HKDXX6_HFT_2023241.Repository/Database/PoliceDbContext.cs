@@ -9,7 +9,6 @@ namespace HKDXX6_HFT_2023241.Repository
         public DbSet<Officer> Officers { get; set; }
         public DbSet<Precinct> Precincts { get; set; }
         public DbSet<Case> Cases { get; set; }
-        public DbSet<OfficerOnCase> Officer_x_Case { get; set; }
 
         public PoliceDbContext()
         {

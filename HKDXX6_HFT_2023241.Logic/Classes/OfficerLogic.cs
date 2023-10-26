@@ -19,9 +19,9 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Officer item)
         {
-            if (item.Cases.Count != 0 || item.CasesAsPrimary.Count != 0 || item.OfficersUnderCommand.Count != 0)
+            if (item.Cases.Count != 0 || item.OfficersUnderCommand.Count != 0)
             {
-                throw new ArgumentException("Cases, CasesAsPrimary and OfficersUnderCommand cannot be filled when creating officer.");
+                throw new ArgumentException("Cases and OfficersUnderCommand cannot be filled when creating officer.");
             }
             if (item.Rank == Ranks.Captain && item.Precinct.Officers.Any(t => t.Rank == Ranks.Captain))
             {
@@ -38,9 +38,9 @@ namespace HKDXX6_HFT_2023241.Logic
                 throw new ArgumentException("Officer does not exist.");
             }
 
-            if (item.Cases.Count != o.Cases.Count || item.CasesAsPrimary.Count != o.CasesAsPrimary.Count || item.OfficersUnderCommand.Count != o.OfficersUnderCommand.Count)
+            if (item.Cases.Count != o.Cases.Count || item.OfficersUnderCommand.Count != o.OfficersUnderCommand.Count)
             {
-                throw new ArgumentException("Cases, CasesAsPrimary and OfficersUnderCommand cannot be updated from this side of the relationship.");
+                throw new ArgumentException("Cases and OfficersUnderCommand cannot be updated from this side of the relationship.");
             }
 
             if (item.DirectCO.Precinct != item.Precinct)
@@ -75,7 +75,6 @@ namespace HKDXX6_HFT_2023241.Logic
                 c = p.Officers
                     .OrderByDescending(t => t.Rank)
                     .ThenBy(t => t.HireDate)
-                    .ThenBy(t => t.CasesAsPrimary.Count())
                     .ThenBy(t => t.Cases.Count())
                     .ThenBy(t => t.FirstName + " " + t.LastName)
                     .First();

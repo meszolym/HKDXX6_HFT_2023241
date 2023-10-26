@@ -83,7 +83,7 @@ namespace HKDXX6_HFT_2023241.Models
             ID = iD;
             Name = name;
             Description = description;
-            OfficerOnCaseID = primaryOfficerBadgeNo;
+            OfficerOnCaseID = OfficerBadgeNo;
             OpenedAt = openDT;
         }
 

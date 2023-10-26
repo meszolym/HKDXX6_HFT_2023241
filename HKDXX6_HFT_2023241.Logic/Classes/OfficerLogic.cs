@@ -12,7 +12,7 @@ namespace HKDXX6_HFT_2023241.Logic
     {
         IRepository<Officer> OfficerRepo;
 
-        public OfficerLogic(IRepository<Officer> officerRepo, IRepository<Precinct> precinctRepo)
+        public OfficerLogic(IRepository<Officer> officerRepo)
         {
             OfficerRepo = officerRepo;
         }

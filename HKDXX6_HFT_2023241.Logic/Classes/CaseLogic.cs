@@ -12,13 +12,11 @@ namespace HKDXX6_HFT_2023241.Logic
     public class CaseLogic : ICaseLogic
     {
         IRepository<Case> CaseRepo;
-        IRepository<Officer> OfficerRepo;
         IRepository<Precinct> PrecinctRepo;
 
-        public CaseLogic(IRepository<Case> caseRepo, IRepository<Officer> officerRepo, IRepository<Precinct> precinctRepo)
+        public CaseLogic(IRepository<Case> caseRepo, IRepository<Precinct> precinctRepo)
         {
             CaseRepo = caseRepo;
-            OfficerRepo = officerRepo;
             PrecinctRepo = precinctRepo;
         }
 

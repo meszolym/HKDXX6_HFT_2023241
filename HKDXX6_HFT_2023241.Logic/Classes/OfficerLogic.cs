@@ -92,7 +92,7 @@ namespace HKDXX6_HFT_2023241.Logic
             OfficerRepo.Delete(ID);
         }
 
-        public IEnumerable<Officer> Read(int ID)
+        public Officer Read(int ID)
         {
             var o = OfficerRepo.Read(ID);
             if (o == null)
@@ -100,9 +100,7 @@ namespace HKDXX6_HFT_2023241.Logic
                 throw new ArgumentException("Officer does not exist.");
             }
 
-            IEnumerable<Officer> result = new Officer[] { o };
-
-            return result;
+            return o;
         }
 
         public IEnumerable<Officer> ReadAll()

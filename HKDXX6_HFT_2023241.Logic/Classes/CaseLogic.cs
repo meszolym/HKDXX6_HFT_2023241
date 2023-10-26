@@ -43,7 +43,7 @@ namespace HKDXX6_HFT_2023241.Logic
             CaseRepo.Delete(ID);
         }
 
-        public IEnumerable<Case> Read(int ID)
+        public Case Read(int ID)
         {
             var c = CaseRepo.Read(ID);
             if (c == null)
@@ -51,9 +51,7 @@ namespace HKDXX6_HFT_2023241.Logic
                 throw new ArgumentException("Case does not exist.");
             }
 
-            IEnumerable<Case> result = new Case[] { c };
-
-            return result;
+            return c;
         }
 
         public IEnumerable<Case> ReadAll()
@@ -105,7 +103,7 @@ namespace HKDXX6_HFT_2023241.Logic
         //NonCrud 3
         public void AutoAssignCase(int id, int precintID)
         {
-            Case c = Read(id).First();
+            Case c = Read(id);
 
             if (c.OfficerOnCase != null || c.IsClosed)
             {

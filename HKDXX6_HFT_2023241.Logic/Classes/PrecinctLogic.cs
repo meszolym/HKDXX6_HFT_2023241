@@ -47,7 +47,7 @@ namespace HKDXX6_HFT_2023241.Logic
             PrecinctRepo.Delete(ID);
         }
 
-        public IEnumerable<Precinct> Read(int ID)
+        public Precinct Read(int ID)
         {
             var p = PrecinctRepo.Read(ID);
             if (p == null)
@@ -55,9 +55,7 @@ namespace HKDXX6_HFT_2023241.Logic
                 throw new ArgumentException("Precinct does not exist.");
             }
 
-            IEnumerable<Precinct> result = new Precinct[] { p };
-
-            return result;
+            return p;
         }
 
         public IEnumerable<Precinct> ReadAll()
@@ -65,9 +63,9 @@ namespace HKDXX6_HFT_2023241.Logic
             return PrecinctRepo.ReadAll();
         }
 
-        public IEnumerable<Officer> GetCaptain(int precintID)
+        public Officer GetCaptain(int precintID)
         {
-            var p = Read(precintID).First();
+            var p = Read(precintID);
 
             Officer c;
 
@@ -85,9 +83,7 @@ namespace HKDXX6_HFT_2023241.Logic
                     .First();
             }
 
-            IEnumerable<Officer> result = new Officer[] { c };
-
-            return result;
+            return c;
         }
     }
 }

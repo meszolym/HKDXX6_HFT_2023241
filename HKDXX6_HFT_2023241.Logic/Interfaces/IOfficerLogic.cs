@@ -7,7 +7,7 @@ namespace HKDXX6_HFT_2023241.Logic
     {
         void Create(Officer item);
         void Delete(int ID);
-        IEnumerable<Officer> Read(int ID);
+        Officer Read(int ID);
         IEnumerable<Officer> ReadAll();
         void Update(Officer item);
     }

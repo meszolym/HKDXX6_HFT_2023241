@@ -15,7 +15,7 @@ namespace HKDXX6_HFT_2023241.Logic
         IEnumerable<CaseLogic.OfficerCaseStatistic> officerCaseStatistics();
         IEnumerable<KeyValuePair<Precinct, TimeSpan>> PrecinctCaseAverageOpenTime();
         IEnumerable<CaseLogic.PrecinctCaseStatistic> precinctCaseStatistics();
-        IEnumerable<Case> Read(int ID);
+        Case Read(int ID);
         IEnumerable<Case> ReadAll();
         void Update(Case item);
     }

@@ -40,23 +40,10 @@ namespace HKDXX6_HFT_2023241.Repository
                 .OnDelete(DeleteBehavior.ClientSetNull)); //If CO is deleted, the officers CO is set to null
 
             modelBuilder.Entity<Case>()
-                .HasMany(x => x.Officers) //A case has multiple officers
-                .WithMany(x => x.Cases) //An officer has multiple cases
-                .UsingEntity<OfficerOnCase>( //Using this connector table
-                    x => x.HasOne(x => x.Officer) //OfficerOnCase has an officer
-                        .WithMany() //The officer has many OfficerOnCase entries => Many cases
-                        .HasForeignKey(x => x.OfficerBadgeNo) //FK assignment
-                        .OnDelete(DeleteBehavior.Cascade), //If officer is deleted, delete the OfficerOnCase entries
-                    x => x.HasOne(x => x.Case) //OfficerOnCase has a case
-                        .WithMany() //The case has many OfficerOnCase entries => Many officers
-                        .HasForeignKey(x => x.CaseID) //FK assignment
-                        .OnDelete(DeleteBehavior.Cascade)); //If case is deleted, delete the OfficerOnCase entries
-
-            modelBuilder.Entity<Case>()
-                .HasOne(c => c.PrimaryOfficer) //A case has a primary officer (this will be ensured by logic, if any officers are attached, a primary officer is a must)
-                .WithMany(o => o.CasesAsPrimary) //An officer has many cases to which they are attached as primary
-                .HasForeignKey(c => c.PrimaryOfficerBadgeNo) //FK assignment
-                .OnDelete(DeleteBehavior.Restrict) //Cannot delete officer if there are any cases to which they are attached as primary
+                .HasOne(c => c.OfficerOnCase) //A case has an officer
+                .WithMany(o => o.Cases) //An officer has many cases to which they are attached to
+                .HasForeignKey(c => c.OfficerOnCaseID) //FK assignment
+                .OnDelete(DeleteBehavior.Restrict) //Cannot delete officer if there are any cases to which they are attached to
                 .IsRequired(false); // When a case is first added, it is not required to have a primary
 
             modelBuilder.Entity<Precinct>().HasData(new Precinct[]
@@ -87,20 +74,6 @@ namespace HKDXX6_HFT_2023241.Repository
                 new Case(2,"Blackmail of Parlov","Famous writer D.C. Parlov's manuscript of his upcoming book was stolen, and some of it was leaked online. The culprit wants a ransom or they will release the rest of the manuscript.",378, new DateTime(2013,09,17,19,00,00)),
                 new Case(3,"Kidnapping of Cheddar the dog","Someone kidnapped the captain's dog, Cheddar (the fluffy boy), and demands ransom.",6382, new DateTime(2013, 09, 17, 19, 00, 00))
             });
-
-            modelBuilder.Entity<OfficerOnCase>().HasData(new OfficerOnCase[]
-            {
-                new OfficerOnCase(1,1,9544),
-                new OfficerOnCase(2,1,426),
-                new OfficerOnCase(3,2,378),
-                new OfficerOnCase(4,2,9544),
-                new OfficerOnCase(5,2,3118),
-                new OfficerOnCase(6,3,6382),
-                new OfficerOnCase(7,3,9544),
-                new OfficerOnCase(8,3,426)
-
-            });
-
         }
 
     }

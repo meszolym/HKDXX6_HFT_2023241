@@ -48,19 +48,12 @@ namespace HKDXX6_HFT_2023241.Models
             }
         }
 
-        // Lazyload the officers on the case
+        // Lazyload the officer on the case
         [NotMapped]
         [JsonIgnore]
-        public virtual ICollection<Officer> Officers { get; set; }
+        public virtual Officer? OfficerOnCase { get; set; }
 
-        //The badge number of the primary officer
-        [Range(1000, 99999)]
-        public int? PrimaryOfficerBadgeNo { get; set; }
-
-        //Lazyload the primary officer
-        [NotMapped]
-        [JsonIgnore]
-        public virtual Officer? PrimaryOfficer { get; set; }
+        public int? OfficerOnCaseID { get; set; }
 
         [NotMapped]
         [JsonIgnore]
@@ -68,13 +61,13 @@ namespace HKDXX6_HFT_2023241.Models
         {
             get
             {
-                return PrimaryOfficer.Precinct;
+                return OfficerOnCase.Precinct;
             }
         }
 
         public Case()
         {
-            Officers = new HashSet<Officer>();
+            
         }
 
         public Case(int iD, string name, string description, DateTime openDT)
@@ -82,17 +75,15 @@ namespace HKDXX6_HFT_2023241.Models
             ID = iD;
             Name = name;
             Description = description;
-            Officers = new HashSet<Officer>();
             OpenedAt = openDT;
         }
 
-        public Case(int iD, string name, string description, int primaryOfficerBadgeNo, DateTime openDT)
+        public Case(int iD, string name, string description, int OfficerBadgeNo, DateTime openDT)
         {
             ID = iD;
             Name = name;
             Description = description;
-            Officers = new HashSet<Officer>();
-            PrimaryOfficerBadgeNo = primaryOfficerBadgeNo;
+            OfficerOnCaseID = primaryOfficerBadgeNo;
             OpenedAt = openDT;
         }
 

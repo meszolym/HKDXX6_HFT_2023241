@@ -50,7 +50,6 @@ namespace HKDXX6_HFT_2023241.Models
 
         // Lazyload the officer on the case
         [NotMapped]
-        [JsonIgnore]
         public virtual Officer? OfficerOnCase { get; set; }
 
         public int? OfficerOnCaseID { get; set; }

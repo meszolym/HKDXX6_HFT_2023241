@@ -48,7 +48,6 @@ namespace HKDXX6_HFT_2023241.Models
 
         //Lazyload the DCO of the officer
         [NotMapped]
-        [JsonIgnore]
         public virtual Officer? DirectCO { get; set; }
 
         //Lazyload officers who are under the command of officer (officers where this officer is DCO)
@@ -63,7 +62,6 @@ namespace HKDXX6_HFT_2023241.Models
 
         //Lazyload the precinct
         [NotMapped]
-        [JsonIgnore]
         public virtual Precinct Precinct { get; set; }
 
         //Lazyload all cases where the officer is attached

@@ -105,7 +105,7 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public IEnumerable<Officer> ReadAll()
         {
-            return OfficerRepo.ReadAll();
+            return OfficerRepo.ReadAll().ToList();
         }
     }
 }

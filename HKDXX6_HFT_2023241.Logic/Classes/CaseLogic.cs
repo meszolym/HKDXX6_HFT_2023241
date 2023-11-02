@@ -56,14 +56,14 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public IEnumerable<Case> ReadAll()
         {
-            return CaseRepo.ReadAll();
+            return CaseRepo.ReadAll().ToList();
         }
 
 
         //NonCrud 1
         public IEnumerable<OfficerCaseStatistic> officerCaseStatistics()
         {
-            return from x in ReadAll()
+            var result = from x in ReadAll()
                    group x by x.OfficerOnCase into g
                    select new OfficerCaseStatistic
                    {
@@ -71,6 +71,8 @@ namespace HKDXX6_HFT_2023241.Logic
                        ClosedCases = g.Count(t => t.IsClosed),
                        OpenCases = g.Count(t => !t.IsClosed)
                    };
+
+            return result.ToList();
         }
 
         public struct OfficerCaseStatistic
@@ -83,7 +85,7 @@ namespace HKDXX6_HFT_2023241.Logic
         //NonCrud 2
         public IEnumerable<PrecinctCaseStatistic> precinctCaseStatistics()
         {
-            return from x in officerCaseStatistics()
+            var result = from x in officerCaseStatistics()
                    group x by x.Officer.Precinct into g
                    select new PrecinctCaseStatistic
                    {
@@ -91,6 +93,8 @@ namespace HKDXX6_HFT_2023241.Logic
                        OpenCases = g.Sum(t => t.OpenCases),
                        ClosedCases = g.Sum(t => t.ClosedCases)
                    };
+
+            return result.ToList();
         }
 
         public struct PrecinctCaseStatistic
@@ -119,25 +123,28 @@ namespace HKDXX6_HFT_2023241.Logic
         //NonCrud 4
         public IEnumerable<KeyValuePair<Officer, TimeSpan>> OfficerCaseAverageOpenTime()
         {
-            return from x in ReadAll()
+            var result = from x in ReadAll()
                    group x by x.OfficerOnCase into g
                    select new KeyValuePair<Officer, TimeSpan>
                    (
                        g.Key,
                        TimeSpan.FromTicks((long)g.Average(t => t.OpenTimeSpan.Value.Ticks))
                    );
+
+            return result.ToList();
         }
 
         //NonCrud 5
         public IEnumerable<KeyValuePair<Precinct, TimeSpan>> PrecinctCaseAverageOpenTime()
         {
-            return from x in ReadAll()
+            var result = from x in ReadAll()
                    group x by x.Precinct into g
                    select new KeyValuePair<Precinct, TimeSpan>
                    (
                        g.Key,
                        TimeSpan.FromTicks((long)g.Average(t => t.OpenTimeSpan.Value.Ticks))
                    );
+            return result.ToList();
         }
 
         //NonCrud 6
@@ -148,19 +155,20 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("Precinct does not exist.");
             }
-            return ReadAll().Where(t => t.Precinct == p);
+            return ReadAll().Where(t => t.Precinct == p).ToList();
         }
 
         //NonCrud 7
         public IEnumerable<KeyValuePair<Precinct, IEnumerable<Case>>> CasesOfPrecincts()
         {
-            return from x in ReadAll()
+            var result = from x in ReadAll()
                    group x by x.Precinct into g
                    select new KeyValuePair<Precinct, IEnumerable<Case>>
                    (
                        g.Key,
                        g
                    );
+            return result.ToList();
         }
     }
 }

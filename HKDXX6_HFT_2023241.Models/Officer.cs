@@ -107,11 +107,11 @@ namespace HKDXX6_HFT_2023241.Models
                     && LastName == b.LastName
                     && Rank == b.Rank
                     && DirectCO_BadgeNo == b.DirectCO_BadgeNo
-                    && DirectCO.Equals(b.DirectCO)
+                    && ((DirectCO == null && b.DirectCO == null) || DirectCO.Equals(b.DirectCO))
                     && PrecinctID == b.PrecinctID
-                    && Precinct.Equals(b.Precinct)
-                    && Cases.Equals(b.Cases)
-                    && OfficersUnderCommand.Equals(b.OfficersUnderCommand)
+                    && ((Precinct == null && b.Precinct == null) || Precinct.Equals(b.Precinct))
+                    && ((Cases == null && b.Cases == null) || Cases.Equals(b.Cases))
+                    && ((OfficersUnderCommand == null && b.OfficersUnderCommand == null) || OfficersUnderCommand.Equals(b.OfficersUnderCommand))
                     && HireDate == b.HireDate;
             }
         }

@@ -106,13 +106,14 @@ namespace HKDXX6_HFT_2023241.Logic
         public IEnumerable<OfficerCaseStatistic> officerCaseStatistics()
         {
             var result = from x in ReadAll()
-                   group x by x.OfficerOnCase into g
-                   select new OfficerCaseStatistic
-                   {
-                       Officer = g.Key,
-                       ClosedCases = g.Count(t => t.IsClosed),
-                       OpenCases = g.Count(t => !t.IsClosed)
-                   };
+                         where x.OfficerOnCase != null
+                         group x by x.OfficerOnCase into g
+                         select new OfficerCaseStatistic
+                         {
+                             Officer = g.Key,
+                             ClosedCases = g.Count(t => t.IsClosed),
+                             OpenCases = g.Count(t => !t.IsClosed)
+                         };
 
             return result.ToList();
         }
@@ -132,7 +133,8 @@ namespace HKDXX6_HFT_2023241.Logic
                 }
                 else
                 {
-                    return this.Officer.Equals(b.Officer)
+                    return 
+                        Officer.Equals(b.Officer)
                         && ClosedCases == b.ClosedCases
                         && OpenCases == b.OpenCases;
                 }
@@ -195,6 +197,12 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new InvalidOperationException("Cannot auto-assign already assigned/closed case.");
             }
+            var p = PrecinctRepo.Read(precintID);
+            if (p == null)
+            {
+                throw new ArgumentException("Precinct does not exist.");
+            }
+
             var Officer = officerCaseStatistics().OrderBy(t => t.OpenCases).First(t => t.Officer.PrecinctID == precintID).Officer;
 
             c.OfficerOnCaseID = Officer.BadgeNo;
@@ -206,12 +214,13 @@ namespace HKDXX6_HFT_2023241.Logic
         public IEnumerable<KeyValuePair<Officer, TimeSpan>> OfficerCaseAverageOpenTime()
         {
             var result = from x in ReadAll()
-                   group x by x.OfficerOnCase into g
-                   select new KeyValuePair<Officer, TimeSpan>
-                   (
-                       g.Key,
-                       TimeSpan.FromTicks((long)g.Average(t => t.OpenTimeSpan.Value.Ticks))
-                   );
+                        where x.IsClosed == true
+                        group x by x.OfficerOnCase into g
+                        select new KeyValuePair<Officer, TimeSpan>
+                        (
+                            g.Key,
+                            TimeSpan.FromTicks((long)g.Average(t => t.OpenTimeSpan.Value.Ticks))
+                        );
 
             return result.ToList();
         }
@@ -220,12 +229,13 @@ namespace HKDXX6_HFT_2023241.Logic
         public IEnumerable<KeyValuePair<Precinct, TimeSpan>> PrecinctCaseAverageOpenTime()
         {
             var result = from x in ReadAll()
-                   group x by x.Precinct into g
-                   select new KeyValuePair<Precinct, TimeSpan>
-                   (
-                       g.Key,
-                       TimeSpan.FromTicks((long)g.Average(t => t.OpenTimeSpan.Value.Ticks))
-                   );
+                        where x.IsClosed == true
+                        group x by x.Precinct into g
+                        select new KeyValuePair<Precinct, TimeSpan>
+                        (
+                            g.Key,
+                            TimeSpan.FromTicks((long)g.Average(t => t.OpenTimeSpan.Value.Ticks))
+                        );
             return result.ToList();
         }
 
@@ -244,6 +254,7 @@ namespace HKDXX6_HFT_2023241.Logic
         public IEnumerable<KeyValuePair<Precinct, IEnumerable<Case>>> CasesOfPrecincts()
         {
             var result = from x in ReadAll()
+                         where x.Precinct != null
                    group x by x.Precinct into g
                    select new KeyValuePair<Precinct, IEnumerable<Case>>
                    (

@@ -62,7 +62,7 @@ namespace HKDXX6_HFT_2023241.Models
         {
             get
             {
-                return OfficerOnCase.Precinct;
+                return OfficerOnCase?.Precinct;
             }
         }
 

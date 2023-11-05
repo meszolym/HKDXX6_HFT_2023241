@@ -162,6 +162,54 @@ namespace HKDXX6_HFT_2023241.Test
         }
 
         [Test]
+        [TestCase(0)]
+        [TestCase(null)]
+        [TestCase(140)]
+        public void UpdateTest_WithIncorrectPrecinctID_ThrowsArgumentException(int pID)
+        {
+            //Arrange
+            var o = new Officer(9544, "Jake", "Peralta", Ranks.Detective, 378, 99, new DateTime(2004, 03, 10));
+            o.PrecinctID = pID;
+
+            //Act + Assert
+            var ex = Assert.Throws<ArgumentException>(() => logic.Update(o));
+            Assert.That(ex.Message == "PrecinctID must be between 1 and 139 inclusively.");
+            mockRepo.Verify(r => r.Update(o), Times.Never);
+        }
+
+        [Test]
+        [TestCase("", "")]
+        [TestCase("", "NoMatterWhatName")]
+        [TestCase("NoMatterWhatName", "")]
+        public void UpdateTest_WithIncorrectNameValues_ThrowsArgumentException(string fname, string lname)
+        {
+            //Arrange
+            var o = new Officer(9544, "Jake", "Peralta", Ranks.Detective, 378, 99, new DateTime(2004, 03, 10));
+            o.FirstName = fname;
+            o.LastName = lname;
+
+            //Act + Assert
+            var ex = Assert.Throws<ArgumentException>(() => logic.Update(o));
+            Assert.That(ex.Message == "First and last name must be at least two characters long");
+            mockRepo.Verify(r => r.Update(o), Times.Never);
+        }
+
+        [Test]
+        public void UpdateTest_WithFutureHireDate_ThrowsArgumentException()
+        {
+            //Arrange
+            var d = DateTime.Now.AddDays(1);
+            var o = new Officer(9544, "Jake", "Peralta", Ranks.Detective, 378, 99, new DateTime(2004, 03, 10));
+            o.HireDate = d;
+
+            //Act + Assert
+            var ex = Assert.Throws<ArgumentException>(() => logic.Update(o));
+            Assert.That(ex.Message == "HireDate cannot be in the future.");
+            mockRepo.Verify(r => r.Update(o), Times.Never);
+        }
+
+
+        [Test]
         public void UpdateTest_Correct_ManyFieldsChanged()
         {
             //Arrange

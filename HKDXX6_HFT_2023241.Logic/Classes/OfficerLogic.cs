@@ -31,7 +31,7 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("PrecinctID must be between 1 and 139 inclusively.");
             }
-            if (item.HireDate > DateTime.Today)
+            if (item.HireDate > DateTime.Now)
             {
                 throw new ArgumentException("HireDate cannot be in the future.");
             }
@@ -63,6 +63,19 @@ namespace HKDXX6_HFT_2023241.Logic
             if (item.Rank == Ranks.Captain && item.Precinct.Officers.Any(t => t.Rank == Ranks.Captain && t.BadgeNo != item.BadgeNo))
             {
                 throw new ArgumentException("Can't have two captains at one precinct.");
+            }
+
+            if (item.FirstName.Length < 2 || item.LastName.Length < 2)
+            {
+                throw new ArgumentException("First and last name must be at least two characters long");
+            }
+            if (item.PrecinctID < 1 || item.PrecinctID > 139)
+            {
+                throw new ArgumentException("PrecinctID must be between 1 and 139 inclusively.");
+            }
+            if (item.HireDate > DateTime.Now)
+            {
+                throw new ArgumentException("HireDate cannot be in the future.");
             }
 
             if (item.PrecinctID != o.PrecinctID)

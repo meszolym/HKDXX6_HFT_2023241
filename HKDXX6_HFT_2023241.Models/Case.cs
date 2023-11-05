@@ -20,10 +20,12 @@ namespace HKDXX6_HFT_2023241.Models
         //Name of the case
         [Required]
         [StringLength(240)]
+        [MinLength(10)]
         public string Name { get; set; }
 
         //Short description of the case
         [Required]
+        [MinLength(15)]
         public string Description { get; set; }
 
         //Opening timestamp

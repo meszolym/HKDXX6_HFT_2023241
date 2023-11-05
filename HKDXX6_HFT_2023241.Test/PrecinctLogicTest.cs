@@ -43,7 +43,7 @@ namespace HKDXX6_HFT_2023241.Test
         [TestCase(null, "ThisIsLongEnough")]
         [TestCase(0, "ThisIsLongEnough")]
         [TestCase(140, "ThisIsLongEnough")]
-        public void CreateTest_WithIncorrectAddressValues_ThrowsArgumentException(int ID, string addr)
+        public void CreateTest_WithIncorrectAddressOrIDValues_ThrowsArgumentException(int ID, string addr)
         {
             //Arrange
             var p = new Precinct() { ID = ID, Address = addr };

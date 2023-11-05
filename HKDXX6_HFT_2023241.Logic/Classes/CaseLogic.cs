@@ -22,6 +22,10 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Case item)
         {
+            if (item.ID != 0)
+            {
+                throw new ArgumentException("ID is assigned by the system automatically.");
+            }
             if (item.Name.Length < 10)
             {
                 throw new ArgumentException("Name of case must be at least 10 characters.");
@@ -29,6 +33,18 @@ namespace HKDXX6_HFT_2023241.Logic
             if (item.Description.Length < 15)
             {
                 throw new ArgumentException("Description of case must be at least 15 characters.");
+            }
+            if (item.OpenedAt > DateTime.Now)
+            {
+                throw new ArgumentException("Cases in the future cannot be recorded.");
+            }
+            if (item.ClosedAt < item.OpenedAt)
+            {
+                throw new ArgumentException("Case cannot be closed before it is opened.");
+            }
+            if (item.ClosedAt > DateTime.Now)
+            {
+                throw new ArgumentException("Case closure cannot be in the future.");
             }
 
             CaseRepo.Create(item);
@@ -40,6 +56,27 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("Case has to be open to be updated.");
             }
+            if (item.ClosedAt != null && item.ClosedAt < item.OpenedAt)
+            {
+                throw new ArgumentException("Case cannot be closed before it is opened.");
+            }
+            if (item.OpenedAt > DateTime.Now)
+            {
+                throw new ArgumentException("Cases in the future cannot be recorded.");
+            }
+            if (item.Name.Length < 10)
+            {
+                throw new ArgumentException("Name of case must be at least 10 characters.");
+            }
+            if (item.Description.Length < 15)
+            {
+                throw new ArgumentException("Description of case must be at least 15 characters.");
+            }
+            if (item.ClosedAt > DateTime.Now)
+            {
+                throw new ArgumentException("Case closure cannot be in the future.");
+            }
+
             CaseRepo.Update(item);
         }
 

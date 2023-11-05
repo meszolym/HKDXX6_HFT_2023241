@@ -61,7 +61,6 @@ namespace HKDXX6_HFT_2023241.Test
 
             List<Officer> olist = new()
             {
-                //int BadgeNo, string FirstName, string LastName, Ranks Rank, int? DirectCO_BadgeNo, int PrecintID, DateTime hireDate
                 new Officer(1234,"Marco","Polo",Ranks.Sergeant,null,99,DateTime.Now)
             };
 

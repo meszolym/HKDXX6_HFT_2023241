@@ -30,11 +30,13 @@ namespace HKDXX6_HFT_2023241.Models
         //The first name of the officer
         [Required]
         [StringLength(100)]
+        [MinLength(2)]
         public string FirstName { get; set; }
 
         //The last name of the officer
         [Required]
         [StringLength(100)]
+        [MinLength(2)]
         public string LastName { get; set; }
 
         //The rank of the officer

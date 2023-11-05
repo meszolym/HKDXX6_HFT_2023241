@@ -19,7 +19,7 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Precinct item)
         {
-            if (item.ID == null || item.ID < 1 || item.ID > 139)
+            if (item.ID < 1 || item.ID > 139)
             {
                 throw new ArgumentException("ID must be between 1 and 139 inclusively.");
             }

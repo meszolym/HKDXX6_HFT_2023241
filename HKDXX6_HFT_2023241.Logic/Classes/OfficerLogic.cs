@@ -19,9 +19,21 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Officer item)
         {
+            if (item.BadgeNo != 0)
+            {
+                throw new ArgumentException("ID is assigned by the system automatically.");
+            }
             if (item.FirstName.Length < 2 || item.LastName.Length <2)
             {
                 throw new ArgumentException("First and last name must be at least two characters long");
+            }
+            if (item.PrecinctID < 1 ||  item.PrecinctID > 139)
+            {
+                throw new ArgumentException("PrecinctID must be between 1 and 139 inclusively.");
+            }
+            if (item.HireDate > DateTime.Today)
+            {
+                throw new ArgumentException("HireDate cannot be in the future.");
             }
             if (item.Cases.Count != 0 || item.OfficersUnderCommand.Count != 0)
             {
@@ -43,7 +55,7 @@ namespace HKDXX6_HFT_2023241.Logic
                 throw new ArgumentException("Cases and OfficersUnderCommand cannot be updated from this side of the relationship.");
             }
 
-            if (item.DirectCO.Precinct != item.Precinct)
+            if (item.DirectCO != null && item.DirectCO.Precinct != item.Precinct)
             {
                 throw new ArgumentException("Commanding officer has to be in the same precinct as officer.");
             }

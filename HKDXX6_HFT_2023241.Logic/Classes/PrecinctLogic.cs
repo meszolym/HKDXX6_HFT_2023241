@@ -19,6 +19,10 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Precinct item)
         {
+            if (item.Address.Length < 10)
+            {
+                throw new ArgumentException("Address must be at least 10 characters.");
+            }
             if (item.Officers.Count != 0)
             {
                 throw new ArgumentException("Officers must be empty when creating.");
@@ -28,12 +32,7 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Update(Precinct item)
         {
-            var p = PrecinctRepo.Read(item.ID);
-
-            if (p == null)
-            {
-                throw new ArgumentException("Precinct does not exist.");
-            }
+            var p = Read(item.ID);
 
             if (item.Officers.Count != p.Officers.Count)
             {

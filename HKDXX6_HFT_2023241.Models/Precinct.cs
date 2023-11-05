@@ -34,5 +34,25 @@ namespace HKDXX6_HFT_2023241.Models
             Address = address;
             Officers = new HashSet<Officer>();
         }
+
+        public override bool Equals(object obj)
+        {
+            Precinct b = obj as Precinct;
+            if (b == null)
+            {
+                return false;
+            }
+            else
+            {
+                return b.ID == ID
+                    && b.Address == Address
+                    && b.Officers.Equals(Officers);
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(ID, Address, Officers);
+        }
     }
 }

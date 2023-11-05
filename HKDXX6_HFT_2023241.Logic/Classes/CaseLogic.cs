@@ -22,16 +22,21 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Case item)
         {
+            if (item.Name.Length < 10)
+            {
+                throw new ArgumentException("Name of case must be at least 10 characters.");
+            }
+            if (item.Description.Length < 15)
+            {
+                throw new ArgumentException("Description of case must be at least 15 characters.");
+            }
+
             CaseRepo.Create(item);
         }
 
         public void Update(Case item)
         {
-            if (CaseRepo.Read(item.ID) == null)
-            {
-                throw new ArgumentException("Case not found.");
-            }
-            if (CaseRepo.Read(item.ID).IsClosed && item.IsClosed)
+            if (Read(item.ID).IsClosed && item.IsClosed)
             {
                 throw new ArgumentException("Case has to be open to be updated.");
             }
@@ -75,11 +80,31 @@ namespace HKDXX6_HFT_2023241.Logic
             return result.ToList();
         }
 
-        public struct OfficerCaseStatistic
+        public class OfficerCaseStatistic
         {
             public Officer Officer { get; set; }
             public int ClosedCases { get; set; }
             public int OpenCases { get; set; }
+
+            public override bool Equals(object obj)
+            {
+                OfficerCaseStatistic b = obj as OfficerCaseStatistic;
+                if (b == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return this.Officer.Equals(b.Officer)
+                        && ClosedCases == b.ClosedCases
+                        && OpenCases == b.OpenCases;
+                }
+            }
+
+            public override int GetHashCode()
+            {
+                return HashCode.Combine(Officer, ClosedCases, OpenCases);
+            }
         }
 
         //NonCrud 2
@@ -97,11 +122,31 @@ namespace HKDXX6_HFT_2023241.Logic
             return result.ToList();
         }
 
-        public struct PrecinctCaseStatistic
+        public class PrecinctCaseStatistic
         {
             public Precinct Precinct { get; set; }
             public int ClosedCases { get; set; }
             public int OpenCases { get; set; }
+
+            public override bool Equals(object obj)
+            {
+                PrecinctCaseStatistic b = obj as PrecinctCaseStatistic;
+                if (b == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return this.Precinct.Equals(b.Precinct)
+                        && ClosedCases == b.ClosedCases
+                        && OpenCases == b.OpenCases;
+                }
+            }
+
+            public override int GetHashCode()
+            {
+                return HashCode.Combine(Precinct, ClosedCases, OpenCases);
+            }
         }
 
         //NonCrud 3
@@ -170,5 +215,6 @@ namespace HKDXX6_HFT_2023241.Logic
                    );
             return result.ToList();
         }
+
     }
 }

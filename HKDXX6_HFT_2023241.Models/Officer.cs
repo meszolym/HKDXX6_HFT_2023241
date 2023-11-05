@@ -91,5 +91,35 @@ namespace HKDXX6_HFT_2023241.Models
             HireDate = hireDate;
         }
 
+        public override bool Equals(object obj)
+        {
+            Officer b = obj as Officer;
+            if (b == null)
+            {
+                return false;
+            }
+            else
+            {
+                return BadgeNo == b.BadgeNo
+                    && FirstName == b.FirstName
+                    && LastName == b.LastName
+                    && Rank == b.Rank
+                    && DirectCO_BadgeNo == b.DirectCO_BadgeNo
+                    && DirectCO.Equals(b.DirectCO)
+                    && PrecinctID == b.PrecinctID
+                    && Precinct.Equals(b.Precinct)
+                    && Cases.Equals(b.Cases)
+                    && OfficersUnderCommand.Equals(b.OfficersUnderCommand)
+                    && HireDate == b.HireDate;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(
+                HashCode.Combine(BadgeNo, FirstName, LastName, Rank, DirectCO_BadgeNo, PrecinctID, HireDate),
+                HashCode.Combine(Precinct, DirectCO, Cases, OfficersUnderCommand)
+                );
+        }
     }
 }

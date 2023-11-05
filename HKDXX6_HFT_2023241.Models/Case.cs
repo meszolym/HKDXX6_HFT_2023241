@@ -86,5 +86,29 @@ namespace HKDXX6_HFT_2023241.Models
             OpenedAt = openDT;
         }
 
+        public override bool Equals(object obj)
+        {
+            Case b = obj as Case;
+            if (b == null)
+            {
+                return false;
+            }
+            else
+            {
+                return ID == b.ID
+                    && Name == b.Name
+                    && Description == b.Description
+                    && OpenedAt.Equals(b.OpenedAt)
+                    && ClosedAt.Equals(b.ClosedAt)
+                    && OfficerOnCaseID == b.OfficerOnCaseID
+                    && OfficerOnCase.Equals(b.OfficerOnCase);
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(ID, Name, Description, OpenedAt, ClosedAt, OfficerOnCase, OfficerOnCaseID);
+        }
+
     }
 }

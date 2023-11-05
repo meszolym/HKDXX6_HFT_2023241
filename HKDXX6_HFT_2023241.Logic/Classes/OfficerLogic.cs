@@ -19,6 +19,10 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Officer item)
         {
+            if (item.FirstName.Length < 2 || item.LastName.Length <2)
+            {
+                throw new ArgumentException("First and last name must be at least two characters long");
+            }
             if (item.Cases.Count != 0 || item.OfficersUnderCommand.Count != 0)
             {
                 throw new ArgumentException("Cases and OfficersUnderCommand cannot be filled when creating officer.");
@@ -32,11 +36,7 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Update(Officer item)
         {
-            var o = OfficerRepo.Read(item.BadgeNo);
-            if (o == null)
-            {
-                throw new ArgumentException("Officer does not exist.");
-            }
+            var o = Read(item.BadgeNo);
 
             if (item.Cases.Count != o.Cases.Count || item.OfficersUnderCommand.Count != o.OfficersUnderCommand.Count)
             {

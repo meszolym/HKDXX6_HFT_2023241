@@ -22,6 +22,7 @@ namespace HKDXX6_HFT_2023241.Models
         //The address of the precinct in NY
         [Required]
         [StringLength(100)]
+        [MinLength(10)]
         public string Address { get; set; }
 
         public Precinct()

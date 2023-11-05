@@ -19,9 +19,13 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Precinct item)
         {
-            if (item.Address.Length < 10)
+            if (item.ID == null || item.ID < 1 || item.ID > 139)
             {
-                throw new ArgumentException("Address must be at least 10 characters.");
+                throw new ArgumentException("ID must be between 1 and 139 inclusively.");
+            }
+            if (item.Address == null || item.Address.Length < 10 || item.Address.Length > 100)
+            {
+                throw new ArgumentException("Length of address must be between 10 and 100 characters.");
             }
             if (item.Officers.Count != 0)
             {
@@ -34,6 +38,10 @@ namespace HKDXX6_HFT_2023241.Logic
         {
             var p = Read(item.ID);
 
+            if (item.Address == null || item.Address.Length < 10 || item.Address.Length > 100)
+            {
+                throw new ArgumentException("Length of address must be between 10 and 100 characters.");
+            }
             if (item.Officers.Count != p.Officers.Count)
             {
                 throw new ArgumentException("Officers cannot be changed from this side of the relationship.");

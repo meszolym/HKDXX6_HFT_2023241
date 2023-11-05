@@ -16,9 +16,9 @@ namespace HKDXX6_HFT_2023241.Test
         CaseLogic logic;
         Mock<IRepository<Case>> mockCaseRepo;
         Mock<IRepository<Precinct>> mockPrecinctRepo;
-        IEnumerable<Officer> officers;
-        IEnumerable<Precinct> precincts;
-        IEnumerable<Case> cases;
+        List<Officer> officers;
+        List<Precinct> precincts;
+        List<Case> cases;
 
         [SetUp]
         public void Initialize()
@@ -58,7 +58,7 @@ namespace HKDXX6_HFT_2023241.Test
                     Name = "Missing ham",
                     Description = "A Jamón Iberico ham was stolen valued at $6000. According to Charles it is an amazing cured ham from Spain.",
                     OfficerOnCaseID = 9544,
-                    OfficerOnCase = officers.ElementAt(0),
+                    OfficerOnCase = officers[0],
                     OpenedAt = new DateTime(2013,09,17,19,00,00),
                     ClosedAt = new DateTime(2013,09,17,19,30,00)
                 },
@@ -68,7 +68,7 @@ namespace HKDXX6_HFT_2023241.Test
                     Name = "Blackmail of Parlov",
                     Description = "Famous writer D.C. Parlov's manuscript of his upcoming book was stolen, and some of it was leaked online. The culprit wants a ransom or they will release the rest of the manuscript.",
                     OfficerOnCaseID = 378,
-                    OfficerOnCase = officers.ElementAt(1),
+                    OfficerOnCase = officers[1],
                     OpenedAt = new DateTime(2013,09,17,19,00,00)
                 },
                 new Case() {
@@ -76,7 +76,7 @@ namespace HKDXX6_HFT_2023241.Test
                     Name = "Kidnapping of Cheddar the dog",
                     Description = "Someone kidnapped the captain's dog, Cheddar (the fluffy boy), and demands ransom.",
                     OfficerOnCaseID = 6382,
-                    OfficerOnCase = officers.ElementAt(2),
+                    OfficerOnCase = officers[2],
                     OpenedAt = new DateTime(2013, 09, 17, 19, 00, 00)
                 },
                 new Case()
@@ -85,7 +85,7 @@ namespace HKDXX6_HFT_2023241.Test
                     Name = "TEST THING",
                     Description = "THIS IS A TEST DESC, NOTHING TO SEE HERE",
                     OfficerOnCaseID = 6382,
-                    OfficerOnCase = officers.ElementAt(4),
+                    OfficerOnCase = officers[4],
                     OpenedAt = new DateTime(2023,01,01,0,0,0),
                     ClosedAt = new DateTime(2023,01,11,0,0,0)
                 },
@@ -109,7 +109,7 @@ namespace HKDXX6_HFT_2023241.Test
                 DirectCO_BadgeNo = null,
                 DirectCO = null,
                 PrecinctID = 99,
-                Precinct = precincts.ElementAt(1),
+                Precinct = precincts[1],
                 HireDate = new DateTime(1980, 01, 02)
             };
 
@@ -122,7 +122,7 @@ namespace HKDXX6_HFT_2023241.Test
                 DirectCO_BadgeNo = 6382,
                 DirectCO = Holt,
                 PrecinctID = 99,
-                Precinct = precincts.ElementAt(1),
+                Precinct = precincts[1],
                 HireDate = new DateTime(1999, 03, 12)
             };
 
@@ -135,7 +135,7 @@ namespace HKDXX6_HFT_2023241.Test
                 DirectCO_BadgeNo = 378,
                 DirectCO = Terry,
                 PrecinctID = 99,
-                Precinct = precincts.ElementAt(1),
+                Precinct = precincts[1],
                 HireDate = new DateTime(2004, 03, 10)
             };
 
@@ -160,7 +160,7 @@ namespace HKDXX6_HFT_2023241.Test
                 DirectCO_BadgeNo = 1973,
                 DirectCO = Joel,
                 PrecinctID = 93,
-                Precinct = precincts.ElementAt(0),
+                Precinct = precincts[0],
                 HireDate = new DateTime(2001, 01, 02)
             };
 
@@ -273,7 +273,7 @@ namespace HKDXX6_HFT_2023241.Test
                 Name = "Blackmail of Parlov",
                 Description = "Famous writer D.C. Parlov's manuscript of his upcoming book was stolen, and some of it was leaked online. The culprit wants a ransom or they will release the rest of the manuscript.",
                 OfficerOnCaseID = 378,
-                OfficerOnCase = officers.ElementAt(1),
+                OfficerOnCase = officers[1],
                 OpenedAt = new DateTime(2013, 09, 17, 19, 00, 00)
             };
             c.ClosedAt = new DateTime(2000, 09, 17, 19, 00, 00);
@@ -336,7 +336,7 @@ namespace HKDXX6_HFT_2023241.Test
                 Name = "Blackmail of Parlov",
                 Description = "Famous writer D.C. Parlov's manuscript of his upcoming book was stolen, and some of it was leaked online. The culprit wants a ransom or they will release the rest of the manuscript.",
                 OfficerOnCaseID = 378,
-                OfficerOnCase = officers.ElementAt(1),
+                OfficerOnCase = officers[1],
                 OpenedAt = new DateTime(2013, 09, 17, 19, 00, 00)
             };
             var d = DateTime.Now.AddDays(1);
@@ -357,25 +357,25 @@ namespace HKDXX6_HFT_2023241.Test
             {
                 new OfficerCaseStatistic
                 {
-                    Officer = officers.ElementAt(0),
+                    Officer = officers[0],
                     ClosedCases = 1,
                     OpenCases = 0
                 },
                 new OfficerCaseStatistic
                 {
-                    Officer = officers.ElementAt(1),
+                    Officer = officers[1],
                     ClosedCases = 0,
                     OpenCases = 1
                 },
                 new OfficerCaseStatistic
                 {
-                    Officer = officers.ElementAt(2),
+                    Officer = officers[2],
                     ClosedCases = 0,
                     OpenCases = 1
                 },
                 new OfficerCaseStatistic
                 {
-                    Officer = officers.ElementAt(4),
+                    Officer = officers[4],
                     ClosedCases = 1,
                     OpenCases = 0
                 }
@@ -396,13 +396,13 @@ namespace HKDXX6_HFT_2023241.Test
             {
                 new PrecinctCaseStatistic
                 {
-                    Precinct = precincts.ElementAt(0),
+                    Precinct = precincts[0],
                     OpenCases = 0,
                     ClosedCases = 1
                 },
                 new PrecinctCaseStatistic
                 {
-                    Precinct = precincts.ElementAt(1),
+                    Precinct = precincts[1],
                     OpenCases = 2,
                     ClosedCases = 1
                 }
@@ -443,7 +443,7 @@ namespace HKDXX6_HFT_2023241.Test
             logic.AutoAssignCase(5, 93);
 
             //Assert
-            Assert.That(cases.ElementAt(4).OfficerOnCaseID, Is.AnyOf(1973,3711));
+            Assert.That(cases[4].OfficerOnCaseID, Is.AnyOf(1973,3711));
         }
 
         [Test]
@@ -455,7 +455,7 @@ namespace HKDXX6_HFT_2023241.Test
             logic.AutoAssignCase(5, 99);
 
             //Assert
-            Assert.That(cases.ElementAt(4).OfficerOnCaseID, Is.EqualTo(9544));
+            Assert.That(cases[4].OfficerOnCaseID, Is.EqualTo(9544));
         }
 
         [Test]
@@ -464,8 +464,8 @@ namespace HKDXX6_HFT_2023241.Test
             //Arrange
             var exp = new List<KeyValuePair<Officer, TimeSpan>>()
             {
-                new KeyValuePair<Officer, TimeSpan>(officers.ElementAt(4),TimeSpan.FromDays(10)),
-                new KeyValuePair<Officer, TimeSpan>(officers.ElementAt(0),TimeSpan.FromMinutes(30))
+                new KeyValuePair<Officer, TimeSpan>(officers[4],TimeSpan.FromDays(10)),
+                new KeyValuePair<Officer, TimeSpan>(officers[0],TimeSpan.FromMinutes(30))
 
             };
 
@@ -482,8 +482,8 @@ namespace HKDXX6_HFT_2023241.Test
             //Arrange
             var exp = new List<KeyValuePair<Precinct, TimeSpan>>()
             {
-                new KeyValuePair<Precinct, TimeSpan>(precincts.ElementAt(0), TimeSpan.FromDays(10)),
-                new KeyValuePair<Precinct, TimeSpan>(precincts.ElementAt(1), TimeSpan.FromMinutes(30))
+                new KeyValuePair<Precinct, TimeSpan>(precincts[0], TimeSpan.FromDays(10)),
+                new KeyValuePair<Precinct, TimeSpan>(precincts[1], TimeSpan.FromMinutes(30))
 
             };
 
@@ -500,9 +500,9 @@ namespace HKDXX6_HFT_2023241.Test
             //Arrange
             var exp = new List<Case>()
             {
-                cases.ElementAt(0),
-                cases.ElementAt(1),
-                cases.ElementAt(2),
+                cases[0],
+                cases[1],
+                cases[2],
             };
 
             //Act
@@ -518,7 +518,7 @@ namespace HKDXX6_HFT_2023241.Test
             //Arrange
             var exp = new List<Case>()
             {
-                cases.ElementAt(3)
+                cases[3]
             };
 
             //Act
@@ -534,15 +534,15 @@ namespace HKDXX6_HFT_2023241.Test
             //Arrange
             var exp = new List<KeyValuePair<Precinct, List<Case>>>()
             {
-                new KeyValuePair<Precinct, List<Case>>(precincts.ElementAt(0),new List<Case>()
+                new KeyValuePair<Precinct, List<Case>>(precincts[0],new List<Case>()
                 {
-                    cases.ElementAt(3)
+                    cases[3]
                 }),
-                new KeyValuePair<Precinct, List<Case>>(precincts.ElementAt(1),new List<Case>()
+                new KeyValuePair<Precinct, List<Case>>(precincts[1],new List<Case>()
                 {
-                    cases.ElementAt(0),
-                    cases.ElementAt(1),
-                    cases.ElementAt(2),
+                    cases[0],
+                    cases[1],
+                    cases[2],
                 }),
             };
 

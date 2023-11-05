@@ -41,7 +41,7 @@ namespace HKDXX6_HFT_2023241.Logic
             }
             if (item.Rank == Ranks.Captain && item.Precinct.Officers.Any(t => t.Rank == Ranks.Captain))
             {
-                throw new ArgumentException("Can't have two captains at one precinct.");
+                throw new ArgumentException("Cannot have two captains at one precinct.");
             }
             OfficerRepo.Create(item);
         }
@@ -50,7 +50,7 @@ namespace HKDXX6_HFT_2023241.Logic
         {
             var o = Read(item.BadgeNo);
 
-            if (item.Cases.Count != o.Cases.Count || item.OfficersUnderCommand.Count != o.OfficersUnderCommand.Count)
+            if (!item.Cases.Equals(o.Cases) || !item.OfficersUnderCommand.Equals(o.OfficersUnderCommand))
             {
                 throw new ArgumentException("Cases and OfficersUnderCommand cannot be updated from this side of the relationship.");
             }
@@ -62,7 +62,7 @@ namespace HKDXX6_HFT_2023241.Logic
 
             if (item.Rank == Ranks.Captain && item.Precinct.Officers.Any(t => t.Rank == Ranks.Captain && t.BadgeNo != item.BadgeNo))
             {
-                throw new ArgumentException("Can't have two captains at one precinct.");
+                throw new ArgumentException("Cannot have two captains at one precinct.");
             }
 
             if (item.FirstName.Length < 2 || item.LastName.Length < 2)

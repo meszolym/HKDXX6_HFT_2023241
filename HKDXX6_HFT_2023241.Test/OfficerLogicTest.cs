@@ -18,29 +18,100 @@ namespace HKDXX6_HFT_2023241.Test
     {
         OfficerLogic logic;
         Mock<IRepository<Officer>> mockRepo;
+        List<Precinct> precincts;
+        List<Officer> officers;
 
         [SetUp]
         public void Initialize()
         {
-            List<Officer> list = new List<Officer>()
-            {
-                new Officer(1973,"Jack","Joel", Ranks.Captain,null,93,new DateTime(1980,01,01)),
-                new Officer(3711,"David","Majors", Ranks.Detective,1973,93, new DateTime(2001,01,02)),
-                new Officer(6382,"Raymond","Holt", Ranks.Captain,null,99, new DateTime(1980, 01, 02)),
-                new Officer(378,"Terrence","Jeffords", Ranks.Sergeant,6382,99, new DateTime(1999, 03, 12)),
-                new Officer(3263,"Amy","Santiago", Ranks.Sergeant,6382,99, new DateTime(2005, 02, 12)),
-                new Officer(9544,"Jake","Peralta", Ranks.Detective,378,99, new DateTime(2004, 03, 10)),
-                new Officer(426,"Charles","Boyle", Ranks.Detective,378,99, new DateTime(2000, 05, 16)),
-                new Officer(3118,"Rosa","Diaz", Ranks.Detective,378,99, new DateTime(2004, 06, 18)),
-                new Officer(18324,"Teri","Haver", Ranks.PatrolOfficer,3263,99, new DateTime(2013, 08, 06)),
-                new Officer(7529,"Lou","Vargas", Ranks.PatrolOfficer,3263,99, new DateTime(2015, 03, 18)),
-                new Officer(94499,"Gary","Jennings", Ranks.PatrolOfficer,3263,99, new DateTime(2016, 11, 26))
-            };
+            InitializePrecincts();
+            InitializeOfficers();
 
             mockRepo = new Mock<IRepository<Officer>>();
             logic = new OfficerLogic(mockRepo.Object);
-            mockRepo.Setup(r => r.ReadAll()).Returns(list.AsQueryable());
-            mockRepo.Setup(r => r.Read(It.IsAny<int>())).Returns((int x) => list.AsQueryable().First(t => t.BadgeNo == x));
+            mockRepo.Setup(r => r.ReadAll()).Returns(officers.AsQueryable());
+            mockRepo.Setup(r => r.Read(It.IsAny<int>())).Returns((int x) => officers.AsQueryable().First(t => t.BadgeNo == x));
+        }
+
+        private void InitializePrecincts()
+        {
+            var ninethree = new Precinct(93, "100 Meserole Avenue");
+            var ninenine = new Precinct(99, "211 Union Avenue");
+
+            precincts = new List<Precinct> { ninethree, ninenine };
+        }
+
+        private void InitializeOfficers()
+        {
+            var Joel = new Officer(1973, "Jack", "Joel", Ranks.Captain, null, 93, new DateTime(1980, 01, 01));
+            Joel.DirectCO = null;
+            Joel.Precinct = precincts[0];
+            precincts[0].Officers.Add(Joel);
+
+            var Vulture = new Officer(3711, "David", "Majors", Ranks.Detective, 1973, 93, new DateTime(2001, 01, 02));
+            Vulture.DirectCO = Joel;
+            Vulture.Precinct = precincts[0];
+            precincts[0].Officers.Add(Vulture);
+            Joel.OfficersUnderCommand.Add(Vulture);
+
+            var Holt = new Officer(6382, "Raymond", "Holt", Ranks.Captain, null, 99, new DateTime(1980, 01, 02));
+            Holt.DirectCO = null;
+            Holt.Precinct = precincts[1];
+            precincts[1].Officers.Add(Holt);
+
+            var Terry = new Officer(378, "Terrence", "Jeffords", Ranks.Sergeant, 6382, 99, new DateTime(1999, 03, 12));
+            Terry.DirectCO = Holt;
+            Terry.Precinct = precincts[1];
+            precincts[1].Officers.Add(Terry);
+            Holt.OfficersUnderCommand.Add(Terry);
+
+            var Amy = new Officer(3263, "Amy", "Santiago", Ranks.Sergeant, 6382, 99, new DateTime(2005, 02, 12));
+            Amy.DirectCO = Holt;
+            Amy.Precinct = precincts[1];
+            precincts[1].Officers.Add(Amy);
+            Holt.OfficersUnderCommand.Add(Amy);
+
+            var Jake = new Officer(9544, "Jake", "Peralta", Ranks.Detective, 378, 99, new DateTime(2004, 03, 10));
+            Jake.DirectCO = Terry;
+            Jake.Precinct = precincts[1];
+            precincts[1].Officers.Add(Jake);
+            Terry.OfficersUnderCommand.Add(Jake);
+
+            var Charles = new Officer(426, "Charles", "Boyle", Ranks.Detective, 378, 99, new DateTime(2000, 05, 16));
+            Charles.DirectCO = Terry;
+            Charles.Precinct = precincts[1];
+            precincts[1].Officers.Add(Charles);
+            Terry.OfficersUnderCommand.Add(Charles);
+
+            var Rosa = new Officer(3118, "Rosa", "Diaz", Ranks.Detective, 378, 99, new DateTime(2004, 06, 18));
+            Rosa.DirectCO = Terry;
+            Rosa.Precinct = precincts[1];
+            precincts[1].Officers.Add(Rosa);
+            Terry.OfficersUnderCommand.Add(Rosa);
+
+            var Teri = new Officer(18324, "Teri", "Haver", Ranks.PatrolOfficer, 3263, 99, new DateTime(2013, 08, 06));
+            Teri.DirectCO = Amy;
+            Teri.Precinct = precincts[1];
+            precincts[1].Officers.Add(Teri);
+            Amy.OfficersUnderCommand.Add(Teri);
+
+            var Lou = new Officer(7529, "Lou", "Vargas", Ranks.PatrolOfficer, 3263, 99, new DateTime(2015, 03, 18));
+            Lou.DirectCO = Amy;
+            Lou.Precinct = precincts[1];
+            precincts[1].Officers.Add(Lou);
+            Amy.OfficersUnderCommand.Add(Lou);
+
+            var Gary = new Officer(94499, "Gary", "Jennings", Ranks.PatrolOfficer, 3263, 99, new DateTime(2016, 11, 26));
+            Gary.DirectCO = Amy;
+            Gary.Precinct = precincts[1];
+            precincts[1].Officers.Add(Gary);
+            Amy.OfficersUnderCommand.Add(Gary);
+
+            officers = new List<Officer>()
+            {
+                Joel, Vulture, Holt, Terry, Amy, Jake, Charles, Rosa, Teri, Lou, Gary
+            };
+            
         }
 
         [Test]
@@ -169,6 +240,10 @@ namespace HKDXX6_HFT_2023241.Test
         {
             //Arrange
             var o = new Officer(9544, "Jake", "Peralta", Ranks.Detective, 378, 99, new DateTime(2004, 03, 10));
+            //old
+            o.Cases = officers[5].Cases;
+            o.OfficersUnderCommand = officers[5].OfficersUnderCommand;
+            //new
             o.PrecinctID = pID;
 
             //Act + Assert
@@ -185,6 +260,10 @@ namespace HKDXX6_HFT_2023241.Test
         {
             //Arrange
             var o = new Officer(9544, "Jake", "Peralta", Ranks.Detective, 378, 99, new DateTime(2004, 03, 10));
+            //old
+            o.Cases = officers[5].Cases;
+            o.OfficersUnderCommand = officers[5].OfficersUnderCommand;
+            //new
             o.FirstName = fname;
             o.LastName = lname;
 
@@ -200,6 +279,10 @@ namespace HKDXX6_HFT_2023241.Test
             //Arrange
             var d = DateTime.Now.AddDays(1);
             var o = new Officer(9544, "Jake", "Peralta", Ranks.Detective, 378, 99, new DateTime(2004, 03, 10));
+            //old
+            o.Cases = officers[5].Cases;
+            o.OfficersUnderCommand = officers[5].OfficersUnderCommand;
+            //new
             o.HireDate = d;
 
             //Act + Assert
@@ -214,11 +297,16 @@ namespace HKDXX6_HFT_2023241.Test
         {
             //Arrange
             var o = new Officer(9544, "Jake", "Peralta", Ranks.Detective, 378, 99, new DateTime(2004, 03, 10));
+            //old
+            o.Cases = officers[5].Cases;
+            o.OfficersUnderCommand = officers[5].OfficersUnderCommand;
+            //new
             o.FirstName = "Test";
             o.LastName = "Test";
             o.Rank = Ranks.Sergeant;
             o.DirectCO_BadgeNo = 6382;
             o.HireDate = DateTime.Now;
+            
 
             //Act
             logic.Update(o);
@@ -226,6 +314,67 @@ namespace HKDXX6_HFT_2023241.Test
             //Assert
             mockRepo.Verify(r => r.Update(o), Times.Once);
 
+        }
+
+        [Test]
+        public void CreateTest_TwoCaptainsProblem_ThrowsArgumentException()
+        {
+            //Officer
+            var o = new Officer(0, "Marco", "Polo", Ranks.Captain, null, 99, DateTime.Now);
+            o.DirectCO = null;
+            o.Precinct = precincts[1];
+            
+
+            //Act + Assert
+            var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
+            Assert.That(ex.Message == "Cannot have two captains at one precinct.");
+            mockRepo.Verify(r => r.Create(o), Times.Never);
+        }
+
+        [Test]
+        public void UpdateTest_TwoCaptainsProblem_ThrowsArgumentException()
+        {
+            //Arrange
+            var o = new Officer(9544, "Jake", "Peralta", Ranks.Detective, 378, 99, new DateTime(2004, 03, 10));
+            o.Cases = officers[5].Cases;
+            o.OfficersUnderCommand = officers[5].OfficersUnderCommand;
+            //new
+            o.Rank = Ranks.Captain;
+            o.DirectCO_BadgeNo = null;
+            o.DirectCO = null;
+            o.Precinct = precincts[1];
+
+
+            //Act + Assert
+            var ex = Assert.Throws<ArgumentException>(() => logic.Update(o));
+            Assert.That(ex.Message == "Cannot have two captains at one precinct.");
+            mockRepo.Verify(r => r.Update(o), Times.Never);
+        }
+
+        [Test]
+        public void UpdateTest_OfficersUnderCommandRedirection()
+        {
+            //Arrange
+            var o = new Officer(3263, "Amy", "Santiago", Ranks.Sergeant, 6382, 99, new DateTime(2005, 02, 12));
+            //old
+            o.OfficersUnderCommand = officers[4].OfficersUnderCommand;
+            o.Cases = officers[4].Cases;
+            //new
+            o.DirectCO_BadgeNo = 1973;
+            o.DirectCO = officers[0];
+            officers[0].OfficersUnderCommand.Add(o);
+            o.PrecinctID = 93;
+            o.Precinct = precincts[0];
+            precincts[0].Officers.Add(o);
+
+            //Act
+            logic.Update(o);
+
+            //Assert
+            Assert.That(officers[8].DirectCO_BadgeNo, Is.EqualTo(6382));
+            Assert.That(officers[9].DirectCO_BadgeNo, Is.EqualTo(6382));
+            Assert.That(officers[10].DirectCO_BadgeNo, Is.EqualTo(6382));
+            mockRepo.Verify(r => r.Update(o), Times.Once);
         }
     }
 }

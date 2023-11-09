@@ -1,6 +1,7 @@
 ﻿using HKDXX6_HFT_2023241.Logic;
 using HKDXX6_HFT_2023241.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -52,5 +53,13 @@ namespace HKDXX6_HFT_2023241.Endpoint.Controllers
         {
             logic.Delete(id);
         }
+
+        // GET <PrecinctController>/GetCaptain/5
+        [HttpGet("GetCaptain/{id}")]
+        public Officer GetCaptain(int id)
+        {
+            return logic.GetCaptain(id);
+        }
+
     }
 }

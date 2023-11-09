@@ -46,14 +46,13 @@ namespace HKDXX6_HFT_2023241.Models
             else
             {
                 return b.ID == ID
-                    && b.Address == Address
-                    && b.Officers.Equals(Officers);
+                    && b.Address == Address;
             }
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(ID, Address, Officers);
+            return HashCode.Combine(ID, Address);
         }
     }
 }

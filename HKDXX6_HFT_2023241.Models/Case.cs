@@ -102,14 +102,13 @@ namespace HKDXX6_HFT_2023241.Models
                     && Description == b.Description
                     && OpenedAt.Equals(b.OpenedAt)
                     && ClosedAt.Equals(b.ClosedAt)
-                    && OfficerOnCaseID == b.OfficerOnCaseID
-                    && OfficerOnCase.Equals(b.OfficerOnCase);
+                    && OfficerOnCaseID == b.OfficerOnCaseID;
             }
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(ID, Name, Description, OpenedAt, ClosedAt, OfficerOnCase, OfficerOnCaseID);
+            return HashCode.Combine(ID, Name, Description, OpenedAt, ClosedAt, OfficerOnCaseID);
         }
 
     }

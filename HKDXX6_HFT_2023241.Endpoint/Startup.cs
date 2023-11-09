@@ -1,3 +1,6 @@
+using HKDXX6_HFT_2023241.Logic;
+using HKDXX6_HFT_2023241.Models;
+using HKDXX6_HFT_2023241.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +19,17 @@ namespace HKDXX6_HFT_2023241.Endpoint
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<PoliceDbContext> ();
+
+            services.AddTransient<IRepository<Precinct>, PrecinctRepository>();
+            services.AddTransient<IRepository<Officer>, OfficerRepository>();
+            services.AddTransient<IRepository<Case>, CaseRepository>();
+
+            services.AddTransient<IPrecinctLogic, PrecinctLogic>();
+            services.AddTransient<IOfficerLogic, OfficerLogic>();
+            services.AddTransient<ICaseLogic, CaseLogic>();
+
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -30,10 +44,7 @@ namespace HKDXX6_HFT_2023241.Endpoint
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllers();
             });
         }
     }

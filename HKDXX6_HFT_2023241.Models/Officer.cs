@@ -107,21 +107,23 @@ namespace HKDXX6_HFT_2023241.Models
                     && LastName == b.LastName
                     && Rank == b.Rank
                     && DirectCO_BadgeNo == b.DirectCO_BadgeNo
-                    && ((DirectCO == null && b.DirectCO == null) || DirectCO.Equals(b.DirectCO))
                     && PrecinctID == b.PrecinctID
-                    && ((Precinct == null && b.Precinct == null) || Precinct.Equals(b.Precinct))
-                    && ((Cases == null && b.Cases == null) || Cases.Equals(b.Cases))
-                    && ((OfficersUnderCommand == null && b.OfficersUnderCommand == null) || OfficersUnderCommand.Equals(b.OfficersUnderCommand))
                     && HireDate == b.HireDate;
             }
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(
-                HashCode.Combine(BadgeNo, FirstName, LastName, Rank, DirectCO_BadgeNo, PrecinctID, HireDate),
-                HashCode.Combine(Precinct, DirectCO, Cases, OfficersUnderCommand)
-                );
+            HashCode hash = new HashCode();
+            hash.Add(BadgeNo);
+            hash.Add(FirstName);
+            hash.Add(LastName);
+            hash.Add(Rank);
+            hash.Add(DirectCO_BadgeNo);
+            hash.Add(PrecinctID);
+            hash.Add(HireDate);
+
+            return hash.ToHashCode();
         }
     }
 }

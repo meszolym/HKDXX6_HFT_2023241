@@ -27,10 +27,6 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("Length of address must be between 10 and 100 characters.");
             }
-            if (item.Officers.Count != 0)
-            {
-                throw new ArgumentException("Officers must be empty when creating.");
-            }
             PrecinctRepo.Create(item);
         }
 
@@ -41,10 +37,6 @@ namespace HKDXX6_HFT_2023241.Logic
             if (item.Address == null || item.Address.Length < 10 || item.Address.Length > 100)
             {
                 throw new ArgumentException("Length of address must be between 10 and 100 characters.");
-            }
-            if (item.Officers.Count != p.Officers.Count)
-            {
-                throw new ArgumentException("Officers cannot be changed from this side of the relationship.");
             }
             PrecinctRepo.Update(item);
         }

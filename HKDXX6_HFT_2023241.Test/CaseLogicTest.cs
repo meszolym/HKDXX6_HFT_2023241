@@ -168,7 +168,6 @@ namespace HKDXX6_HFT_2023241.Test
         }
 
         [Test]
-        [TestCase(0)]
         [TestCase(-1)]
         public void CreateTest_WithIncorrectCaseID_ThrowsArgumentException(int id) 
         {
@@ -177,7 +176,7 @@ namespace HKDXX6_HFT_2023241.Test
 
             //Act+Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(c));
-            Assert.That(ex.Message == "ID has to be positive.");
+            Assert.That(ex.Message == "ID has to be positive or zero.");
             mockCaseRepo.Verify(r => r.Create(c), Times.Never);
 
         }

@@ -24,7 +24,6 @@ namespace HKDXX6_HFT_2023241.Repository
             var old = Read(item.ID);
 
             old.Address = item.Address;
-            old.Officers = item.Officers;
 
             ctx.SaveChanges();
         }

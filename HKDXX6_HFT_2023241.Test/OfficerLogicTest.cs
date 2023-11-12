@@ -138,7 +138,7 @@ namespace HKDXX6_HFT_2023241.Test
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
-            Assert.That(ex.Message == "ID has to be positive.");
+            Assert.That(ex.Message == "ID has to be positive or zero.");
             mockRepo.Verify(r => r.Create(o), Times.Never);
         }
 
@@ -168,66 +168,6 @@ namespace HKDXX6_HFT_2023241.Test
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
             Assert.That(ex.Message == "HireDate cannot be in the future.");
             mockRepo.Verify(r => r.Create(o), Times.Never);
-        }
-
-        [Test]
-        public void CreateTest_WithCasesAdded_ThrowsArgumentException()
-        {
-            //Arrange
-            var c = new List<Case>(){ new Case() { Name = "Test" } };
-
-            var o = new Officer() { BadgeNo = 1111, FirstName = "LongEnough", LastName = "NameValues", PrecinctID = 99, Cases = c };
-
-            //Act + Assert
-            var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
-            Assert.That(ex.Message == "Cases and OfficersUnderCommand cannot be filled when creating officer.");
-            mockRepo.Verify(r => r.Create(o), Times.Never);
-        }
-
-        [Test]
-        public void CreateTest_WithOfficersAdded_ThrowsArgumentException()
-        {
-            //Arrange
-            List<Officer> olist = new()
-            {
-                new Officer(1234,"Marco","Polo",Ranks.Sergeant,null,99,DateTime.Now)
-            };
-
-            var o = new Officer() { BadgeNo = 1111, FirstName = "LongEnough", LastName = "NameValues", PrecinctID = 99, OfficersUnderCommand = olist };
-
-            //Act + Assert
-            var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
-            Assert.That(ex.Message == "Cases and OfficersUnderCommand cannot be filled when creating officer.");
-            mockRepo.Verify(r => r.Create(o), Times.Never);
-        }
-
-        [Test]
-        public void UpdateTest_WithCasesAdded_ThrowsArgumentException()
-        {
-            //Arrange
-            var c = new List<Case>() { new Case() { Name = "Test" } };
-            var o = new Officer(9544, "Jake", "Peralta", Ranks.Detective, 378, 99, new DateTime(2004, 03, 10));
-            o.Cases = c;
-
-            var ex = Assert.Throws<ArgumentException>(() => logic.Update(o));
-            Assert.That(ex.Message == "Cases and OfficersUnderCommand cannot be updated from this side of the relationship.");
-            mockRepo.Verify(r => r.Update(o), Times.Never);
-        }
-
-        [Test]
-        public void UpdateTest_WithOfficersAdded_ThrowsArgumentException()
-        {
-            //Arrange
-            List<Officer> olist = new()
-            {
-                new Officer(1234,"Marco","Polo",Ranks.Sergeant,null,99,DateTime.Now)
-            };
-            var o = new Officer(9544, "Jake", "Peralta", Ranks.Detective, 378, 99, new DateTime(2004, 03, 10));
-            o.OfficersUnderCommand = olist;
-
-            var ex = Assert.Throws<ArgumentException>(() => logic.Update(o));
-            Assert.That(ex.Message == "Cases and OfficersUnderCommand cannot be updated from this side of the relationship.");
-            mockRepo.Verify(r => r.Update(o), Times.Never);
         }
 
         [Test]

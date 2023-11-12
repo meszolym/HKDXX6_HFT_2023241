@@ -24,7 +24,7 @@ namespace HKDXX6_HFT_2023241.Logic
         {
             if (item.ID < 0)
             {
-                throw new ArgumentException("ID has to be positive.");
+                throw new ArgumentException("ID has to be positive or zero.");
             }
             if (item.Name.Length < 10)
             {

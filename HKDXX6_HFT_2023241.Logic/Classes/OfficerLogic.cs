@@ -21,7 +21,7 @@ namespace HKDXX6_HFT_2023241.Logic
         {
             if (item.BadgeNo < 0)
             {
-                throw new ArgumentException("ID has to be positive.");
+                throw new ArgumentException("ID has to be positive or zero.");
             }
             if (item.FirstName.Length < 2 || item.LastName.Length <2)
             {
@@ -35,10 +35,6 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("HireDate cannot be in the future.");
             }
-            if (item.Cases.Count != 0 || item.OfficersUnderCommand.Count != 0)
-            {
-                throw new ArgumentException("Cases and OfficersUnderCommand cannot be filled when creating officer.");
-            }
             if (item.Rank == Ranks.Captain && item.Precinct.Officers.Any(t => t.Rank == Ranks.Captain))
             {
                 throw new ArgumentException("Cannot have two captains at one precinct.");
@@ -49,11 +45,6 @@ namespace HKDXX6_HFT_2023241.Logic
         public void Update(Officer item)
         {
             var o = Read(item.BadgeNo);
-
-            if (!item.Cases.Equals(o.Cases) || !item.OfficersUnderCommand.Equals(o.OfficersUnderCommand))
-            {
-                throw new ArgumentException("Cases and OfficersUnderCommand cannot be updated from this side of the relationship.");
-            }
 
             if (item.DirectCO != null && item.DirectCO.Precinct != item.Precinct)
             {

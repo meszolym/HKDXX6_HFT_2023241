@@ -54,25 +54,6 @@ namespace HKDXX6_HFT_2023241.Test
         }
 
         [Test]
-        public void CreateTest_WithOfficersAdded_ThrowsArgumentException()
-        {
-
-            //Arrange
-
-            List<Officer> olist = new()
-            {
-                new Officer(1234,"Marco","Polo",Ranks.Sergeant,null,99,DateTime.Now)
-            };
-
-            var p = new Precinct() {ID = 1, Address = "ThisIsALongAddressSoThatItPasses", Officers = olist };
-
-            //Act + Assert
-            var ex = Assert.Throws<ArgumentException>(() => logic.Create(p));
-            Assert.That(ex.Message == "Officers must be empty when creating.");
-            mockRepo.Verify(r => r.Create(p), Times.Never);
-        }
-
-        [Test]
         [TestCase(1,"PerfectLen")]
         [TestCase(139,"PerfectLen")]
         [TestCase(1,"BarelyRightLen:" +
@@ -89,23 +70,6 @@ namespace HKDXX6_HFT_2023241.Test
 
             //Assert
             mockRepo.Verify(r => r.Create(p), Times.Once);
-        }
-
-        [Test]
-        public void UpdateTest_ChangeOfficerList_ThrowsArgumentException()
-        {
-            //Arrange
-            List<Officer> olist = new()
-            {
-                //int BadgeNo, string FirstName, string LastName, Ranks Rank, int? DirectCO_BadgeNo, int PrecintID, DateTime hireDate
-                new Officer(1234,"Marco","Polo",Ranks.Sergeant,null,99,DateTime.Now)
-            };
-            var p = new Precinct() { ID = 99, Address = "211 Union Avenue", Officers = olist };
-
-            //Act+Assert
-            var ex = Assert.Throws<ArgumentException>(() => logic.Update(p));
-            Assert.That(ex.Message == "Officers cannot be changed from this side of the relationship.");
-            mockRepo.Verify(r => r.Update(p), Times.Never);
         }
 
         [Test]

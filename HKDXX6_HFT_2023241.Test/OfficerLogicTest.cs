@@ -130,9 +130,7 @@ namespace HKDXX6_HFT_2023241.Test
         }
 
         [Test]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(100000)]
+        [TestCase(-1)]
         public void CreateTest_WithIncorrectIDValues_ThrowsArgumentException(int ID)
         {
             //Arrange
@@ -140,7 +138,7 @@ namespace HKDXX6_HFT_2023241.Test
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
-            Assert.That(ex.Message == "ID has to be given between 1000 and 99999.");
+            Assert.That(ex.Message == "ID has to be positive.");
             mockRepo.Verify(r => r.Create(o), Times.Never);
         }
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace HKDXX6_HFT_2023241.Models
 {
@@ -23,7 +24,6 @@ namespace HKDXX6_HFT_2023241.Models
     {
         //The badge number (ID) of the officer
         [Key]
-        [Range(1000, 99999)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BadgeNo { get; set; }
 
@@ -45,7 +45,6 @@ namespace HKDXX6_HFT_2023241.Models
         public Ranks Rank { get; set; }
 
         //BadgeNo of officer directly "above" the officer (Direct Commanding Officer), if any
-        [Range(1000, 99999)]
         public int? DirectCO_BadgeNo { get; set; }
 
         //Lazyload the DCO of the officer

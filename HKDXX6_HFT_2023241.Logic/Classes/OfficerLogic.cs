@@ -19,9 +19,9 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Officer item)
         {
-            if (item.BadgeNo < 1000 || item.BadgeNo > 99999)
+            if (item.BadgeNo < 0)
             {
-                throw new ArgumentException("ID has to be given between 1000 and 99999.");
+                throw new ArgumentException("ID has to be positive.");
             }
             if (item.FirstName.Length < 2 || item.LastName.Length <2)
             {

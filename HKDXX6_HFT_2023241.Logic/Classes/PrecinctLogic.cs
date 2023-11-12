@@ -51,6 +51,11 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Delete(int ID)
         {
+            var p = PrecinctRepo.Read(ID);
+            if (p == null)
+            {
+                throw new ArgumentException("Precinct does not exist.");
+            }
             PrecinctRepo.Delete(ID);
         }
 

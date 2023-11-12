@@ -114,6 +114,11 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Delete(int ID)
         {
+            var o = OfficerRepo.Read(ID);
+            if (o == null)
+            {
+                throw new ArgumentException("Officer does not exist.");
+            }
             OfficerRepo.Delete(ID);
         }
 

@@ -19,7 +19,7 @@ namespace HKDXX6_HFT_2023241.Endpoint
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<PoliceDbContext> ();
+            services.AddTransient<PoliceDbContext>();
 
             services.AddTransient<IRepository<Precinct>, PrecinctRepository>();
             services.AddTransient<IRepository<Officer>, OfficerRepository>();
@@ -30,15 +30,24 @@ namespace HKDXX6_HFT_2023241.Endpoint
             services.AddTransient<ICaseLogic, CaseLogic>();
 
             services.AddControllers();
+
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
+        { 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "HKDXX6_HFT_2023241_API");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 

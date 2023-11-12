@@ -35,9 +35,10 @@ namespace HKDXX6_HFT_2023241.Endpoint.Controllers
         }
 
         [HttpPost]
-        public void AutoAssignCase([FromBody] int caseID, [FromBody] int precinctID)
+        public void AutoAssignCase([FromBody] Tuple<int,int> IDPair)
         {
-            logic.AutoAssignCase(caseID, precinctID);
+            //                   CaseID,       PrecinctID
+            logic.AutoAssignCase(IDPair.Item1, IDPair.Item2);
         }
 
         [HttpGet]

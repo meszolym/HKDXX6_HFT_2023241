@@ -22,7 +22,7 @@ namespace HKDXX6_HFT_2023241.Logic
 
         public void Create(Case item)
         {
-            if (item.ID < 0)
+            if (item.ID <= 0)
             {
                 throw new ArgumentException("ID has to be positive.");
             }

@@ -121,7 +121,7 @@ namespace HKDXX6_HFT_2023241.Test
         public void CreateTest_WithIncorrectNameValues_ThrowsArgumentException(string fname, string lname) 
         {
             //Arrange
-            var o = new Officer() { FirstName = fname, LastName = lname, PrecinctID = 99 };
+            var o = new Officer() {BadgeNo = 1111, FirstName = fname, LastName = lname, PrecinctID = 99 };
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
@@ -132,7 +132,7 @@ namespace HKDXX6_HFT_2023241.Test
         [Test]
         [TestCase(1)]
         [TestCase(2)]
-        [TestCase(10000)]
+        [TestCase(100000)]
         public void CreateTest_WithIncorrectIDValues_ThrowsArgumentException(int ID)
         {
             //Arrange
@@ -140,7 +140,7 @@ namespace HKDXX6_HFT_2023241.Test
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
-            Assert.That(ex.Message == "ID is assigned by the system automatically.");
+            Assert.That(ex.Message == "ID has to be given between 1000 and 99999.");
             mockRepo.Verify(r => r.Create(o), Times.Never);
         }
 
@@ -151,7 +151,7 @@ namespace HKDXX6_HFT_2023241.Test
         public void CreateTest_WithIncorrectPrecinctIDValues_ThrowsArgumentException(int pID)
         {
             //Arrange
-            var o = new Officer() { FirstName = "LongEnough", LastName = "NameValues", PrecinctID = pID };
+            var o = new Officer() {BadgeNo = 1111, FirstName = "LongEnough", LastName = "NameValues", PrecinctID = pID };
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
@@ -164,7 +164,7 @@ namespace HKDXX6_HFT_2023241.Test
         {
             //Arrange
             var d = DateTime.Now.AddDays(1);
-            var o = new Officer() { FirstName = "LongEnough", LastName = "NameValues", PrecinctID = 99, HireDate = d };
+            var o = new Officer() { BadgeNo = 1111, FirstName = "LongEnough", LastName = "NameValues", PrecinctID = 99, HireDate = d };
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
@@ -178,7 +178,7 @@ namespace HKDXX6_HFT_2023241.Test
             //Arrange
             var c = new List<Case>(){ new Case() { Name = "Test" } };
 
-            var o = new Officer() { FirstName = "LongEnough", LastName = "NameValues", PrecinctID = 99, Cases = c };
+            var o = new Officer() { BadgeNo = 1111, FirstName = "LongEnough", LastName = "NameValues", PrecinctID = 99, Cases = c };
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
@@ -195,7 +195,7 @@ namespace HKDXX6_HFT_2023241.Test
                 new Officer(1234,"Marco","Polo",Ranks.Sergeant,null,99,DateTime.Now)
             };
 
-            var o = new Officer() { FirstName = "LongEnough", LastName = "NameValues", PrecinctID = 99, OfficersUnderCommand = olist };
+            var o = new Officer() { BadgeNo = 1111, FirstName = "LongEnough", LastName = "NameValues", PrecinctID = 99, OfficersUnderCommand = olist };
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
@@ -320,7 +320,7 @@ namespace HKDXX6_HFT_2023241.Test
         public void CreateTest_TwoCaptainsProblem_ThrowsArgumentException()
         {
             //Officer
-            var o = new Officer(0, "Marco", "Polo", Ranks.Captain, null, 99, DateTime.Now);
+            var o = new Officer(1111, "Marco", "Polo", Ranks.Captain, null, 99, DateTime.Now);
             o.DirectCO = null;
             o.Precinct = precincts[1];
             

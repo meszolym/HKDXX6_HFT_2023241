@@ -168,9 +168,8 @@ namespace HKDXX6_HFT_2023241.Test
         }
 
         [Test]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(1000)]
+        [TestCase(0)]
+        [TestCase(-1)]
         public void CreateTest_WithIncorrectCaseID_ThrowsArgumentException(int id) 
         {
             //Arrange
@@ -178,7 +177,7 @@ namespace HKDXX6_HFT_2023241.Test
 
             //Act+Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(c));
-            Assert.That(ex.Message == "ID is assigned by the system automatically.");
+            Assert.That(ex.Message == "ID has to be positive.");
             mockCaseRepo.Verify(r => r.Create(c), Times.Never);
 
         }
@@ -187,7 +186,7 @@ namespace HKDXX6_HFT_2023241.Test
         public void CreateTest_WithIncorrectName_ThrowsArgumentException()
         {
             //Arrange
-            var c = new Case() { Name = "tooshort", Description = "FifteenChars...", OpenedAt = DateTime.Now };
+            var c = new Case() {ID = 1000, Name = "tooshort", Description = "FifteenChars...", OpenedAt = DateTime.Now };
 
 
             //Act+Assert
@@ -200,7 +199,7 @@ namespace HKDXX6_HFT_2023241.Test
         public void CreateTest_WithIncorrectDesc_ThrowsArgumentException()
         {
             //Arrange
-            var c = new Case() { Name = "TenChars..", Description = "tooshort", OpenedAt = DateTime.Now };
+            var c = new Case() { ID = 1000, Name = "TenChars..", Description = "tooshort", OpenedAt = DateTime.Now };
 
 
             //Act+Assert
@@ -214,7 +213,7 @@ namespace HKDXX6_HFT_2023241.Test
         {
             //Arrange
             var d = DateTime.Now.AddDays(1);
-            var c = new Case() { Name = "TenChars..", Description = "FifteenChars...", OpenedAt = d };
+            var c = new Case() { ID = 1000, Name = "TenChars..", Description = "FifteenChars...", OpenedAt = d };
 
 
             //Act+Assert
@@ -228,7 +227,7 @@ namespace HKDXX6_HFT_2023241.Test
         {
             //Arrange
             var d = DateTime.Now.AddDays(-1);
-            var c = new Case() { Name = "TenChars..", Description = "FifteenChars...", OpenedAt = DateTime.Now, ClosedAt = d };
+            var c = new Case() { ID = 1000, Name = "TenChars..", Description = "FifteenChars...", OpenedAt = DateTime.Now, ClosedAt = d };
 
             //Act+Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(c));
@@ -241,7 +240,7 @@ namespace HKDXX6_HFT_2023241.Test
         {
             //Arrange
             var d = DateTime.Now.AddDays(1);
-            var c = new Case() { Name = "TenChars..", Description = "FifteenChars...", OpenedAt = DateTime.Now, ClosedAt = d };
+            var c = new Case() { ID = 1000, Name = "TenChars..", Description = "FifteenChars...", OpenedAt = DateTime.Now, ClosedAt = d };
 
             //Act+Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(c));

@@ -240,9 +240,9 @@ namespace HKDXX6_HFT_2023241.Logic
         }
 
         //NonCrud 6
-        public IEnumerable<Case> CasesOfPrecint(int PrecintID)
+        public IEnumerable<Case> CasesOfPrecint(int PrecinctID)
         {
-            var p = PrecinctRepo.Read(PrecintID);
+            var p = PrecinctRepo.Read(PrecinctID);
             if (p == null)
             {
                 throw new ArgumentException("Precinct does not exist.");

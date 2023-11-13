@@ -2,6 +2,7 @@ using HKDXX6_HFT_2023241.Logic;
 using HKDXX6_HFT_2023241.Models;
 using HKDXX6_HFT_2023241.Repository;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,6 +49,18 @@ namespace HKDXX6_HFT_2023241.Endpoint
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "HKDXX6_HFT_2023241_API");
                 c.RoutePrefix = string.Empty;
             });
+
+            app.UseExceptionHandler(c => c.Run(async context =>
+            {
+                var ex = context.Features
+                            .Get<IExceptionHandlerPathFeature>()
+                            .Error;
+                var resp = new { 
+                    ErrorType = ex.GetType().FullName,
+                    ErrorMessage = ex.Message };
+                await context.Response.WriteAsJsonAsync(resp);
+
+            }));
 
             app.UseRouting();
 

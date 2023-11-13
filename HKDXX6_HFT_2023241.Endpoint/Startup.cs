@@ -10,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace HKDXX6_HFT_2023241.Endpoint
@@ -55,9 +57,10 @@ namespace HKDXX6_HFT_2023241.Endpoint
                 var ex = context.Features
                             .Get<IExceptionHandlerPathFeature>()
                             .Error;
-                var resp = new { 
-                    ErrorType = ex.GetType().FullName,
-                    ErrorMessage = ex.Message };
+                var resp = new {
+                    ErrorType = ex.GetType().Name,
+                    ErrorMessage = ex.Message 
+                }; 
                 await context.Response.WriteAsJsonAsync(resp);
 
             }));

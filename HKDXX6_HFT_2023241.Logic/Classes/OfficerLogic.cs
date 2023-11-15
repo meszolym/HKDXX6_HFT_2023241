@@ -110,6 +110,7 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("Officer does not exist.");
             }
+            RedirectOfficersUnderCommand(o);
             OfficerRepo.Delete(ID);
         }
 

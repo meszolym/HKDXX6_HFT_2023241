@@ -40,10 +40,6 @@ namespace HKDXX6_HFT_2023241.Test
 
             InitializeCases();
 
-            
-
-            
-
             mockCaseRepo.Setup(r => r.ReadAll()).Returns(cases.AsQueryable());
             mockCaseRepo.Setup(r => r.Read(It.IsAny<int>())).Returns((int x) => cases.AsQueryable().First(t => t.ID == x));
         }

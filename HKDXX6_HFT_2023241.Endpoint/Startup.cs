@@ -58,8 +58,8 @@ namespace HKDXX6_HFT_2023241.Endpoint
                             .Get<IExceptionHandlerPathFeature>()
                             .Error;
                 var resp = new {
-                    ErrorType = ex.GetType().Name,
-                    ErrorMessage = ex.Message 
+                    Type = ex.GetType().Name,
+                    Msg = ex.Message 
                 }; 
                 await context.Response.WriteAsJsonAsync(resp);
 

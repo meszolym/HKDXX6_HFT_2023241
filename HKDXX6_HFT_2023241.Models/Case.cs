@@ -95,15 +95,12 @@ namespace HKDXX6_HFT_2023241.Models
             {
                 return false;
             }
-            else
-            {
-                return ID == b.ID
+            return ID == b.ID
                     && Name == b.Name
                     && Description == b.Description
                     && OpenedAt.Equals(b.OpenedAt)
                     && ClosedAt.Equals(b.ClosedAt)
                     && OfficerOnCaseID == b.OfficerOnCaseID;
-            }
         }
 
         public override int GetHashCode()

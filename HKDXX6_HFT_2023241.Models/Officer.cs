@@ -99,16 +99,13 @@ namespace HKDXX6_HFT_2023241.Models
             {
                 return false;
             }
-            else
-            {
-                return BadgeNo == b.BadgeNo
+            return BadgeNo == b.BadgeNo
                     && FirstName == b.FirstName
                     && LastName == b.LastName
                     && Rank == b.Rank
                     && DirectCO_BadgeNo == b.DirectCO_BadgeNo
                     && PrecinctID == b.PrecinctID
                     && HireDate == b.HireDate;
-            }
         }
 
         public override int GetHashCode()

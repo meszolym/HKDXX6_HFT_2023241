@@ -43,11 +43,8 @@ namespace HKDXX6_HFT_2023241.Models
             {
                 return false;
             }
-            else
-            {
-                return b.ID == ID
-                    && b.Address == Address;
-            }
+            return b.ID == ID
+                && b.Address == Address;
         }
 
         public override int GetHashCode()

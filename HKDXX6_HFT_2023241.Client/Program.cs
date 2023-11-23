@@ -4,9 +4,16 @@ using System.Collections.Generic;
 using ConsoleTables;
 using System.Diagnostics.Contracts;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HKDXX6_HFT_2023241.Client
 {
+    internal enum Status
+    {
+        OK,
+        ERRORED
+    }
+
     internal class Program
     {
         static RestService Rest;
@@ -21,6 +28,7 @@ namespace HKDXX6_HFT_2023241.Client
 
         static void List(string TypeName)
         {
+            Console.WriteLine($"Listing all {TypeName.ToLower()}s");
             if (TypeName == nameof(Case))
             {
                 List<Case> cases = Rest.Get<Case>("Case");
@@ -65,20 +73,35 @@ namespace HKDXX6_HFT_2023241.Client
             Console.ReadKey();
         }
 
-        static void GetDetails(string TypeName)
+        static Status GetDetails(string TypeName, int? id = null)
         {
-            Console.WriteLine($"Getting details of a {TypeName.ToLower()}");
-            Console.Write("Please provide the ID to look up or put * to go back to the main menu: ");
-            string input = Console.ReadLine();
-            if (input == "*") return;
-
+            string input = string.Empty;
             int inputInt;
+            if (id == null)
+            {
+                Console.WriteLine($"Getting details of a(n) {TypeName.ToLower()}");
+                Console.Write("Please provide the ID to look up or put * to go back to the main menu: ");
+                input = Console.ReadLine();
+
+                if (input == "*")
+                {
+                    return Status.OK;
+                }
+            }
+            else
+            {
+                inputInt = id.Value;
+            }
 
             while (!int.TryParse(input, out inputInt))
             {
-                Console.WriteLine("Invalid input. Please try again: ");
+                Console.Write("Invalid input. Please try again: ");
                 input = Console.ReadLine();
-                if (input == "*") return;
+                if (input == "*")
+                {
+                    
+                    return Status.OK;
+                }
             }
             var table = new ConsoleTable("Field", "Data");
             if (TypeName == nameof(Case))
@@ -90,12 +113,13 @@ namespace HKDXX6_HFT_2023241.Client
                 }
                 catch (Exception ex)
                 {
+                    
                     Console.WriteLine();
                     Console.WriteLine($"[!] Error: {ex.Message}");
                     Console.WriteLine($"Please contact the administrator of the system for further help.");
                     Console.WriteLine("Press any key to go back.");
                     Console.ReadKey();
-                    return;
+                    return Status.ERRORED;
                 }
                 Console.WriteLine();
                 table.AddRow("ID", c.ID);
@@ -132,9 +156,13 @@ namespace HKDXX6_HFT_2023241.Client
                 table.Write(Format.Minimal);
                 Console.WriteLine($"Description:\r\n{c.Description}");
                 Console.WriteLine();
-                Console.WriteLine("Press any key to go back.");
-                Console.ReadKey();
-                return;
+                if (id == null)
+                {
+                    Console.WriteLine("Press any key to go back.");
+                    Console.ReadKey();
+                }
+                
+                return Status.OK;
 
             }
             if (TypeName == nameof(Officer))
@@ -146,12 +174,13 @@ namespace HKDXX6_HFT_2023241.Client
                 }
                 catch (Exception ex)
                 {
+                    
                     Console.WriteLine();
                     Console.WriteLine($"[!] Error: {ex.Message}");
                     Console.WriteLine($"Please contact the administrator of the system for further help.");
                     Console.WriteLine("Press any key to go back.");
                     Console.ReadKey();
-                    return;
+                    return Status.ERRORED;
                 }
 
                 Console.WriteLine();
@@ -169,9 +198,13 @@ namespace HKDXX6_HFT_2023241.Client
                 table.AddRow("Count of officers under command", o.OfficersUnderCommand.Count);
 
                 table.Write(Format.Minimal);
-                Console.WriteLine("Press any key to go back.");
-                Console.ReadKey();
-                return;
+                if (id == null)
+                {
+                    Console.WriteLine("Press any key to go back.");
+                    Console.ReadKey();
+                }
+                
+                return Status.OK;
 
             }
             if (TypeName == nameof(Precinct))
@@ -183,12 +216,13 @@ namespace HKDXX6_HFT_2023241.Client
                 }
                 catch (Exception ex)
                 {
+                    
                     Console.WriteLine();
                     Console.WriteLine($"[!] Error: {ex.Message}");
                     Console.WriteLine($"Please contact the administrator of the system for further help.");
                     Console.WriteLine("Press any key to go back.");
                     Console.ReadKey();
-                    return;
+                    return Status.ERRORED;
                 }
                 Console.WriteLine();
 
@@ -209,19 +243,57 @@ namespace HKDXX6_HFT_2023241.Client
                 table.AddRow("Count of officers", p.Officers.Count);
 
                 table.Write(Format.Minimal);
-                Console.WriteLine("Press any key to go back.");
-                Console.ReadKey();
-                return;
+                if (id == null)
+                {
+                    Console.WriteLine("Press any key to go back.");
+                    Console.ReadKey();
+                }
+                
+                return Status.OK;
 
             }
 
             Console.WriteLine("This kind of information is not stored in the system.");
             Console.WriteLine("Press any key to go back.");
             Console.ReadKey();
+            return Status.ERRORED;
         }
 
         static void Update(string TypeName)
         {
+            Console.WriteLine($"Updating a(n) {TypeName.ToLower()}");
+            Console.Write("Please provide the ID to update or put * to go back to the main menu: ");
+            string input = Console.ReadLine();
+            if (input == "*") return;
+
+            int inputInt;
+
+            while (!int.TryParse(input, out inputInt))
+            {
+                Console.Write("Invalid input. Please try again: ");
+                input = Console.ReadLine();
+                if (input == "*") return;
+            }
+
+            Status result = GetDetails(TypeName, inputInt);
+            if (result == Status.ERRORED) return;
+
+            Console.WriteLine();
+
+            if (TypeName == nameof(Case))
+            {
+                
+            }
+            if (TypeName == nameof(Officer))
+            {
+
+            }
+            if (TypeName == nameof(Precinct))
+            {
+
+            }
+
+
 
         }
 
@@ -232,7 +304,43 @@ namespace HKDXX6_HFT_2023241.Client
 
         static void Delete(string TypeName)
         {
+            Console.WriteLine($"Deleting a(n) {TypeName.ToLower()}");
+            Console.Write("Please provide the ID to delete or put * to go back to the main menu: ");
+            string input = Console.ReadLine();
+            if (input == "*") return;
 
+            int inputInt;
+
+            while (!int.TryParse(input, out inputInt))
+            {
+                Console.Write("Invalid input. Please try again: ");
+                input = Console.ReadLine();
+                if (input == "*") return;
+            }
+
+            Status result = GetDetails(TypeName, inputInt);
+            if (result == Status.ERRORED) return;
+            Console.WriteLine();
+            Console.Write("Are you sure you want to delete this item? (y/n): ");
+            string inputYN = Console.ReadLine();
+            while (inputYN.ToUpper() != "Y" || inputYN.ToUpper() != "N")
+            {
+                Console.Write("Invalid input. Please try again: ");
+                inputYN = Console.ReadLine();
+            }
+
+            if (inputYN.ToUpper() != "Y")
+            {
+                Console.WriteLine("No changes made.");
+                Console.WriteLine("Press any key to go back.");
+                Console.ReadKey();
+                return;
+            }
+
+            Rest.Delete(inputInt, TypeName);
+            Console.WriteLine($"{TypeName}[{inputInt}] deleted sucsessfully.");
+            Console.WriteLine("Press any key to go back.");
+            Console.ReadKey();
         }
 
         static void OfficerCaseStatistics()

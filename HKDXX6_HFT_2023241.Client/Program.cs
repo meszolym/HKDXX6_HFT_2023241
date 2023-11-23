@@ -277,20 +277,43 @@ namespace HKDXX6_HFT_2023241.Client
 
             Status result = GetDetails(TypeName, inputInt);
             if (result == Status.ERRORED) return;
+            Console.WriteLine();
+            Console.Write("Are you sure you want to update this item? (y/n): ");
+            string inputYN = Console.ReadLine();
+            while (inputYN.ToUpper() != "Y" || inputYN.ToUpper() != "N")
+            {
+                Console.Write("Invalid input. Please try again: ");
+                inputYN = Console.ReadLine();
+            }
+
+            if (inputYN.ToUpper() != "Y")
+            {
+                Console.WriteLine("No changes were made.");
+                Console.WriteLine("Press any key to go back.");
+                Console.ReadKey();
+                return;
+            }
 
             Console.WriteLine();
 
             if (TypeName == nameof(Case))
             {
-                
+                Case updated = new Case();
+                //TODO
             }
             if (TypeName == nameof(Officer))
             {
-
+                Officer updated = new Officer();
+                //TODO
             }
             if (TypeName == nameof(Precinct))
             {
-
+                Precinct updated = new Precinct();
+                Console.WriteLine("Enter new data below");
+                Console.Write("Address: ");
+                string addressInput = Console.ReadLine();
+                updated.Address = addressInput;
+                Rest.Put(updated, TypeName);
             }
 
 
@@ -299,7 +322,7 @@ namespace HKDXX6_HFT_2023241.Client
 
         static void Create(string TypeName)
         {
-
+            //TODO
         }
 
         static void Delete(string TypeName)
@@ -320,6 +343,8 @@ namespace HKDXX6_HFT_2023241.Client
 
             Status result = GetDetails(TypeName, inputInt);
             if (result == Status.ERRORED) return;
+
+
             Console.WriteLine();
             Console.Write("Are you sure you want to delete this item? (y/n): ");
             string inputYN = Console.ReadLine();
@@ -331,7 +356,7 @@ namespace HKDXX6_HFT_2023241.Client
 
             if (inputYN.ToUpper() != "Y")
             {
-                Console.WriteLine("No changes made.");
+                Console.WriteLine("No changes were made.");
                 Console.WriteLine("Press any key to go back.");
                 Console.ReadKey();
                 return;
@@ -345,37 +370,37 @@ namespace HKDXX6_HFT_2023241.Client
 
         static void OfficerCaseStatistics()
         {
-
+            //TODO
         }
 
         static void PrecinctCaseStatistics()
         {
-
+            //TODO
         }
 
         static void AutoAssignCase()
         {
-
+            //TODO
         }
 
         static void CaseAverageOpenTimePerOfficer()
         {
-
+            //TODO
         }
 
         static void CaseAverageOpenTimePerPrecinct()
         {
-
+            //TODO
         }
 
         static void CasesOfPrecinct()
         {
-
+            //TODO
         }
 
         static void CasesOfPrecincts()
         {
-
+            //TODO
         }
 
     }

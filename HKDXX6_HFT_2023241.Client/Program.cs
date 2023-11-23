@@ -220,6 +220,55 @@ namespace HKDXX6_HFT_2023241.Client
             Console.ReadKey();
         }
 
+        static void Update(string TypeName)
+        {
+
+        }
+
+        static void Create(string TypeName)
+        {
+
+        }
+
+        static void Delete(string TypeName)
+        {
+
+        }
+
+        static void OfficerCaseStatistics()
+        {
+
+        }
+
+        static void PrecinctCaseStatistics()
+        {
+
+        }
+
+        static void AutoAssignCase()
+        {
+
+        }
+
+        static void CaseAverageOpenTimePerOfficer()
+        {
+
+        }
+
+        static void CaseAverageOpenTimePerPrecinct()
+        {
+
+        }
+
+        static void CasesOfPrecinct()
+        {
+
+        }
+
+        static void CasesOfPrecincts()
+        {
+
+        }
 
     }
 }

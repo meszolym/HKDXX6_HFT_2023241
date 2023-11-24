@@ -21,7 +21,7 @@ namespace HKDXX6_HFT_2023241.Client
         static void Main(string[] args)
         {
             Rest = new("http://localhost:33410/", "Case");
-            GetDetails("Case");
+            Create("Case");
         }
 
         static void WriteErrorMsg(string msg)
@@ -86,7 +86,7 @@ namespace HKDXX6_HFT_2023241.Client
             if (id == null)
             {
                 Console.WriteLine($"Getting details of a(n) {TypeName.ToLower()}");
-                Console.Write("Please provide the ID to look up or put * to go back to the main menu: ");
+                Console.Write("Please provide the ID to look up or put an asterisk (*) to go back to the main menu: ");
                 input = Console.ReadLine();
 
                 if (input == "*")
@@ -115,7 +115,7 @@ namespace HKDXX6_HFT_2023241.Client
                 Case c;
                 try
                 {
-                    c = Rest.GetSingle<Case>($"Case/{inputInt}");
+                    c = Rest.GetSingle<Case>($"{TypeName}/{inputInt}");
                 }
                 catch (Exception ex)
                 {
@@ -173,7 +173,7 @@ namespace HKDXX6_HFT_2023241.Client
                 Officer o;
                 try
                 {
-                    o = Rest.GetSingle<Officer>($"Officer/{inputInt}");
+                    o = Rest.GetSingle<Officer>($"{TypeName}/{inputInt}");
                 }
                 catch (Exception ex)
                 {
@@ -212,7 +212,7 @@ namespace HKDXX6_HFT_2023241.Client
                 Precinct p;
                 try
                 {
-                    p = Rest.GetSingle<Precinct>($"Precinct/{inputInt}");
+                    p = Rest.GetSingle<Precinct>($"{TypeName}/{inputInt}");
                 }
                 catch (Exception ex)
                 {
@@ -259,7 +259,7 @@ namespace HKDXX6_HFT_2023241.Client
         static void Update(string TypeName)
         {
             Console.WriteLine($"Updating a(n) {TypeName.ToLower()}");
-            Console.Write("Please provide the ID to update or put * to go back to the main menu: ");
+            Console.Write("Please provide the ID to update or put an asterisk (*) to go back to the main menu: ");
             string input = Console.ReadLine();
             if (input == "*") return;
 
@@ -293,58 +293,64 @@ namespace HKDXX6_HFT_2023241.Client
 
             Console.WriteLine();
 
-            Console.WriteLine("Enter new data below");
+            Console.WriteLine("Enter new data below. If you would like to skip updating something, please put an asterisk (*) in the field.");
 
             if (TypeName == nameof(Case))
             {
-                Case updated = new Case();
+                Case updated = Rest.GetSingle<Case>($"{TypeName}/{inputInt}");
 
                 Console.Write("Name: ");
                 string nameInput = Console.ReadLine();
-                updated.Name = nameInput;
+                if (nameInput != "*") updated.Name = nameInput;
 
                 Console.Write("Description: ");
                 string descInput = Console.ReadLine();
-                updated.Description = descInput;
+                if (descInput != "*") updated.Description = descInput;
 
                 Console.Write("Recorded at: ");
                 string openedDtInputString = Console.ReadLine();
-
-                DateTime openedDt;
-
-                while(!DateTime.TryParse(openedDtInputString, out openedDt))
+                if (openedDtInputString != "*")
                 {
-                    Console.Write("Invalid input for recorded at, please try again: ");
-                    openedDtInputString = Console.ReadLine();
-                }
+                    DateTime openedDt;
 
-                updated.OpenedAt = openedDt;
+                    while (!DateTime.TryParse(openedDtInputString, out openedDt))
+                    {
+                        Console.Write("Invalid input for recorded at, please try again: ");
+                        openedDtInputString = Console.ReadLine();
+                    }
+
+                    updated.OpenedAt = openedDt;
+                }
 
                 Console.Write("Closed at: ");
                 string closedDtInputString = Console.ReadLine();
-
-                DateTime closedDt;
-
-                while (!DateTime.TryParse(closedDtInputString, out closedDt))
+                if (closedDtInputString != "*")
                 {
-                    Console.Write("Invalid input for closed at, please try again: ");
-                    closedDtInputString = Console.ReadLine();
-                }
+                    DateTime closedDt;
 
-                updated.ClosedAt = closedDt;
+                    while (!DateTime.TryParse(closedDtInputString, out closedDt))
+                    {
+                        Console.Write("Invalid input for closed at, please try again: ");
+                        closedDtInputString = Console.ReadLine();
+                    }
+
+                    updated.ClosedAt = closedDt;
+                }    
 
                 Console.Write("Officer on case badgeNo.: ");
                 string officerIDInputString = Console.ReadLine();
-
-                int officerID;
-
-                while(!int.TryParse(officerIDInputString, out officerID))
+                if (officerIDInputString != "*")
                 {
-                    Console.Write("Invalid input for officer badgeNo., please try again: ");
-                    officerIDInputString = Console.ReadLine();
-                }
+                    int officerID;
 
-                updated.OfficerOnCaseID = officerID;
+                    while (!int.TryParse(officerIDInputString, out officerID))
+                    {
+                        Console.Write("Invalid input for officer badgeNo., please try again: ");
+                        officerIDInputString = Console.ReadLine();
+                    }
+
+                    updated.OfficerOnCaseID = officerID;
+                }
 
                 try
                 {
@@ -364,62 +370,79 @@ namespace HKDXX6_HFT_2023241.Client
             }
             if (TypeName == nameof(Officer))
             {
-                Officer updated = new Officer();
+                Officer updated = Rest.GetSingle<Officer>($"{TypeName}/{inputInt}");
 
                 Console.Write("First name: ");
                 string fnameInput = Console.ReadLine();
-                updated.FirstName = fnameInput;
+                if (fnameInput != "*") updated.FirstName = fnameInput;
 
                 Console.Write("Last name: ");
                 string lnameInput = Console.ReadLine();
-                updated.LastName = lnameInput;
+                if (lnameInput != "*") updated.LastName = lnameInput;
 
                 Console.Write("Rank: ");
                 string rankInputString = Console.ReadLine();
-
-                object rank;
-
-                while (!Enum.TryParse(typeof(Ranks), rankInputString, out rank))
+                if (rankInputString != "*")
                 {
-                    Console.Write("Invalid input for rank, please try again: ");
-                    rankInputString = Console.ReadLine();
+                    object rank;
+
+                    while (!Enum.TryParse(typeof(Ranks), rankInputString, out rank))
+                    {
+                        Console.Write("Invalid input for rank, please try again: ");
+                        rankInputString = Console.ReadLine();
+                    }
+
+                    updated.Rank = (Ranks)rank;
                 }
 
-                updated.Rank = (Ranks)rank;
-
-                Console.Write("Direct CO badgeNo.: ");
-                string directCoIdInputString = Console.ReadLine();
-
-                int directCoId;
-
-                while (!int.TryParse(directCoIdInputString, out directCoId))
+                if (updated.Rank != Ranks.Captain)
                 {
-                    Console.Write("Invalid input for direct CO badgeNo., please try again: ");
-                    directCoIdInputString = Console.ReadLine();
+                    Console.Write("Direct CO badgeNo.: ");
+                    string directCoIdInputString = Console.ReadLine();
+                    if (directCoIdInputString != "*")
+                    {
+                        int directCoId;
+                        while (!int.TryParse(directCoIdInputString, out directCoId))
+                        {
+                            Console.Write("Invalid input for direct CO badgeNo., please try again: ");
+                            directCoIdInputString = Console.ReadLine();
+                        }
+                        updated.DirectCO_BadgeNo = directCoId;
+                    }
                 }
-                updated.DirectCO_BadgeNo = directCoId;
+                else
+                {
+                    updated.DirectCO_BadgeNo = null;
+                }
+                
 
                 Console.Write("Precinct ID: ");
                 string precinctIdInputString = Console.ReadLine();
-
-                int precinctId;
-
-
-                while (!int.TryParse(precinctIdInputString, out precinctId))
+                if (precinctIdInputString != "*")
                 {
-                    Console.Write("Invalid input for precinct ID, please try again: ");
-                    precinctIdInputString = Console.ReadLine();
+                    int precinctId;
+
+                    while (!int.TryParse(precinctIdInputString, out precinctId))
+                    {
+                        Console.Write("Invalid input for precinct ID, please try again: ");
+                        precinctIdInputString = Console.ReadLine();
+                    }
+                    updated.PrecinctID = precinctId;
                 }
+
 
                 Console.Write("Hired at: ");
                 string hireDateInputString = Console.ReadLine();
-
-                DateTime hireDate;
-
-                while(!DateTime.TryParse(hireDateInputString, out hireDate))
+                if (hireDateInputString != "*")
                 {
-                    Console.Write("Invalid input for hire date, please try again: ");
-                    hireDateInputString = Console.ReadLine();
+                    DateTime hireDate;
+
+                    while (!DateTime.TryParse(hireDateInputString, out hireDate))
+                    {
+                        Console.Write("Invalid input for hire date, please try again: ");
+                        hireDateInputString = Console.ReadLine();
+                    }
+                    updated.HireDate = hireDate;
                 }
 
                 try
@@ -440,11 +463,11 @@ namespace HKDXX6_HFT_2023241.Client
             }
             if (TypeName == nameof(Precinct))
             {
-                Precinct updated = new Precinct();
-                
+                Precinct updated = Rest.GetSingle<Precinct>($"{TypeName}/{inputInt}");
+
                 Console.Write("Address: ");
                 string addressInput = Console.ReadLine();
-                updated.Address = addressInput;
+                if (addressInput != "*") updated.Address = addressInput;
 
                 try
                 {
@@ -461,20 +484,204 @@ namespace HKDXX6_HFT_2023241.Client
                     return;
                 }
             }
-            return;
-
-
         }
 
         static void Create(string TypeName)
         {
-            //TODO
+            Console.WriteLine($"Creating a(n) {TypeName.ToLower()}");
+
+            Console.WriteLine("Enter new data below.");
+            if (TypeName == nameof(Case))
+            {
+
+                Console.Write("Case name: ");
+                string caseNameInput = Console.ReadLine();
+
+                Console.Write("Case description: ");
+                string caseDescInput = Console.ReadLine();
+
+                Console.WriteLine();
+                Console.WriteLine("The following fields are not mandatory, you may leave them empty.");
+                Console.Write("Case closed at: ");
+                string closedAtInputString = Console.ReadLine();
+                DateTime? closedAt = null;
+                if (closedAtInputString != string.Empty)
+                {
+                    DateTime parsed;
+                    while (!DateTime.TryParse(closedAtInputString, out parsed))
+                    {
+                        Console.Write("Invalid input for closed at, please try again: ");
+                        closedAtInputString = Console.ReadLine();
+                    }
+                    closedAt = parsed;
+                }
+
+                Console.Write("Officer on case badgeNo.: ");
+                string officerOnCaseIdInputString = Console.ReadLine();
+                int? officerID = null;
+                if (officerOnCaseIdInputString != string.Empty)
+                {
+                    int parsed;
+                    while (!int.TryParse(officerOnCaseIdInputString, out parsed))
+                    {
+                        Console.Write("Invalid input for officer on case badgeNo., please try again: ");
+                        officerOnCaseIdInputString = Console.ReadLine();
+                    }
+                    officerID = parsed;
+                }
+
+                Case added = new Case()
+                {
+                    Name = caseNameInput,
+                    Description = caseDescInput,
+                    OpenedAt = DateTime.Now,
+                    ClosedAt = closedAt,
+                    OfficerOnCaseID = officerID
+                };
+
+                try
+                {
+                    Rest.Post(added, TypeName);
+                    Console.WriteLine("Case successfully added.");
+                    Console.WriteLine("Press any key to go back.");
+                    Console.ReadKey();
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    WriteErrorMsg(ex.Message);
+                    Console.ReadKey();
+                    return;
+                }
+
+            }
+            if (TypeName == nameof(Officer))
+            {
+                Officer added = new Officer();
+                Console.Write("First name: ");
+                string fnameInput = Console.ReadLine();
+                added.FirstName = fnameInput;
+
+                Console.Write("Last name: ");
+                string lnameInput = Console.ReadLine();
+                added.LastName = lnameInput;
+
+                Console.WriteLine("Rank: ");
+                string rankInputString = Console.ReadLine();
+
+                object parsed;
+
+                while (!Enum.TryParse(typeof(Ranks), rankInputString, out parsed))
+                {
+                    Console.Write("Invalid input for rank, please try again: ");
+                    rankInputString = Console.ReadLine();
+                }
+
+                added.Rank = (Ranks)parsed;
+
+                if (added.Rank != Ranks.Captain)
+                {
+                    Console.Write("Direct CO badgeNo.: ");
+                    string directCoIdInputString = Console.ReadLine();
+
+                    int directCoId;
+                    while (!int.TryParse(directCoIdInputString, out directCoId))
+                    {
+                        Console.Write("Invalid input for direct CO badgeNo., please try again: ");
+                        directCoIdInputString = Console.ReadLine();
+                    }
+                    added.DirectCO_BadgeNo = directCoId;
+                }
+                else
+                {
+                    added.DirectCO_BadgeNo = null;
+                }
+
+                Console.Write("Precinct ID: ");
+                string precinctIdInputString = Console.ReadLine();
+               
+                int precinctId;
+
+                while (!int.TryParse(precinctIdInputString, out precinctId))
+                {
+                    Console.Write("Invalid input for precinct ID, please try again: ");
+                    precinctIdInputString = Console.ReadLine();
+                }
+                added.PrecinctID = precinctId;
+                
+
+
+                Console.Write("Hired at: ");
+                string hireDateInputString = Console.ReadLine();
+
+                DateTime hireDate;
+
+                while (!DateTime.TryParse(hireDateInputString, out hireDate))
+                {
+                    Console.Write("Invalid input for hire date, please try again: ");
+                    hireDateInputString = Console.ReadLine();
+                }
+                added.HireDate = hireDate;
+
+                try
+                {
+                    Rest.Post(added, TypeName);
+                    Console.WriteLine("Officer successfully added.");
+                    Console.WriteLine("Press any key to go back.");
+                    Console.ReadKey();
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    WriteErrorMsg(ex.Message);
+                    Console.ReadKey();
+                    return;
+                }
+                
+            }
+            if (TypeName == nameof(Precinct))
+            {
+                Console.Write("Precinct ID: ");
+                string precinctIdInputString = Console.ReadLine();
+
+                int precinctId;
+
+                while (!int.TryParse(precinctIdInputString, out precinctId))
+                {
+                    Console.Write("Invalid input for precinct ID, please try again: ");
+                    precinctIdInputString = Console.ReadLine();
+                }
+
+                Console.Write("Address: ");
+                string addressInput = Console.ReadLine();
+
+                Precinct added = new Precinct(precinctId, addressInput);
+
+                try
+                {
+                    Rest.Post(added, TypeName);
+                    Console.WriteLine("Precinct successfully added.");
+                    Console.WriteLine("Press any key to go back.");
+                    Console.ReadKey();
+                    return;
+                }
+                catch(Exception ex)
+                {
+                    WriteErrorMsg(ex.Message);
+                    Console.ReadKey();
+                    return;
+                }
+
+            }
+            Console.WriteLine("This kind of information is not stored in the system.");
+            Console.WriteLine("Press any key to go back.");
+            Console.ReadKey();
         }
 
         static void Delete(string TypeName)
         {
             Console.WriteLine($"Deleting a(n) {TypeName.ToLower()}");
-            Console.Write("Please provide the ID to delete or put * to go back to the main menu: ");
+            Console.Write("Please provide the ID to delete or put an asterisk (*) to go back to the main menu: ");
             string input = Console.ReadLine();
             if (input == "*") return;
 

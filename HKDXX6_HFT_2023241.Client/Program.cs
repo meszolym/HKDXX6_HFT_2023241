@@ -21,10 +21,16 @@ namespace HKDXX6_HFT_2023241.Client
         static void Main(string[] args)
         {
             Rest = new("http://localhost:33410/", "Case");
-            GetDetails("Precinct");
+            GetDetails("Case");
         }
 
-        
+        static void WriteErrorMsg(string msg)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"[!] Error: {msg}");
+            Console.WriteLine($"Please contact the administrator of the system for further help.");
+            Console.WriteLine("Press any key to go back.");
+        }
 
         static void List(string TypeName)
         {
@@ -113,11 +119,8 @@ namespace HKDXX6_HFT_2023241.Client
                 }
                 catch (Exception ex)
                 {
-                    
-                    Console.WriteLine();
-                    Console.WriteLine($"[!] Error: {ex.Message}");
-                    Console.WriteLine($"Please contact the administrator of the system for further help.");
-                    Console.WriteLine("Press any key to go back.");
+
+                    WriteErrorMsg(ex.Message);
                     Console.ReadKey();
                     return Status.ERRORED;
                 }
@@ -174,11 +177,8 @@ namespace HKDXX6_HFT_2023241.Client
                 }
                 catch (Exception ex)
                 {
-                    
-                    Console.WriteLine();
-                    Console.WriteLine($"[!] Error: {ex.Message}");
-                    Console.WriteLine($"Please contact the administrator of the system for further help.");
-                    Console.WriteLine("Press any key to go back.");
+
+                    WriteErrorMsg(ex.Message);
                     Console.ReadKey();
                     return Status.ERRORED;
                 }
@@ -217,10 +217,7 @@ namespace HKDXX6_HFT_2023241.Client
                 catch (Exception ex)
                 {
                     
-                    Console.WriteLine();
-                    Console.WriteLine($"[!] Error: {ex.Message}");
-                    Console.WriteLine($"Please contact the administrator of the system for further help.");
-                    Console.WriteLine("Press any key to go back.");
+                    
                     Console.ReadKey();
                     return Status.ERRORED;
                 }
@@ -296,26 +293,175 @@ namespace HKDXX6_HFT_2023241.Client
 
             Console.WriteLine();
 
+            Console.WriteLine("Enter new data below");
+
             if (TypeName == nameof(Case))
             {
                 Case updated = new Case();
-                //TODO
+
+                Console.Write("Name: ");
+                string nameInput = Console.ReadLine();
+                updated.Name = nameInput;
+
+                Console.Write("Description: ");
+                string descInput = Console.ReadLine();
+                updated.Description = descInput;
+
+                Console.Write("Recorded at: ");
+                string openedDtInputString = Console.ReadLine();
+
+                DateTime openedDt;
+
+                while(!DateTime.TryParse(openedDtInputString, out openedDt))
+                {
+                    Console.Write("Invalid input for recorded at, please try again: ");
+                    openedDtInputString = Console.ReadLine();
+                }
+
+                updated.OpenedAt = openedDt;
+
+                Console.Write("Closed at: ");
+                string closedDtInputString = Console.ReadLine();
+
+                DateTime closedDt;
+
+                while (!DateTime.TryParse(closedDtInputString, out closedDt))
+                {
+                    Console.Write("Invalid input for closed at, please try again: ");
+                    closedDtInputString = Console.ReadLine();
+                }
+
+                updated.ClosedAt = closedDt;
+
+                Console.Write("Officer on case badgeNo.: ");
+                string officerIDInputString = Console.ReadLine();
+
+                int officerID;
+
+                while(!int.TryParse(officerIDInputString, out officerID))
+                {
+                    Console.Write("Invalid input for officer badgeNo., please try again: ");
+                    officerIDInputString = Console.ReadLine();
+                }
+
+                updated.OfficerOnCaseID = officerID;
+
+                try
+                {
+                    Rest.Put(updated, TypeName);
+                    Console.WriteLine($"Case[{inputInt}] successfully updated.");
+                    Console.WriteLine("Press any key to go back.");
+                    Console.ReadKey();
+                    return;
+                }
+                catch(Exception ex)
+                {
+                    WriteErrorMsg(ex.Message);
+                    Console.ReadKey();
+                    return;
+                }
+
             }
             if (TypeName == nameof(Officer))
             {
                 Officer updated = new Officer();
-                //TODO
+
+                Console.Write("First name: ");
+                string fnameInput = Console.ReadLine();
+                updated.FirstName = fnameInput;
+
+                Console.Write("Last name: ");
+                string lnameInput = Console.ReadLine();
+                updated.LastName = lnameInput;
+
+                Console.Write("Rank: ");
+                string rankInputString = Console.ReadLine();
+
+                object rank;
+
+                while (!Enum.TryParse(typeof(Ranks), rankInputString, out rank))
+                {
+                    Console.Write("Invalid input for rank, please try again: ");
+                    rankInputString = Console.ReadLine();
+                }
+
+                updated.Rank = (Ranks)rank;
+
+                Console.Write("Direct CO badgeNo.: ");
+                string directCoIdInputString = Console.ReadLine();
+
+                int directCoId;
+
+                while (!int.TryParse(directCoIdInputString, out directCoId))
+                {
+                    Console.Write("Invalid input for direct CO badgeNo., please try again: ");
+                    directCoIdInputString = Console.ReadLine();
+                }
+                updated.DirectCO_BadgeNo = directCoId;
+
+                Console.Write("Precinct ID: ");
+                string precinctIdInputString = Console.ReadLine();
+
+                int precinctId;
+
+
+                while (!int.TryParse(precinctIdInputString, out precinctId))
+                {
+                    Console.Write("Invalid input for precinct ID, please try again: ");
+                    precinctIdInputString = Console.ReadLine();
+                }
+
+                Console.Write("Hired at: ");
+                string hireDateInputString = Console.ReadLine();
+
+                DateTime hireDate;
+
+                while(!DateTime.TryParse(hireDateInputString, out hireDate))
+                {
+                    Console.Write("Invalid input for hire date, please try again: ");
+                    hireDateInputString = Console.ReadLine();
+                }
+
+                try
+                {
+                    Rest.Put(updated, TypeName);
+                    Console.WriteLine($"Officer[{inputInt}] successfully updated.");
+                    Console.WriteLine("Press any key to go back.");
+                    Console.ReadKey();
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    WriteErrorMsg(ex.Message);
+                    Console.ReadKey();
+                    return;
+                }
+
             }
             if (TypeName == nameof(Precinct))
             {
                 Precinct updated = new Precinct();
-                Console.WriteLine("Enter new data below");
+                
                 Console.Write("Address: ");
                 string addressInput = Console.ReadLine();
                 updated.Address = addressInput;
-                Rest.Put(updated, TypeName);
-            }
 
+                try
+                {
+                    Rest.Put(updated, TypeName);
+                    Console.WriteLine($"Precinct[{inputInt}] successfully updated.");
+                    Console.WriteLine("Press any key to go back.");
+                    Console.ReadKey();
+                    return;
+                }
+                catch(Exception ex)
+                {
+                    WriteErrorMsg(ex.Message);
+                    Console.ReadKey();
+                    return;
+                }
+            }
+            return;
 
 
         }

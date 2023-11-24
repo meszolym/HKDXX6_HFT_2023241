@@ -26,9 +26,9 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("ID has to be positive or zero.");
             }
-            if (item.Name.Length < 10)
+            if (item.Name.Length < 10 || item.Name.Length > 240)
             {
-                throw new ArgumentException("Name of case must be at least 10 characters.");
+                throw new ArgumentException("Name of case must be at least 10, at most 240 characters.");
             }
             if (item.Description.Length < 15)
             {
@@ -64,9 +64,9 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("Cases in the future cannot be recorded.");
             }
-            if (item.Name.Length < 10)
+            if (item.Name.Length < 10 || item.Name.Length > 240)
             {
-                throw new ArgumentException("Name of case must be at least 10 characters.");
+                throw new ArgumentException("Name of case must be at least 10, at most 240 characters.");
             }
             if (item.Description.Length < 15)
             {

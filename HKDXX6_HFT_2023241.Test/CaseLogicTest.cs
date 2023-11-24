@@ -6,6 +6,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using static HKDXX6_HFT_2023241.Logic.CaseLogic;
 
 namespace HKDXX6_HFT_2023241.Test
@@ -178,15 +179,17 @@ namespace HKDXX6_HFT_2023241.Test
         }
 
         [Test]
-        public void CreateTest_WithIncorrectName_ThrowsArgumentException()
+        [TestCase("tooshort")]
+        [TestCase("waaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaytoolong")]
+        public void CreateTest_WithIncorrectName_ThrowsArgumentException(string name)
         {
             //Arrange
-            var c = new Case() {ID = 1000, Name = "tooshort", Description = "FifteenChars...", OpenedAt = DateTime.Now };
+            var c = new Case() {ID = 1000, Name = name, Description = "FifteenChars...", OpenedAt = DateTime.Now };
 
 
             //Act+Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(c));
-            Assert.That(ex.Message == "Name of case must be at least 10 characters.");
+            Assert.That(ex.Message == "Name of case must be at least 10, at most 240 characters.");
             mockCaseRepo.Verify(r => r.Create(c), Times.Never);
         }
 
@@ -295,15 +298,18 @@ namespace HKDXX6_HFT_2023241.Test
 
 
         [Test]
-        public void UpdateTest_WithIncorrectName_ThrowsArgumentException()
+        [TestCase("tooshort")]
+        [TestCase("waaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaytoolong")]
+
+        public void UpdateTest_WithIncorrectName_ThrowsArgumentException(string name)
         {
             //Arrange
             var c = new Case(1, "Missing ham", "A Jamón Iberico ham was stolen valued at $6000. According to Charles it is an amazing cured ham from Spain.", 9544, new DateTime(2013, 09, 17, 19, 00, 00));
-            c.Name = "tooshort";
+            c.Name = name;
 
             //Act+Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Update(c));
-            Assert.That(ex.Message == "Name of case must be at least 10 characters.");
+            Assert.That(ex.Message == "Name of case must be at least 10, at most 240 characters.");
             mockCaseRepo.Verify(r => r.Update(c), Times.Never);
         }
 

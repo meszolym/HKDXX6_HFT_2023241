@@ -6,6 +6,8 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using HKDXX6_HFT_2023241.Models.DBModels;
 using ConsoleTools;
+using HKDXX6_HFT_2023241.Models.NonCrudModels;
+using Humanizer;
 
 namespace HKDXX6_HFT_2023241.Client
 {
@@ -73,6 +75,7 @@ namespace HKDXX6_HFT_2023241.Client
 
         static void List(string TypeName)
         {
+            Console.Clear();
             Console.WriteLine($"Listing all {TypeName.ToLower()}s");
             if (TypeName == nameof(Case))
             {
@@ -80,7 +83,7 @@ namespace HKDXX6_HFT_2023241.Client
                 var table = new ConsoleTable("ID", "Name", "Officer on case");
                 foreach (var item in cases)
                 {
-                    table.AddRow(item.ID, item.Name, item.OfficerOnCase.FirstName + " " + item.OfficerOnCase.LastName);
+                    table.AddRow(item.ID, item.Name, $"{item.OfficerOnCase.Rank} {item.OfficerOnCase.FirstName} {item.OfficerOnCase.LastName} ({item.OfficerOnCaseID})");
                 }
                 table.Write(Format.Minimal);
                 Console.WriteLine("Press any key to go back.");
@@ -124,13 +127,25 @@ namespace HKDXX6_HFT_2023241.Client
             int inputInt;
             if (id == null)
             {
+                Console.Clear();
                 Console.WriteLine($"Getting details of a(n) {TypeName.ToLower()}");
-                Console.Write("Please provide the ID to look up or put an asterisk (*) to go back to the main menu: ");
+                Console.Write("Please provide the ID to look up or put an asterisk (*) to go back to the menu: ");
                 input = Console.ReadLine();
 
                 if (input == "*")
                 {
                     return Status.OK;
+                }
+
+                while (!int.TryParse(input, out inputInt))
+                {
+                    Console.Write("Invalid input. Please try again: ");
+                    input = Console.ReadLine();
+                    if (input == "*")
+                    {
+
+                        return Status.OK;
+                    }
                 }
             }
             else
@@ -138,16 +153,6 @@ namespace HKDXX6_HFT_2023241.Client
                 inputInt = id.Value;
             }
 
-            while (!int.TryParse(input, out inputInt))
-            {
-                Console.Write("Invalid input. Please try again: ");
-                input = Console.ReadLine();
-                if (input == "*")
-                {
-                    
-                    return Status.OK;
-                }
-            }
             var table = new ConsoleTable("Field", "Data");
             if (TypeName == nameof(Case))
             {
@@ -170,30 +175,12 @@ namespace HKDXX6_HFT_2023241.Client
                 if (c.IsClosed)
                 {
                     table.AddRow("Closed at", c.ClosedAt);
-                    table.AddRow("Open time", c.OpenTimeSpan);
+                    table.AddRow("Open time", c.OpenTimeSpan.Value.Humanize(2));
                 }
                 if (c.OfficerOnCaseID != null)
-                {
-                    string ending;
-                    switch (c.OfficerOnCase.PrecinctID.ToString()[c.OfficerOnCase.PrecinctID.ToString().Length-1])
-                    {
-                        case '1':
-                            ending = "st";
-                            break;
-                        case '2':
-                            ending = "nd";
-                            break;
-                        case '3':
-                            ending = "rd";
-                            break;
-                        default:
-                            ending = "th";
-                            break;
-                    }
-
-
-                    table.AddRow("Officer on case badgeNo.", c.OfficerOnCaseID);
-                    table.AddRow("Officer on case", $"{c.OfficerOnCase.Rank} {c.OfficerOnCase.FirstName} {c.OfficerOnCase.LastName}, {c.OfficerOnCase.PrecinctID}{ending} Precinct");
+                {                    
+                    table.AddRow("Officer on case", $"{c.OfficerOnCase.Rank} {c.OfficerOnCase.FirstName} {c.OfficerOnCase.LastName} ({c.OfficerOnCaseID})");
+                    table.AddRow("Precinct", c.OfficerOnCase.PrecinctID);
                 }
                 table.Write(Format.Minimal);
                 Console.WriteLine($"Description:\r\n{c.Description}");
@@ -230,8 +217,7 @@ namespace HKDXX6_HFT_2023241.Client
                 table.AddRow("Precinct", o.PrecinctID);
                 if (o.DirectCO_BadgeNo != null)
                 {
-                    table.AddRow("Commanding officer badgeNo", o.DirectCO_BadgeNo);
-                    table.AddRow("Commanding officer", $"{o.DirectCO.Rank} {o.DirectCO.FirstName} {o.DirectCO.LastName}");
+                    table.AddRow("Commanding officer", $"{o.DirectCO.Rank} {o.DirectCO.FirstName} {o.DirectCO.LastName} ({o.DirectCO_BadgeNo})");
                 }
                 table.AddRow("Count of all cases", o.Cases.Count);
                 table.AddRow("Count of officers under command", o.OfficersUnderCommand.Count);
@@ -268,7 +254,7 @@ namespace HKDXX6_HFT_2023241.Client
                     try
                     {
                         var ro = Rest.GetSingle<Officer>($"Precinct/GetCaptain/{inputInt}");
-                        table.AddRow("Ranking officer", $"{ro.Rank} {ro.FirstName} {ro.LastName}");
+                        table.AddRow("Ranking officer", $"{ro.Rank} {ro.FirstName} {ro.LastName} ({ro.BadgeNo})");
                     }
                     catch
                     {
@@ -296,8 +282,9 @@ namespace HKDXX6_HFT_2023241.Client
 
         static void Update(string TypeName)
         {
+            Console.Clear();
             Console.WriteLine($"Updating a(n) {TypeName.ToLower()}");
-            Console.Write("Please provide the ID to update or put an asterisk (*) to go back to the main menu: ");
+            Console.Write("Please provide the ID to update or put an asterisk (*) to go back to the menu: ");
             string input = Console.ReadLine();
             if (input == "*") return;
 
@@ -315,7 +302,7 @@ namespace HKDXX6_HFT_2023241.Client
             Console.WriteLine();
             Console.Write("Are you sure you want to update this item? (y/n): ");
             string inputYN = Console.ReadLine();
-            while (inputYN.ToUpper() != "Y" || inputYN.ToUpper() != "N")
+            while (inputYN.ToUpper() != "Y" && inputYN.ToUpper() != "N")
             {
                 Console.Write("Invalid input. Please try again: ");
                 inputYN = Console.ReadLine();
@@ -360,9 +347,13 @@ namespace HKDXX6_HFT_2023241.Client
                     updated.OpenedAt = openedDt;
                 }
 
-                Console.Write("Closed at: ");
+                Console.Write("Closed at (leave empty to leave the case open): ");
                 string closedDtInputString = Console.ReadLine();
-                if (closedDtInputString != "*")
+                if (closedDtInputString == string.Empty)
+                {
+                    updated.ClosedAt = null;
+                }
+                else if (closedDtInputString != "*")
                 {
                     DateTime closedDt;
 
@@ -370,14 +361,30 @@ namespace HKDXX6_HFT_2023241.Client
                     {
                         Console.Write("Invalid input for closed at, please try again: ");
                         closedDtInputString = Console.ReadLine();
+                        if (closedDtInputString == string.Empty)
+                        {
+                            updated.ClosedAt = null;
+                            break;
+                        }
+                        else if (closedDtInputString == "*")
+                        {
+                            break;
+                        }
                     }
+                    if (closedDtInputString != string.Empty && closedDtInputString != "*")
+                    {
+                        updated.ClosedAt = closedDt;
+                    }
+                    
+                }
 
-                    updated.ClosedAt = closedDt;
-                }    
-
-                Console.Write("Officer on case badgeNo.: ");
+                Console.Write("Officer on case badgeNo. (leave empty for unassigned): ");
                 string officerIDInputString = Console.ReadLine();
-                if (officerIDInputString != "*")
+                if (officerIDInputString == string.Empty)
+                {
+                    updated.OfficerOnCaseID = null;
+                }
+                else if (officerIDInputString != "*")
                 {
                     int officerID;
 
@@ -385,9 +392,21 @@ namespace HKDXX6_HFT_2023241.Client
                     {
                         Console.Write("Invalid input for officer badgeNo., please try again: ");
                         officerIDInputString = Console.ReadLine();
+                        if (officerIDInputString == string.Empty)
+                        {
+                            updated.OfficerOnCaseID = null;
+                            break;
+                        }
+                        else if (officerIDInputString == "*")
+                        {
+                            break;
+                        }
                     }
-
-                    updated.OfficerOnCaseID = officerID;
+                    if (officerIDInputString != string.Empty && officerIDInputString != "*")
+                    {
+                        updated.OfficerOnCaseID = officerID;
+                    }
+                    
                 }
 
                 try
@@ -526,6 +545,7 @@ namespace HKDXX6_HFT_2023241.Client
 
         static void Create(string TypeName)
         {
+            Console.Clear();
             Console.WriteLine($"Creating a(n) {TypeName.ToLower()}");
 
             Console.WriteLine("Enter new data below.");
@@ -718,8 +738,9 @@ namespace HKDXX6_HFT_2023241.Client
 
         static void Delete(string TypeName)
         {
+            Console.Clear();
             Console.WriteLine($"Deleting a(n) {TypeName.ToLower()}");
-            Console.Write("Please provide the ID to delete or put an asterisk (*) to go back to the main menu: ");
+            Console.Write("Please provide the ID to delete or put an asterisk (*) to go back to the menu: ");
             string input = Console.ReadLine();
             if (input == "*") return;
 
@@ -761,12 +782,36 @@ namespace HKDXX6_HFT_2023241.Client
 
         static void CasesPerOfficerStatistics()
         {
-            //TODO
+            Console.Clear();
+            Console.WriteLine("Listing number of open and closed cases per officer");
+            var table = new ConsoleTable("Officer", "Precinct", "No. of open cases", "No. of closed cases");
+            List<CasesPerOfficerStatistic> stat = Rest.Get<CasesPerOfficerStatistic>("Statistics/casesPerOfficerStatistics");
+            foreach (var statItem in stat)
+            {
+                table.AddRow($"{statItem.Officer.Rank} {statItem.Officer.FirstName} {statItem.Officer.LastName} ({statItem.Officer.BadgeNo})",
+                    statItem.Officer.PrecinctID,
+                    statItem.OpenCases,
+                    statItem.ClosedCases);
+            }
+            table.Write(Format.Minimal);
+            Console.WriteLine("Press any key to go back.");
+            Console.ReadKey();
+
         }
 
         static void CasesPerPrecinctStatistics()
         {
-            //TODO
+            Console.Clear();
+            Console.WriteLine("Listing number of open and closed cases per precinct");
+            var table = new ConsoleTable("Precinct", "No. of open cases", "No. of closed cases");
+            List<CasesPerPrecinctStatistic> stat = Rest.Get<CasesPerPrecinctStatistic>("Statistics/casesPerPrecinctStatistics");
+            foreach (var statItem in stat)
+            {
+                table.AddRow(statItem.Precinct.ID, statItem.OpenCases, statItem.ClosedCases);
+            }
+            table.Write(Format.Minimal);
+            Console.WriteLine("Press any key to go back.");
+            Console.ReadKey();
         }
 
         static void AutoAssignCase()
@@ -776,12 +821,35 @@ namespace HKDXX6_HFT_2023241.Client
 
         static void CaseAverageOpenTimePerOfficer()
         {
-            //TODO
+            Console.Clear();
+            Console.WriteLine("Listing average case open time per officer");
+            var table = new ConsoleTable("Officer", "Precinct", "Average case open time");
+            List<OfficerCaseAverageOpenTimeItem> stat = Rest.Get<OfficerCaseAverageOpenTimeItem>("Statistics/CaseAverageOpenTimePerOfficer");
+            foreach (var statItem in stat)
+            {
+                table.AddRow($"{statItem.officer.Rank} {statItem.officer.FirstName} {statItem.officer.LastName} ({statItem.officer.BadgeNo})",
+                    statItem.officer.PrecinctID, statItem.openTimeSpan.Humanize(2));
+            }
+            table.Write(Format.Minimal);
+            Console.WriteLine("Press any key to go back.");
+            Console.ReadKey();
+
         }
 
         static void CaseAverageOpenTimePerPrecinct()
         {
-            //TODO
+            Console.Clear();
+            Console.WriteLine("Listing average case open time per precinct");
+            var table = new ConsoleTable("Precinct", "Average case open time");
+            List<PrecinctCaseAverageOpenTimeItem> stat = Rest.Get<PrecinctCaseAverageOpenTimeItem>("Statistics/CaseAverageOpenTimePerPrecinct");
+            foreach (var statItem in stat)
+            {
+                table.AddRow(statItem.precinct.ID,
+                    statItem.openTimeSpan.Humanize(2));
+            }
+            table.Write(Format.Minimal);
+            Console.WriteLine("Press any key to go back.");
+            Console.ReadKey();
         }
 
         static void CasesOfPrecinct()

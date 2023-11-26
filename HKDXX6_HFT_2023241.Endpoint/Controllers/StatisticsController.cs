@@ -1,5 +1,6 @@
 ﻿using HKDXX6_HFT_2023241.Logic;
 using HKDXX6_HFT_2023241.Models.DBModels;
+using HKDXX6_HFT_2023241.Models.NonCrudModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System;
@@ -23,13 +24,13 @@ namespace HKDXX6_HFT_2023241.Endpoint.Controllers
 
 
         [HttpGet]
-        public IEnumerable<OfficerCaseStatistic> OfficerCaseStatistics()
+        public IEnumerable<CasesPerOfficerStatistic> casesPerOfficerStatistics()
         {
             return logic.casesPerOfficerStatistics();
         }
 
         [HttpGet]
-        public IEnumerable<PrecinctCaseStatistic> precinctCaseStatistics()
+        public IEnumerable<CasesPerPrecinctStatistic> casesPerPrecinctStatistics()
         {
             return logic.casesPerPrecinctStatistics();
         }
@@ -42,13 +43,13 @@ namespace HKDXX6_HFT_2023241.Endpoint.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<KeyValuePair<Officer, TimeSpan>> CaseAverageOpenTimePerOfficer()
+        public IEnumerable<OfficerCaseAverageOpenTimeItem> CaseAverageOpenTimePerOfficer()
         {
             return logic.OfficerCaseAverageOpenTime();
         }
 
         [HttpGet]
-        public IEnumerable<KeyValuePair<Precinct, TimeSpan>> CaseAverageOpenTimePerPrecinct()
+        public IEnumerable<PrecinctCaseAverageOpenTimeItem> CaseAverageOpenTimePerPrecinct()
         {
             return logic.PrecinctCaseAverageOpenTime();
         }

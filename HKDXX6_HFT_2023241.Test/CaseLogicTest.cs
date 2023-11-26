@@ -1,5 +1,6 @@
 ﻿using HKDXX6_HFT_2023241.Logic;
 using HKDXX6_HFT_2023241.Models.DBModels;
+using HKDXX6_HFT_2023241.Models.NonCrudModels;
 using HKDXX6_HFT_2023241.Repository;
 using Moq;
 using NUnit.Framework;
@@ -353,27 +354,27 @@ namespace HKDXX6_HFT_2023241.Test
         public void OfficerCaseStatsTest()
         {
             //Arrange:
-            var exp = new List<OfficerCaseStatistic>()
+            var exp = new List<CasesPerOfficerStatistic>()
             {
-                new OfficerCaseStatistic
+                new CasesPerOfficerStatistic
                 {
                     Officer = officers[0],
                     ClosedCases = 1,
                     OpenCases = 0
                 },
-                new OfficerCaseStatistic
+                new CasesPerOfficerStatistic
                 {
                     Officer = officers[1],
                     ClosedCases = 0,
                     OpenCases = 1
                 },
-                new OfficerCaseStatistic
+                new CasesPerOfficerStatistic
                 {
                     Officer = officers[2],
                     ClosedCases = 0,
                     OpenCases = 1
                 },
-                new OfficerCaseStatistic
+                new CasesPerOfficerStatistic
                 {
                     Officer = officers[4],
                     ClosedCases = 1,
@@ -392,15 +393,15 @@ namespace HKDXX6_HFT_2023241.Test
         public void PrecinctCaseStatsTest()
         {
             //Arrange
-            var exp = new List<PrecinctCaseStatistic>()
+            var exp = new List<CasesPerPrecinctStatistic>()
             {
-                new PrecinctCaseStatistic
+                new CasesPerPrecinctStatistic
                 {
                     Precinct = precincts[0],
                     OpenCases = 0,
                     ClosedCases = 1
                 },
-                new PrecinctCaseStatistic
+                new CasesPerPrecinctStatistic
                 {
                     Precinct = precincts[1],
                     OpenCases = 2,
@@ -462,10 +463,10 @@ namespace HKDXX6_HFT_2023241.Test
         public void OfficerCaseAverageOpenTimeTest()
         {
             //Arrange
-            var exp = new List<KeyValuePair<Officer, TimeSpan>>()
+            var exp = new List<OfficerCaseAverageOpenTimeItem>()
             {
-                new KeyValuePair<Officer, TimeSpan>(officers[4],TimeSpan.FromDays(10)),
-                new KeyValuePair<Officer, TimeSpan>(officers[0],TimeSpan.FromMinutes(30))
+                new OfficerCaseAverageOpenTimeItem(officers[4],TimeSpan.FromDays(10)),
+                new OfficerCaseAverageOpenTimeItem(officers[0],TimeSpan.FromMinutes(30))
 
             };
 
@@ -480,10 +481,10 @@ namespace HKDXX6_HFT_2023241.Test
         public void PrecinctCaseAverageOpenTimeTest()
         {
             //Arrange
-            var exp = new List<KeyValuePair<Precinct, TimeSpan>>()
+            var exp = new List<PrecinctCaseAverageOpenTimeItem>()
             {
-                new KeyValuePair<Precinct, TimeSpan>(precincts[0], TimeSpan.FromDays(10)),
-                new KeyValuePair<Precinct, TimeSpan>(precincts[1], TimeSpan.FromMinutes(30))
+                new PrecinctCaseAverageOpenTimeItem(precincts[0], TimeSpan.FromDays(10)),
+                new PrecinctCaseAverageOpenTimeItem(precincts[1], TimeSpan.FromMinutes(30))
 
             };
 

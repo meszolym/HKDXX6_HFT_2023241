@@ -163,12 +163,12 @@ namespace HKDXX6_HFT_2023241.Logic
         }
 
         //NonCrud 4
-        public IEnumerable<KeyValuePair<Officer, TimeSpan>> OfficerCaseAverageOpenTime()
+        public IEnumerable<OfficerCaseAverageOpenTimeItem> OfficerCaseAverageOpenTime()
         {
             var result = from x in ReadAll()
                         where x.IsClosed == true
                         group x by x.OfficerOnCase into g
-                        select new KeyValuePair<Officer, TimeSpan>
+                        select new OfficerCaseAverageOpenTimeItem
                         (
                             g.Key,
                             TimeSpan.FromTicks((long)g.Average(t => t.OpenTimeSpan.Value.Ticks))
@@ -178,12 +178,12 @@ namespace HKDXX6_HFT_2023241.Logic
         }
 
         //NonCrud 5
-        public IEnumerable<KeyValuePair<Precinct, TimeSpan>> PrecinctCaseAverageOpenTime()
+        public IEnumerable<PrecinctCaseAverageOpenTimeItem> PrecinctCaseAverageOpenTime()
         {
             var result = from x in ReadAll()
                         where x.IsClosed == true
                         group x by x.Precinct into g
-                        select new KeyValuePair<Precinct, TimeSpan>
+                        select new PrecinctCaseAverageOpenTimeItem
                         (
                             g.Key,
                             TimeSpan.FromTicks((long)g.Average(t => t.OpenTimeSpan.Value.Ticks))

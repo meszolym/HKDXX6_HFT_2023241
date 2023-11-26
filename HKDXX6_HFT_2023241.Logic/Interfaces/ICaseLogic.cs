@@ -12,9 +12,9 @@ namespace HKDXX6_HFT_2023241.Logic
         IEnumerable<Case> CasesOfPrecint(int PrecintID);
         void Create(Case item);
         void Delete(int ID);
-        IEnumerable<KeyValuePair<Officer, TimeSpan>> OfficerCaseAverageOpenTime();
+        IEnumerable<OfficerCaseAverageOpenTimeItem> OfficerCaseAverageOpenTime();
         IEnumerable<CasesPerOfficerStatistic> casesPerOfficerStatistics();
-        IEnumerable<KeyValuePair<Precinct, TimeSpan>> PrecinctCaseAverageOpenTime();
+        IEnumerable<PrecinctCaseAverageOpenTimeItem> PrecinctCaseAverageOpenTime();
         IEnumerable<CasesPerPrecinctStatistic> casesPerPrecinctStatistics();
         Case Read(int ID);
         IEnumerable<Case> ReadAll();

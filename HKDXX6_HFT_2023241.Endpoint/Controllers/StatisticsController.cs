@@ -35,13 +35,6 @@ namespace HKDXX6_HFT_2023241.Endpoint.Controllers
             return logic.casesPerPrecinctStatistics();
         }
 
-        [HttpPost]
-        public void AutoAssignCase([FromBody] Tuple<int,int> IDPair)
-        {
-            //                   CaseID,       PrecinctID
-            logic.AutoAssignCase(IDPair.Item1, IDPair.Item2);
-        }
-
         [HttpGet]
         public IEnumerable<OfficerCaseAverageOpenTimeItem> CaseAverageOpenTimePerOfficer()
         {

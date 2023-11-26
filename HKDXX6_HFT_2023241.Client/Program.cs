@@ -781,7 +781,51 @@ namespace HKDXX6_HFT_2023241.Client
 
         static void AutoAssignCase()
         {
-            //TODO
+            Console.Clear();
+            Console.WriteLine("AutoAssigning case");
+            Console.Write("Please provide the Case ID to autoassign or put an asterisk (*) to go back to the menu: ");
+            string caseInput = Console.ReadLine();
+            if (caseInput == "*") return;
+
+            int caseInputInt;
+
+            while (!int.TryParse(caseInput, out caseInputInt))
+            {
+                Console.Write("Invalid input. Please try again: ");
+                caseInput = Console.ReadLine();
+                if (caseInput == "*") return;
+            }
+
+            Console.Write("Please provide the Precinct ID to autoassign the case to or put an asterisk (*) to go back to the menu: ");
+            string precinctInput = Console.ReadLine();
+            if (precinctInput == "*") return;
+
+            int precinctInputInt;
+
+            while (!int.TryParse(precinctInput, out precinctInputInt))
+            {
+                Console.Write("Invalid input. Please try again: ");
+                precinctInput = Console.ReadLine();
+                if (precinctInput == "*") return;
+            }
+
+            var assignData = new AutoAssignData(caseInputInt, precinctInputInt);
+            try
+            {
+                Rest.Post(assignData, "Case/AutoAssign");
+                Case c = Rest.GetSingle<Case>($"Case/{caseInputInt}");
+                Console.Write("Case sucsessfully assigned to ");
+                Console.WriteLine($"{c.OfficerOnCase.Rank} {c.OfficerOnCase.FirstName} {c.OfficerOnCase.LastName}.");
+                Console.WriteLine("Press any key to go back");
+                Console.ReadKey();
+                return;
+            }
+            catch (Exception ex)
+            {
+                WriteErrorMsg(ex.Message);
+                Console.ReadKey();
+                return;
+            }
         }
 
         static void CaseAverageOpenTimePerOfficer()

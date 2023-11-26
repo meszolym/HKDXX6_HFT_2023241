@@ -145,6 +145,10 @@ namespace HKDXX6_HFT_2023241.Logic
         {
             Case c = Read(id);
 
+            if (c == null)
+            {
+                throw new ArgumentException("Case does not exist.");
+            }
             if (c.OfficerOnCase != null || c.IsClosed)
             {
                 throw new InvalidOperationException("Cannot auto-assign already assigned/closed case.");

@@ -1,7 +1,9 @@
 ﻿using HKDXX6_HFT_2023241.Logic;
 using HKDXX6_HFT_2023241.Models.DBModels;
+using HKDXX6_HFT_2023241.Models.NonCrudModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using System;
 using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -52,6 +54,12 @@ namespace HKDXX6_HFT_2023241.Endpoint.Controllers
         public void Delete(int id)
         {
             logic.Delete(id);
+        }
+
+        [HttpPost("/AutoAssign")]
+        public void AutoAssignCase([FromBody]AutoAssignData assignData)
+        {
+            logic.AutoAssignCase(assignData.CaseID, assignData.PrecinctID);
         }
     }
 }

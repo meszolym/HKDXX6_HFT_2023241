@@ -382,7 +382,7 @@ namespace HKDXX6_HFT_2023241.Test
             };
 
             //Act
-            var res = logic.officerCaseStatistics().ToList();
+            var res = logic.casesPerOfficerStatistics().ToList();
 
             //Assert
             CollectionAssert.AreEquivalent(exp, res);
@@ -409,7 +409,7 @@ namespace HKDXX6_HFT_2023241.Test
             };
 
             //Act
-            var res = logic.precinctCaseStatistics().ToList();
+            var res = logic.casesPerPrecinctStatistics().ToList();
 
             //Assert
             CollectionAssert.AreEquivalent(exp, res);

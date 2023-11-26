@@ -5,6 +5,7 @@ using System.Diagnostics.Contracts;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using HKDXX6_HFT_2023241.Models.DBModels;
+using ConsoleTools;
 
 namespace HKDXX6_HFT_2023241.Client
 {
@@ -21,7 +22,45 @@ namespace HKDXX6_HFT_2023241.Client
         static void Main(string[] args)
         {
             Rest = new("http://localhost:33410/", "Case");
-            Create("Case");
+
+            var precinctSubMenu = new ConsoleMenu(args, 1)
+                .Add("List", () => List(nameof(Precinct)))
+                .Add("Get details", () => GetDetails(nameof(Precinct)))
+                .Add("Create", () => Create(nameof(Precinct)))
+                .Add("Update", () => Update(nameof(Precinct)))
+                .Add("Delete", () => Delete(nameof(Precinct)))
+                .Add("Back to main menu", ConsoleMenu.Close);
+
+            var officerSubMenu = new ConsoleMenu(args, 1)
+                .Add("List", () => List(nameof(Officer)))
+                .Add("Get details", () => GetDetails(nameof(Officer)))
+                .Add("Create", () => Create(nameof(Officer)))
+                .Add("Update", () => Update(nameof(Officer)))
+                .Add("Delete", () => Delete(nameof(Officer)))
+                .Add("Back to main menu", ConsoleMenu.Close);
+
+            var caseSubMenu = new ConsoleMenu(args, 1)
+                .Add("List", () => List(nameof(Case)))
+                .Add("Get details", () => GetDetails(nameof(Case)))
+                .Add("Create", () => Create(nameof(Case)))
+                .Add("Assign case automatically", () => AutoAssignCase())
+                .Add("Update", () => Update(nameof(Case)))
+                .Add("Delete", () => Delete(nameof(Case)))
+                .Add("Number of open and closed cases per officers", () => CasesPerOfficerStatistics())
+                .Add("Number of open and closed cases per precincts", () => CasesPerPrecinctStatistics())
+                .Add("Average case open time per officers", () => CaseAverageOpenTimePerOfficer())
+                .Add("Average case open time per precincts", () => CaseAverageOpenTimePerPrecinct())
+                .Add("All cases of a precinct", () => CasesOfPrecinct())
+                .Add("All cases of all precincts", () => CasesOfPrecincts())
+                .Add("Back to main menu", ConsoleMenu.Close);
+
+            var mainMenu = new ConsoleMenu(args, 0)
+                .Add("Precincts", () => precinctSubMenu.Show())
+                .Add("Officers", () => officerSubMenu.Show())
+                .Add("Cases", () => caseSubMenu.Show())
+                .Add("Quit app", ConsoleMenu.Close);
+
+            mainMenu.Show();
         }
 
         static void WriteErrorMsg(string msg)
@@ -720,12 +759,12 @@ namespace HKDXX6_HFT_2023241.Client
             Console.ReadKey();
         }
 
-        static void OfficerCaseStatistics()
+        static void CasesPerOfficerStatistics()
         {
             //TODO
         }
 
-        static void PrecinctCaseStatistics()
+        static void CasesPerPrecinctStatistics()
         {
             //TODO
         }

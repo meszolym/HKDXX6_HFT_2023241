@@ -110,12 +110,12 @@ namespace HKDXX6_HFT_2023241.Logic
 
 
         //NonCrud 1
-        public IEnumerable<OfficerCaseStatistic> officerCaseStatistics()
+        public IEnumerable<CasesPerOfficerStatistic> casesPerOfficerStatistics()
         {
             var result = from x in ReadAll()
                          where x.OfficerOnCase != null
                          group x by x.OfficerOnCase into g
-                         select new OfficerCaseStatistic
+                         select new CasesPerOfficerStatistic
                          {
                              Officer = g.Key,
                              ClosedCases = g.Count(t => t.IsClosed),
@@ -126,11 +126,11 @@ namespace HKDXX6_HFT_2023241.Logic
         }
 
         //NonCrud 2
-        public IEnumerable<PrecinctCaseStatistic> precinctCaseStatistics()
+        public IEnumerable<CasesPerPrecinctStatistic> casesPerPrecinctStatistics()
         {
-            var result = from x in officerCaseStatistics()
+            var result = from x in casesPerOfficerStatistics()
                    group x by x.Officer.Precinct into g
-                   select new PrecinctCaseStatistic
+                   select new CasesPerPrecinctStatistic
                    {
                        Precinct = g.Key,
                        OpenCases = g.Sum(t => t.OpenCases),
@@ -155,7 +155,7 @@ namespace HKDXX6_HFT_2023241.Logic
                 throw new ArgumentException("Precinct does not exist.");
             }
 
-            var Officer = officerCaseStatistics().OrderBy(t => t.OpenCases).First(t => t.Officer.PrecinctID == precintID).Officer;
+            var Officer = casesPerOfficerStatistics().OrderBy(t => t.OpenCases).First(t => t.Officer.PrecinctID == precintID).Officer;
 
             c.OfficerOnCaseID = Officer.BadgeNo;
 

@@ -7,7 +7,7 @@ using HKDXX6_HFT_2023241.Models.DBModels;
 
 namespace HKDXX6_HFT_2023241.Models.NonCrudModels
 {
-    public class PrecinctCaseStatistic
+    public class CasesPerPrecinctStatistic
     {
         public Precinct Precinct { get; set; }
         public int ClosedCases { get; set; }
@@ -15,7 +15,7 @@ namespace HKDXX6_HFT_2023241.Models.NonCrudModels
 
         public override bool Equals(object obj)
         {
-            PrecinctCaseStatistic b = obj as PrecinctCaseStatistic;
+            CasesPerPrecinctStatistic b = obj as CasesPerPrecinctStatistic;
             if (b == null)
             {
                 return false;

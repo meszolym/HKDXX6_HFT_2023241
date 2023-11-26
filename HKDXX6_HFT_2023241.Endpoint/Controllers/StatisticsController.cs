@@ -25,13 +25,13 @@ namespace HKDXX6_HFT_2023241.Endpoint.Controllers
         [HttpGet]
         public IEnumerable<OfficerCaseStatistic> OfficerCaseStatistics()
         {
-            return logic.officerCaseStatistics();
+            return logic.casesPerOfficerStatistics();
         }
 
         [HttpGet]
         public IEnumerable<PrecinctCaseStatistic> precinctCaseStatistics()
         {
-            return logic.precinctCaseStatistics();
+            return logic.casesPerPrecinctStatistics();
         }
 
         [HttpPost]

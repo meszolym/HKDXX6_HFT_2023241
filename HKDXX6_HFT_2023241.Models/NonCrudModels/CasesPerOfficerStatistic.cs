@@ -7,7 +7,7 @@ using HKDXX6_HFT_2023241.Models.DBModels;
 
 namespace HKDXX6_HFT_2023241.Models.NonCrudModels
 {
-    public class OfficerCaseStatistic
+    public class CasesPerOfficerStatistic
     {
         public Officer Officer { get; set; }
         public int ClosedCases { get; set; }
@@ -15,7 +15,7 @@ namespace HKDXX6_HFT_2023241.Models.NonCrudModels
 
         public override bool Equals(object obj)
         {
-            OfficerCaseStatistic b = obj as OfficerCaseStatistic;
+            CasesPerOfficerStatistic b = obj as CasesPerOfficerStatistic;
             if (b == null)
             {
                 return false;

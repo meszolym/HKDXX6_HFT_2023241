@@ -13,9 +13,9 @@ namespace HKDXX6_HFT_2023241.Logic
         void Create(Case item);
         void Delete(int ID);
         IEnumerable<KeyValuePair<Officer, TimeSpan>> OfficerCaseAverageOpenTime();
-        IEnumerable<OfficerCaseStatistic> officerCaseStatistics();
+        IEnumerable<CasesPerOfficerStatistic> casesPerOfficerStatistics();
         IEnumerable<KeyValuePair<Precinct, TimeSpan>> PrecinctCaseAverageOpenTime();
-        IEnumerable<PrecinctCaseStatistic> precinctCaseStatistics();
+        IEnumerable<CasesPerPrecinctStatistic> casesPerPrecinctStatistics();
         Case Read(int ID);
         IEnumerable<Case> ReadAll();
         void Update(Case item);

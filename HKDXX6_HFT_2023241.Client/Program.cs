@@ -1,10 +1,10 @@
-﻿using HKDXX6_HFT_2023241.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using ConsoleTables;
 using System.Diagnostics.Contracts;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using HKDXX6_HFT_2023241.Models.DBModels;
 
 namespace HKDXX6_HFT_2023241.Client
 {
@@ -216,8 +216,7 @@ namespace HKDXX6_HFT_2023241.Client
                 }
                 catch (Exception ex)
                 {
-                    
-                    
+                    WriteErrorMsg(ex.Message);
                     Console.ReadKey();
                     return Status.ERRORED;
                 }

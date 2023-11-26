@@ -1,4 +1,4 @@
-﻿using HKDXX6_HFT_2023241.Models;
+﻿using HKDXX6_HFT_2023241.Models.DBModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 

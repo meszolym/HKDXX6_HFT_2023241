@@ -1,5 +1,5 @@
 ﻿using HKDXX6_HFT_2023241.Logic;
-using HKDXX6_HFT_2023241.Models;
+using HKDXX6_HFT_2023241.Models.DBModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System;

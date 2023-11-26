@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace HKDXX6_HFT_2023241.Models
+namespace HKDXX6_HFT_2023241.Models.DBModels
 {
     public class Case
     {
@@ -52,13 +52,13 @@ namespace HKDXX6_HFT_2023241.Models
 
         // Lazyload the officer on the case
         [NotMapped]
-        public virtual Officer? OfficerOnCase { get; set; }
+        public virtual Officer OfficerOnCase { get; set; }
 
         public int? OfficerOnCaseID { get; set; }
 
         [NotMapped]
         [JsonIgnore]
-        public Precinct? Precinct
+        public Precinct Precinct
         {
             get
             {
@@ -68,7 +68,7 @@ namespace HKDXX6_HFT_2023241.Models
 
         public Case()
         {
-            
+
         }
 
         public Case(int iD, string name, string description, DateTime openDT)

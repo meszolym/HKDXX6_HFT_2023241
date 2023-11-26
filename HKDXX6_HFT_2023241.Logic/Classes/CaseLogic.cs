@@ -1,5 +1,5 @@
 ﻿using Castle.Core.Internal;
-using HKDXX6_HFT_2023241.Models;
+using HKDXX6_HFT_2023241.Models.DBModels;
 using HKDXX6_HFT_2023241.Models.NonCrudModels;
 using HKDXX6_HFT_2023241.Repository;
 using System;

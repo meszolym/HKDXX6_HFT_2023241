@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text.Json.Serialization;
 
-namespace HKDXX6_HFT_2023241.Models
+namespace HKDXX6_HFT_2023241.Models.DBModels
 {
     public class Precinct
     {

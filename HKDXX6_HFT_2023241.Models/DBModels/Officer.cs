@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace HKDXX6_HFT_2023241.Models
+namespace HKDXX6_HFT_2023241.Models.DBModels
 {
     public enum Ranks
     {
@@ -49,7 +49,7 @@ namespace HKDXX6_HFT_2023241.Models
 
         //Lazyload the DCO of the officer
         [NotMapped]
-        public virtual Officer? DirectCO { get; set; }
+        public virtual Officer DirectCO { get; set; }
 
         //Lazyload officers who are under the command of officer (officers where this officer is DCO)
         [NotMapped]
@@ -86,7 +86,7 @@ namespace HKDXX6_HFT_2023241.Models
             this.LastName = LastName;
             this.Rank = Rank;
             this.DirectCO_BadgeNo = DirectCO_BadgeNo;
-            this.PrecinctID = PrecintID;
+            PrecinctID = PrecintID;
             Cases = new HashSet<Case>();
             OfficersUnderCommand = new HashSet<Officer>();
             HireDate = hireDate;

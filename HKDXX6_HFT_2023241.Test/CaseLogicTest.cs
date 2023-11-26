@@ -528,31 +528,5 @@ namespace HKDXX6_HFT_2023241.Test
             //Assert
             CollectionAssert.AreEquivalent(exp, res);
         }
-
-        [Test]
-        public void CasesOfPrecinctsTest()
-        {
-            //Arrange
-            var exp = new List<KeyValuePair<Precinct, List<Case>>>()
-            {
-                new KeyValuePair<Precinct, List<Case>>(precincts[0],new List<Case>()
-                {
-                    cases[3]
-                }),
-                new KeyValuePair<Precinct, List<Case>>(precincts[1],new List<Case>()
-                {
-                    cases[0],
-                    cases[1],
-                    cases[2],
-                }),
-            };
-
-            //Act
-            var res = logic.CasesOfPrecincts().ToList();
-
-            //Assert
-            CollectionAssert.AreEquivalent(exp, res);
-        }
-
     }
 }

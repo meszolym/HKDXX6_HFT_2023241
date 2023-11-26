@@ -55,16 +55,9 @@ namespace HKDXX6_HFT_2023241.Endpoint.Controllers
         }
 
         [HttpGet("{id}")]
-        public IEnumerable<Case> CasesOfPrecinct(int precinctID)
+        public IEnumerable<Case> CasesOfPrecinct(int id)
         {
-            return logic.CasesOfPrecint(precinctID);
+            return logic.CasesOfPrecint(id);
         }
-
-        [HttpGet]
-        public IEnumerable<KeyValuePair<Precinct, IEnumerable<Case>>> CasesOfPrecincts()
-        {
-            return logic.CasesOfPrecincts();
-        }
-
     }
 }

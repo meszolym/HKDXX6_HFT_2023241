@@ -199,22 +199,7 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("Precinct does not exist.");
             }
-            return ReadAll().Where(t => t.Precinct == p).ToList();
+            return ReadAll().Where(t => t.Precinct != null && t.Precinct.ID == PrecinctID).ToList();
         }
-
-        //NonCrud 7
-        public IEnumerable<KeyValuePair<Precinct, IEnumerable<Case>>> CasesOfPrecincts()
-        {
-            var result = from x in ReadAll()
-                         where x.Precinct != null
-                   group x by x.Precinct into g
-                   select new KeyValuePair<Precinct, IEnumerable<Case>>
-                   (
-                       g.Key,
-                       g
-                   );
-            return result.ToList();
-        }
-
     }
 }

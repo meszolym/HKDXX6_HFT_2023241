@@ -53,7 +53,6 @@ namespace HKDXX6_HFT_2023241.Client
                 .Add("Average case open time per officers", () => CaseAverageOpenTimePerOfficer())
                 .Add("Average case open time per precincts", () => CaseAverageOpenTimePerPrecinct())
                 .Add("All cases of a precinct", () => CasesOfPrecinct())
-                .Add("All cases of all precincts", () => CasesOfPrecincts())
                 .Add("Back to main menu", ConsoleMenu.Close);
 
             var mainMenu = new ConsoleMenu(args, 0)
@@ -820,13 +819,33 @@ namespace HKDXX6_HFT_2023241.Client
 
         static void CasesOfPrecinct()
         {
-            //TODO
-        }
+            Console.Clear();
+            Console.WriteLine("Listing all cases of precinct");
+            Console.Write("Please provide the ID to look up or put an asterisk (*) to go back to the menu: ");
+            string input = Console.ReadLine();
 
-        static void CasesOfPrecincts()
-        {
-            //TODO
-        }
+            if (input == "*") return;
 
+            int inputInt;
+
+            while (!int.TryParse(input, out inputInt))
+            {
+                Console.Write("Invalid input. Please try again: ");
+                input = Console.ReadLine();
+                if (input == "*") return;
+            }
+
+            List<Case> cases = Rest.Get<Case>($"Statistics/CasesOfPrecinct/{inputInt}");
+
+            var table = new ConsoleTable("ID", "Name", "Officer on case");
+            foreach (var item in cases)
+            {
+                table.AddRow(item.ID, item.Name, $"{item.OfficerOnCase.Rank} {item.OfficerOnCase.FirstName} {item.OfficerOnCase.LastName} ({item.OfficerOnCaseID})");
+            }
+            table.Write(Format.Minimal);
+            Console.WriteLine("Press any key to go back.");
+            Console.ReadKey();
+            return;
+        }
     }
 }

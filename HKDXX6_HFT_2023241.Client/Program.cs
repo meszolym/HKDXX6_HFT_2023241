@@ -299,7 +299,6 @@ namespace HKDXX6_HFT_2023241.Client
 
             Status result = GetDetails(TypeName, inputInt);
             if (result == Status.ERRORED) return;
-            Console.WriteLine();
             Console.Write("Are you sure you want to update this item? (y/n): ");
             string inputYN = Console.ReadLine();
             while (inputYN.ToUpper() != "Y" && inputYN.ToUpper() != "N")
@@ -334,79 +333,50 @@ namespace HKDXX6_HFT_2023241.Client
 
                 Console.Write("Recorded at: ");
                 string openedDtInputString = Console.ReadLine();
-                if (openedDtInputString != "*")
+                DateTime openedDt;
+                while (!DateTime.TryParse(openedDtInputString, out openedDt) && openedDtInputString != "*")
                 {
-                    DateTime openedDt;
-
-                    while (!DateTime.TryParse(openedDtInputString, out openedDt))
-                    {
-                        Console.Write("Invalid input for recorded at, please try again: ");
-                        openedDtInputString = Console.ReadLine();
-                    }
-
-                    updated.OpenedAt = openedDt;
+                    Console.Write("Invalid input for recorded at, please try again: ");
+                    openedDtInputString = Console.ReadLine();
                 }
+                if (openedDtInputString != "*") updated.OpenedAt = openedDt;
+
 
                 Console.Write("Closed at (leave empty to leave the case open): ");
                 string closedDtInputString = Console.ReadLine();
-                if (closedDtInputString == string.Empty)
+                DateTime closedDt;
+
+                while (!DateTime.TryParse(closedDtInputString, out closedDt)
+                    && closedDtInputString != string.Empty && closedDtInputString != "*")
+                {
+                    Console.Write("Invalid input for closed at, please try again: ");
+                    closedDtInputString = Console.ReadLine();
+                }
+                if (closedDtInputString != string.Empty && closedDtInputString != "*")
+                {
+                    updated.ClosedAt = closedDt;
+                }
+                else if (closedDtInputString == string.Empty)
                 {
                     updated.ClosedAt = null;
-                }
-                else if (closedDtInputString != "*")
-                {
-                    DateTime closedDt;
-
-                    while (!DateTime.TryParse(closedDtInputString, out closedDt))
-                    {
-                        Console.Write("Invalid input for closed at, please try again: ");
-                        closedDtInputString = Console.ReadLine();
-                        if (closedDtInputString == string.Empty)
-                        {
-                            updated.ClosedAt = null;
-                            break;
-                        }
-                        else if (closedDtInputString == "*")
-                        {
-                            break;
-                        }
-                    }
-                    if (closedDtInputString != string.Empty && closedDtInputString != "*")
-                    {
-                        updated.ClosedAt = closedDt;
-                    }
-                    
                 }
 
                 Console.Write("Officer on case badgeNo. (leave empty for unassigned): ");
                 string officerIDInputString = Console.ReadLine();
-                if (officerIDInputString == string.Empty)
+                int officerID;
+                while (!int.TryParse(officerIDInputString, out officerID)
+                    && officerIDInputString != "*" && officerIDInputString != string.Empty)
+                {
+                    Console.Write("Invalid input for officer badgeNo., please try again: ");
+                    officerIDInputString = Console.ReadLine();
+                }
+                if (officerIDInputString != "*" && officerIDInputString != string.Empty)
+                {
+                    updated.OfficerOnCaseID = officerID;
+                }
+                else if (officerIDInputString == string.Empty)
                 {
                     updated.OfficerOnCaseID = null;
-                }
-                else if (officerIDInputString != "*")
-                {
-                    int officerID;
-
-                    while (!int.TryParse(officerIDInputString, out officerID))
-                    {
-                        Console.Write("Invalid input for officer badgeNo., please try again: ");
-                        officerIDInputString = Console.ReadLine();
-                        if (officerIDInputString == string.Empty)
-                        {
-                            updated.OfficerOnCaseID = null;
-                            break;
-                        }
-                        else if (officerIDInputString == "*")
-                        {
-                            break;
-                        }
-                    }
-                    if (officerIDInputString != string.Empty && officerIDInputString != "*")
-                    {
-                        updated.OfficerOnCaseID = officerID;
-                    }
-                    
                 }
 
                 try
@@ -439,16 +409,14 @@ namespace HKDXX6_HFT_2023241.Client
 
                 Console.Write("Rank: ");
                 string rankInputString = Console.ReadLine();
+                object rank;
+                while (!Enum.TryParse(typeof(Ranks), rankInputString, out rank) && rankInputString != "*")
+                {
+                    Console.Write("Invalid input for rank, please try again: ");
+                    rankInputString = Console.ReadLine();
+                }
                 if (rankInputString != "*")
                 {
-                    object rank;
-
-                    while (!Enum.TryParse(typeof(Ranks), rankInputString, out rank))
-                    {
-                        Console.Write("Invalid input for rank, please try again: ");
-                        rankInputString = Console.ReadLine();
-                    }
-
                     updated.Rank = (Ranks)rank;
                 }
 
@@ -456,14 +424,16 @@ namespace HKDXX6_HFT_2023241.Client
                 {
                     Console.Write("Direct CO badgeNo.: ");
                     string directCoIdInputString = Console.ReadLine();
+
+                    int directCoId;
+
+                    while (!int.TryParse(directCoIdInputString, out directCoId) && directCoIdInputString != "*")
+                    {
+                        Console.Write("Invalid input for direct CO badgeNo., please try again: ");
+                        directCoIdInputString = Console.ReadLine();
+                    }
                     if (directCoIdInputString != "*")
                     {
-                        int directCoId;
-                        while (!int.TryParse(directCoIdInputString, out directCoId))
-                        {
-                            Console.Write("Invalid input for direct CO badgeNo., please try again: ");
-                            directCoIdInputString = Console.ReadLine();
-                        }
                         updated.DirectCO_BadgeNo = directCoId;
                     }
                 }
@@ -475,30 +445,30 @@ namespace HKDXX6_HFT_2023241.Client
 
                 Console.Write("Precinct ID: ");
                 string precinctIdInputString = Console.ReadLine();
+                int precinctId;
+                while (!int.TryParse(precinctIdInputString, out precinctId) && precinctIdInputString != "*")
+                {
+
+                    Console.Write("Invalid input for precinct ID, please try again: ");
+                    precinctIdInputString = Console.ReadLine();                    
+                }
                 if (precinctIdInputString != "*")
                 {
-                    int precinctId;
-
-                    while (!int.TryParse(precinctIdInputString, out precinctId))
-                    {
-                        Console.Write("Invalid input for precinct ID, please try again: ");
-                        precinctIdInputString = Console.ReadLine();
-                    }
                     updated.PrecinctID = precinctId;
                 }
 
 
                 Console.Write("Hired at: ");
                 string hireDateInputString = Console.ReadLine();
+                DateTime hireDate;
+
+                while (!DateTime.TryParse(hireDateInputString, out hireDate) && hireDateInputString != "*")
+                {
+                    Console.Write("Invalid input for hire date, please try again: ");
+                    hireDateInputString = Console.ReadLine();
+                }
                 if (hireDateInputString != "*")
                 {
-                    DateTime hireDate;
-
-                    while (!DateTime.TryParse(hireDateInputString, out hireDate))
-                    {
-                        Console.Write("Invalid input for hire date, please try again: ");
-                        hireDateInputString = Console.ReadLine();
-                    }
                     updated.HireDate = hireDate;
                 }
 
@@ -552,50 +522,46 @@ namespace HKDXX6_HFT_2023241.Client
             if (TypeName == nameof(Case))
             {
 
+                Case added = new Case();
+
                 Console.Write("Case name: ");
-                string caseNameInput = Console.ReadLine();
+                added.Name = Console.ReadLine();
 
                 Console.Write("Case description: ");
-                string caseDescInput = Console.ReadLine();
+                added.Description = Console.ReadLine();
+
+                Console.Write("Case opened at: ");
+                string openedAtInputString = Console.ReadLine();
+                DateTime parsedOpenDt;
+                while (!DateTime.TryParse(openedAtInputString, out parsedOpenDt))
+                {
+                    Console.Write("Invalid input for opened at, please try again: ");
+                    openedAtInputString = Console.ReadLine();
+                }
+                added.ClosedAt = (openedAtInputString == string.Empty ? null : parsedOpenDt);
 
                 Console.WriteLine();
                 Console.WriteLine("The following fields are not mandatory, you may leave them empty.");
                 Console.Write("Case closed at: ");
                 string closedAtInputString = Console.ReadLine();
-                DateTime? closedAt = null;
-                if (closedAtInputString != string.Empty)
+                DateTime parsedClosedDt;
+                while (!DateTime.TryParse(closedAtInputString, out parsedClosedDt) && closedAtInputString != string.Empty)
                 {
-                    DateTime parsed;
-                    while (!DateTime.TryParse(closedAtInputString, out parsed))
-                    {
-                        Console.Write("Invalid input for closed at, please try again: ");
-                        closedAtInputString = Console.ReadLine();
-                    }
-                    closedAt = parsed;
+                    Console.Write("Invalid input for closed at, please try again: ");
+                    closedAtInputString = Console.ReadLine();
                 }
+                added.ClosedAt = (closedAtInputString == string.Empty ? null : parsedClosedDt);
+
 
                 Console.Write("Officer on case badgeNo.: ");
                 string officerOnCaseIdInputString = Console.ReadLine();
-                int? officerID = null;
-                if (officerOnCaseIdInputString != string.Empty)
+                int parsedOfficerID;
+                while (!int.TryParse(officerOnCaseIdInputString, out parsedOfficerID) && officerOnCaseIdInputString != string.Empty)
                 {
-                    int parsed;
-                    while (!int.TryParse(officerOnCaseIdInputString, out parsed))
-                    {
-                        Console.Write("Invalid input for officer on case badgeNo., please try again: ");
-                        officerOnCaseIdInputString = Console.ReadLine();
-                    }
-                    officerID = parsed;
+                    Console.Write("Invalid input for officer on case badgeNo., please try again: ");
+                    officerOnCaseIdInputString = Console.ReadLine();
                 }
-
-                Case added = new Case()
-                {
-                    Name = caseNameInput,
-                    Description = caseDescInput,
-                    OpenedAt = DateTime.Now,
-                    ClosedAt = closedAt,
-                    OfficerOnCaseID = officerID
-                };
+                added.OfficerOnCaseID = (officerOnCaseIdInputString == string.Empty ? null : parsedOfficerID);
 
                 try
                 {
@@ -627,15 +593,15 @@ namespace HKDXX6_HFT_2023241.Client
                 Console.WriteLine("Rank: ");
                 string rankInputString = Console.ReadLine();
 
-                object parsed;
+                object parsedRank;
 
-                while (!Enum.TryParse(typeof(Ranks), rankInputString, out parsed))
+                while (!Enum.TryParse(typeof(Ranks), rankInputString, out parsedRank))
                 {
                     Console.Write("Invalid input for rank, please try again: ");
                     rankInputString = Console.ReadLine();
                 }
 
-                added.Rank = (Ranks)parsed;
+                added.Rank = (Ranks)parsedRank;
 
                 if (added.Rank != Ranks.Captain)
                 {

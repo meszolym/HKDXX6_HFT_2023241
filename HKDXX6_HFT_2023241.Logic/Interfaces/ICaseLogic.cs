@@ -1,4 +1,5 @@
 ﻿using HKDXX6_HFT_2023241.Models;
+using HKDXX6_HFT_2023241.Models.NonCrudModels;
 using System;
 using System.Collections.Generic;
 
@@ -12,9 +13,9 @@ namespace HKDXX6_HFT_2023241.Logic
         void Create(Case item);
         void Delete(int ID);
         IEnumerable<KeyValuePair<Officer, TimeSpan>> OfficerCaseAverageOpenTime();
-        IEnumerable<CaseLogic.OfficerCaseStatistic> officerCaseStatistics();
+        IEnumerable<OfficerCaseStatistic> officerCaseStatistics();
         IEnumerable<KeyValuePair<Precinct, TimeSpan>> PrecinctCaseAverageOpenTime();
-        IEnumerable<CaseLogic.PrecinctCaseStatistic> precinctCaseStatistics();
+        IEnumerable<PrecinctCaseStatistic> precinctCaseStatistics();
         Case Read(int ID);
         IEnumerable<Case> ReadAll();
         void Update(Case item);

@@ -1,5 +1,6 @@
 ﻿using Castle.Core.Internal;
 using HKDXX6_HFT_2023241.Models;
+using HKDXX6_HFT_2023241.Models.NonCrudModels;
 using HKDXX6_HFT_2023241.Repository;
 using System;
 using System.Collections.Generic;
@@ -124,34 +125,6 @@ namespace HKDXX6_HFT_2023241.Logic
             return result.ToList();
         }
 
-        public class OfficerCaseStatistic
-        {
-            public Officer Officer { get; set; }
-            public int ClosedCases { get; set; }
-            public int OpenCases { get; set; }
-
-            public override bool Equals(object obj)
-            {
-                OfficerCaseStatistic b = obj as OfficerCaseStatistic;
-                if (b == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return 
-                        Officer.Equals(b.Officer)
-                        && ClosedCases == b.ClosedCases
-                        && OpenCases == b.OpenCases;
-                }
-            }
-
-            public override int GetHashCode()
-            {
-                return HashCode.Combine(Officer, ClosedCases, OpenCases);
-            }
-        }
-
         //NonCrud 2
         public IEnumerable<PrecinctCaseStatistic> precinctCaseStatistics()
         {
@@ -165,33 +138,6 @@ namespace HKDXX6_HFT_2023241.Logic
                    };
 
             return result.ToList();
-        }
-
-        public class PrecinctCaseStatistic
-        {
-            public Precinct Precinct { get; set; }
-            public int ClosedCases { get; set; }
-            public int OpenCases { get; set; }
-
-            public override bool Equals(object obj)
-            {
-                PrecinctCaseStatistic b = obj as PrecinctCaseStatistic;
-                if (b == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return this.Precinct.Equals(b.Precinct)
-                        && ClosedCases == b.ClosedCases
-                        && OpenCases == b.OpenCases;
-                }
-            }
-
-            public override int GetHashCode()
-            {
-                return HashCode.Combine(Precinct, ClosedCases, OpenCases);
-            }
         }
 
         //NonCrud 3

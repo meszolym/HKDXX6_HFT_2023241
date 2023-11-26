@@ -56,7 +56,7 @@ namespace HKDXX6_HFT_2023241.Endpoint.Controllers
             logic.Delete(id);
         }
 
-        [HttpPost("/AutoAssign")]
+        [HttpPost("AutoAssign")]
         public void AutoAssignCase([FromBody]AutoAssignData assignData)
         {
             logic.AutoAssignCase(assignData.CaseID, assignData.PrecinctID);

@@ -159,7 +159,10 @@ namespace HKDXX6_HFT_2023241.Logic
                 throw new ArgumentException("Precinct does not exist.");
             }
 
-            var Officer = casesPerOfficerStatistics().OrderBy(t => t.OpenCases).First(t => t.Officer.PrecinctID == precintID).Officer;
+            //var Officer = casesPerOfficerStatistics().OrderBy(t => t.OpenCases).First(t => t.Officer.PrecinctID == precintID).Officer;
+            var Officer = PrecinctRepo.ReadAll().First(p => p.ID == precintID).Officers
+                .OrderBy(o => o.Cases.Count(c => !c.IsClosed))
+                .ThenByDescending(o => o.Rank).First();
 
             c.OfficerOnCaseID = Officer.BadgeNo;
 

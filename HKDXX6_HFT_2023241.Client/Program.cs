@@ -324,10 +324,20 @@ namespace HKDXX6_HFT_2023241.Client
 
                 Console.Write("Name: ");
                 string nameInput = Console.ReadLine();
+                while ((nameInput.Length < 10 || nameInput.Length > 240) && nameInput != "*")
+                {
+                    Console.Write("Invalid input for name, please try again: ");
+                    nameInput = Console.ReadLine();
+                }
                 if (nameInput != "*") updated.Name = nameInput;
 
                 Console.Write("Description: ");
                 string descInput = Console.ReadLine();
+                while (descInput.Length<15 && descInput != "*")
+                {
+                    Console.Write("Invalid input for description, please try again: ");
+                    descInput = Console.ReadLine();
+                }
                 if (descInput != "*") updated.Description = descInput;
 
                 Console.Write("Recorded at: ");
@@ -400,10 +410,20 @@ namespace HKDXX6_HFT_2023241.Client
 
                 Console.Write("First name: ");
                 string fnameInput = Console.ReadLine();
+                while ((fnameInput.Length < 2 || fnameInput.Length > 100) && fnameInput != "*")
+                {
+                    Console.Write("Invalid input for first name, please try again: ");
+                    fnameInput = Console.ReadLine();
+                }
                 if (fnameInput != "*") updated.FirstName = fnameInput;
 
                 Console.Write("Last name: ");
                 string lnameInput = Console.ReadLine();
+                while ((lnameInput.Length < 2 || lnameInput.Length > 100) && lnameInput != "*")
+                {
+                    Console.Write("Invalid input for last name, please try again: ");
+                    lnameInput = Console.ReadLine();
+                }
                 if (lnameInput != "*") updated.LastName = lnameInput;
 
                 Console.Write("Rank: ");
@@ -493,6 +513,11 @@ namespace HKDXX6_HFT_2023241.Client
 
                 Console.Write("Address: ");
                 string addressInput = Console.ReadLine();
+                while ((addressInput.Length < 10 || addressInput.Length > 100) && addressInput != "*")
+                {
+                    Console.Write("Invalid input for address, please try again: ");
+                    addressInput = Console.ReadLine();
+                }
                 if (addressInput != "*") updated.Address = addressInput;
 
                 try

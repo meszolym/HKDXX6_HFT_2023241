@@ -45,11 +45,7 @@ namespace HKDXX6_HFT_2023241.Logic
         public void Update(Officer item)
         {
             var o = Read(item.BadgeNo);
-
-            if (item.DirectCO != null && item.DirectCO.Precinct != item.Precinct)
-            {
-                throw new ArgumentException("Commanding officer has to be in the same precinct as officer.");
-            }
+            
 
             if (item.Rank == Ranks.Captain && item.Precinct.Officers.Any(t => t.Rank == Ranks.Captain && t.BadgeNo != item.BadgeNo))
             {
@@ -64,6 +60,16 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("PrecinctID must be between 1 and 139 inclusively.");
             }
+
+            if (item.DirectCO_BadgeNo != null)
+            {
+                Officer co = Read(item.DirectCO_BadgeNo.Value);
+                if (co.PrecinctID != item.PrecinctID)
+                {
+                    throw new ArgumentException("Commanding officer has to be in the same precinct as officer.");
+                }
+            }
+
             if (item.HireDate > DateTime.Now)
             {
                 throw new ArgumentException("HireDate cannot be in the future.");
@@ -82,13 +88,14 @@ namespace HKDXX6_HFT_2023241.Logic
             var p = o.Precinct;
             Officer c;
 
-            if (p.Officers.Any(t => t.Rank == Ranks.Captain))
+            if (p.Officers.Any(t => t.Rank == Ranks.Captain && t.BadgeNo != o.BadgeNo))
             {
-                c = p.Officers.Single(t => t.Rank == Ranks.Captain);
+                c = p.Officers.Single(t => t.Rank == Ranks.Captain && t.BadgeNo != o.BadgeNo);
             }
             else
             {
                 c = p.Officers
+                    .Where(t => t.BadgeNo != o.BadgeNo)
                     .OrderByDescending(t => t.Rank)
                     .ThenBy(t => t.HireDate)
                     .ThenBy(t => t.Cases.Count())
@@ -98,7 +105,14 @@ namespace HKDXX6_HFT_2023241.Logic
 
             foreach (var ooc in o.OfficersUnderCommand)
             {
-                ooc.DirectCO_BadgeNo = c.BadgeNo;
+                if (ooc.BadgeNo != c.BadgeNo)
+                {
+                    ooc.DirectCO_BadgeNo = c.BadgeNo;
+                }
+                else
+                {
+                    ooc.DirectCO_BadgeNo = null;
+                }
                 Update(ooc);
             }
         }

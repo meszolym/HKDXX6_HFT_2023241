@@ -881,7 +881,7 @@ namespace HKDXX6_HFT_2023241.Client
             Console.WriteLine();
             Console.Write("Are you sure you want to delete this item? (y/n): ");
             string inputYN = Console.ReadLine();
-            while (inputYN.ToUpper() != "Y" || inputYN.ToUpper() != "N")
+            while (inputYN.ToUpper() != "Y" && inputYN.ToUpper() != "N")
             {
                 Console.Write("Invalid input. Please try again: ");
                 inputYN = Console.ReadLine();

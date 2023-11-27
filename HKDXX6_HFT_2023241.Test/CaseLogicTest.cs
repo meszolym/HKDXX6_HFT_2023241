@@ -82,7 +82,7 @@ namespace HKDXX6_HFT_2023241.Test
                     ID = 4,
                     Name = "TEST THING",
                     Description = "THIS IS A TEST DESC, NOTHING TO SEE HERE",
-                    OfficerOnCaseID = 6382,
+                    OfficerOnCaseID = 3711,
                     OfficerOnCase = officers[4],
                     OpenedAt = new DateTime(2023,01,01,0,0,0),
                     ClosedAt = new DateTime(2023,01,11,0,0,0)
@@ -94,6 +94,10 @@ namespace HKDXX6_HFT_2023241.Test
                     OpenedAt = new DateTime(2023,01,01,0,0,0),
                 }
             };
+            officers[0].Cases.Add(cases[0]);
+            officers[1].Cases.Add(cases[1]);
+            officers[2].Cases.Add(cases[2]);
+            officers[4].Cases.Add(cases[3]);
         }
 
         private void InitializeOfficers()
@@ -110,6 +114,7 @@ namespace HKDXX6_HFT_2023241.Test
                 Precinct = precincts[1],
                 HireDate = new DateTime(1980, 01, 02)
             };
+            precincts[1].Officers.Add(Holt);
 
             Officer Terry = new Officer()
             {
@@ -123,6 +128,7 @@ namespace HKDXX6_HFT_2023241.Test
                 Precinct = precincts[1],
                 HireDate = new DateTime(1999, 03, 12)
             };
+            precincts[1].Officers.Add(Terry);
 
             Officer Jake = new Officer()
             {
@@ -136,6 +142,7 @@ namespace HKDXX6_HFT_2023241.Test
                 Precinct = precincts[1],
                 HireDate = new DateTime(2004, 03, 10)
             };
+            precincts[1].Officers.Add(Jake);
 
             Officer Joel = new Officer()
             {
@@ -146,8 +153,10 @@ namespace HKDXX6_HFT_2023241.Test
                 DirectCO_BadgeNo = null,
                 DirectCO = null,
                 PrecinctID = 93,
+                Precinct = precincts[0],
                 HireDate = new DateTime(1980, 01, 01)
             };
+            precincts[0].Officers.Add(Joel);
 
             Officer Vulture = new Officer()
             {
@@ -161,6 +170,7 @@ namespace HKDXX6_HFT_2023241.Test
                 Precinct = precincts[0],
                 HireDate = new DateTime(2001, 01, 02)
             };
+            precincts[0].Officers.Add(Vulture);
 
             officers = new List<Officer>() { Jake, Terry, Holt, Joel, Vulture };
         }
@@ -444,7 +454,7 @@ namespace HKDXX6_HFT_2023241.Test
             logic.AutoAssignCase(5, 93);
 
             //Assert
-            Assert.That(cases[4].OfficerOnCaseID, Is.AnyOf(1973,3711));
+            Assert.That(cases[4].OfficerOnCaseID, Is.EqualTo(3711));
         }
 
         [Test]

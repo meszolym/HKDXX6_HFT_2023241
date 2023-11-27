@@ -320,6 +320,7 @@ namespace HKDXX6_HFT_2023241.Client
 
             if (TypeName == nameof(Case))
             {
+                //No need for try-catch as getdetails was called: getting the old item is handled there aswell.
                 Case updated = Rest.GetSingle<Case>($"{TypeName}/{inputInt}");
 
                 Console.Write("Name: ");
@@ -406,6 +407,7 @@ namespace HKDXX6_HFT_2023241.Client
             }
             if (TypeName == nameof(Officer))
             {
+                //No need for try-catch as getdetails was called: getting the old item is handled there aswell.
                 Officer updated = Rest.GetSingle<Officer>($"{TypeName}/{inputInt}");
 
                 Console.Write("First name: ");
@@ -509,6 +511,7 @@ namespace HKDXX6_HFT_2023241.Client
             }
             if (TypeName == nameof(Precinct))
             {
+                //No need for try-catch as getdetails was called: getting the old item is handled there aswell.
                 Precinct updated = Rest.GetSingle<Precinct>($"{TypeName}/{inputInt}");
 
                 Console.Write("Address: ");
@@ -602,7 +605,8 @@ namespace HKDXX6_HFT_2023241.Client
                 try
                 {
                     Rest.Post(added, TypeName);
-                    Console.WriteLine("Case successfully added.");
+                    Case addedCase = Rest.Get<Case>("Case").Find(t => t.Equals(added));
+                    Console.WriteLine($"Case successfully added. Case ID: {addedCase.ID}");
                     Console.WriteLine("Press any key to go back.");
                     Console.ReadKey();
                     return;
@@ -696,7 +700,8 @@ namespace HKDXX6_HFT_2023241.Client
                 try
                 {
                     Rest.Post(added, TypeName);
-                    Console.WriteLine("Officer successfully added.");
+                    Officer addedOfficer = Rest.Get<Officer>("Officer").Find(t => t.Equals(added));
+                    Console.WriteLine($"Officer successfully added. BadgeNo.: {addedOfficer.BadgeNo}");
                     Console.WriteLine("Press any key to go back.");
                     Console.ReadKey();
                     return;
@@ -737,7 +742,7 @@ namespace HKDXX6_HFT_2023241.Client
                 try
                 {
                     Rest.Post(added, TypeName);
-                    Console.WriteLine("Precinct successfully added.");
+                    Console.WriteLine($"Precinct successfully added. ID: {precinctId}");
                     Console.WriteLine("Press any key to go back.");
                     Console.ReadKey();
                     return;
@@ -793,10 +798,22 @@ namespace HKDXX6_HFT_2023241.Client
                 return;
             }
 
-            Rest.Delete(inputInt, TypeName);
-            Console.WriteLine($"{TypeName}[{inputInt}] deleted sucsessfully.");
-            Console.WriteLine("Press any key to go back.");
-            Console.ReadKey();
+            try
+            {
+                Rest.Delete(inputInt, TypeName);
+                Console.WriteLine($"{TypeName}[{inputInt}] deleted sucsessfully.");
+                Console.WriteLine("Press any key to go back.");
+                Console.ReadKey();
+                return;
+            }
+            catch (Exception ex)
+            {
+                WriteErrorMsg(ex.Message);
+                Console.ReadKey();
+                return;
+            }
+            
+            
         }
 
         static void CasesPerOfficerStatistics()

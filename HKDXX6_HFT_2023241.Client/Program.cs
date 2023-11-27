@@ -341,34 +341,66 @@ namespace HKDXX6_HFT_2023241.Client
                 }
                 if (descInput != "*") updated.Description = descInput;
 
+                Console.WriteLine("You may write today to indicate today at 00:00, or write now, to put in the current time.");
                 Console.Write("Recorded at: ");
                 string openedDtInputString = Console.ReadLine();
                 DateTime openedDt;
-                while (!DateTime.TryParse(openedDtInputString, out openedDt) && openedDtInputString != "*")
+                while (!DateTime.TryParse(openedDtInputString, out openedDt)
+                    && openedDtInputString != "*"
+                    && openedDtInputString.ToLower() != "now"
+                    && openedDtInputString.ToLower() != "today")
                 {
                     Console.Write("Invalid input for recorded at, please try again: ");
                     openedDtInputString = Console.ReadLine();
                 }
-                if (openedDtInputString != "*") updated.OpenedAt = openedDt;
+                if (openedDtInputString != "*")
+                {
+                    if (openedDtInputString.ToLower() == "now")
+                    {
+                        updated.OpenedAt = DateTime.Now;
+                    }
+                    else if(openedDtInputString.ToLower() == "today")
+                    {
+                        updated.OpenedAt = DateTime.Today;
+                    }
+                    else
+                    {
+                        updated.OpenedAt = openedDt;
+                    }
+                }
 
-
+                Console.WriteLine("You may write today to indicate today at 00:00, or write now, to put in the current time.");
                 Console.Write("Closed at (leave empty to leave the case open): ");
                 string closedDtInputString = Console.ReadLine();
                 DateTime closedDt;
 
                 while (!DateTime.TryParse(closedDtInputString, out closedDt)
-                    && closedDtInputString != string.Empty && closedDtInputString != "*")
+                    && closedDtInputString != string.Empty
+                    && closedDtInputString != "*"
+                    && closedDtInputString.ToLower() != "now"
+                    && closedDtInputString.ToLower() != "today")
                 {
                     Console.Write("Invalid input for closed at, please try again: ");
                     closedDtInputString = Console.ReadLine();
                 }
-                if (closedDtInputString != string.Empty && closedDtInputString != "*")
+                if (closedDtInputString != "*")
                 {
-                    updated.ClosedAt = closedDt;
-                }
-                else if (closedDtInputString == string.Empty)
-                {
-                    updated.ClosedAt = null;
+                    if (closedDtInputString == string.Empty)
+                    {
+                        updated.ClosedAt = null;
+                    }
+                    else if (openedDtInputString.ToLower() == "now")
+                    {
+                        updated.ClosedAt = DateTime.Now;
+                    }
+                    else if (openedDtInputString.ToLower() == "today")
+                    {
+                        updated.ClosedAt = DateTime.Today;
+                    }
+                    else
+                    {
+                        updated.ClosedAt = closedDt;
+                    }
                 }
 
                 Console.Write("Officer on case badgeNo. (leave empty for unassigned): ");
@@ -380,13 +412,16 @@ namespace HKDXX6_HFT_2023241.Client
                     Console.Write("Invalid input for officer badgeNo., please try again: ");
                     officerIDInputString = Console.ReadLine();
                 }
-                if (officerIDInputString != "*" && officerIDInputString != string.Empty)
+                if (officerIDInputString != "*")
                 {
-                    updated.OfficerOnCaseID = officerID;
-                }
-                else if (officerIDInputString == string.Empty)
-                {
-                    updated.OfficerOnCaseID = null;
+                    if (officerIDInputString == string.Empty)
+                    {
+                        updated.OfficerOnCaseID = null;
+                    }
+                    else
+                    {
+                        updated.OfficerOnCaseID = officerID;
+                    }
                 }
 
                 try
@@ -436,10 +471,7 @@ namespace HKDXX6_HFT_2023241.Client
                     Console.Write("Invalid input for rank, please try again: ");
                     rankInputString = Console.ReadLine();
                 }
-                if (rankInputString != "*")
-                {
-                    updated.Rank = (Ranks)rank;
-                }
+                if (rankInputString != "*") updated.Rank = (Ranks)rank;
 
                 if (updated.Rank != Ranks.Captain)
                 {
@@ -453,10 +485,7 @@ namespace HKDXX6_HFT_2023241.Client
                         Console.Write("Invalid input for direct CO badgeNo., please try again: ");
                         directCoIdInputString = Console.ReadLine();
                     }
-                    if (directCoIdInputString != "*")
-                    {
-                        updated.DirectCO_BadgeNo = directCoId;
-                    }
+                    if (directCoIdInputString != "*") updated.DirectCO_BadgeNo = directCoId;
                 }
                 else
                 {
@@ -473,24 +502,35 @@ namespace HKDXX6_HFT_2023241.Client
                     Console.Write("Invalid input for precinct ID, please try again: ");
                     precinctIdInputString = Console.ReadLine();                    
                 }
-                if (precinctIdInputString != "*")
-                {
-                    updated.PrecinctID = precinctId;
-                }
+                if (precinctIdInputString != "*") updated.PrecinctID = precinctId;
 
-
+                Console.WriteLine("You may write today to indicate today at 00:00, or write now, to put in the current time.");
                 Console.Write("Hired at: ");
                 string hireDateInputString = Console.ReadLine();
                 DateTime hireDate;
 
-                while (!DateTime.TryParse(hireDateInputString, out hireDate) && hireDateInputString != "*")
+                while (!DateTime.TryParse(hireDateInputString, out hireDate)
+                    && hireDateInputString != "*"
+                    && hireDateInputString.ToLower() != "now"
+                    && hireDateInputString.ToLower() != "today")
                 {
                     Console.Write("Invalid input for hire date, please try again: ");
                     hireDateInputString = Console.ReadLine();
                 }
                 if (hireDateInputString != "*")
                 {
-                    updated.HireDate = hireDate;
+                    if (hireDateInputString.ToLower() == "now")
+                    {
+                        updated.HireDate = DateTime.Now;
+                    }
+                    if (hireDateInputString.ToLower() == "today")
+                    {
+                        updated.HireDate = DateTime.Today;
+                    }
+                    else
+                    {
+                        updated.HireDate = hireDate;
+                    }
                 }
 
                 try
@@ -569,27 +609,70 @@ namespace HKDXX6_HFT_2023241.Client
                 }
                 added.Description = descInput;
 
+                Console.WriteLine("You may write today to indicate today at 00:00, or write now, to put in the current time.");
                 Console.Write("Case opened at: ");
                 string openedAtInputString = Console.ReadLine();
                 DateTime parsedOpenDt;
-                while (!DateTime.TryParse(openedAtInputString, out parsedOpenDt))
+                while (!DateTime.TryParse(openedAtInputString, out parsedOpenDt)
+                    && openedAtInputString.ToLower() != "now"
+                    && openedAtInputString.ToLower() != "today")
                 {
                     Console.Write("Invalid input for opened at, please try again: ");
                     openedAtInputString = Console.ReadLine();
                 }
-                added.ClosedAt = (openedAtInputString == string.Empty ? null : parsedOpenDt);
+                if (openedAtInputString != string.Empty)
+                {
+                    if (openedAtInputString.ToLower() == "now")
+                    {
+                        added.ClosedAt = DateTime.Now;
+                    }
+                    else if (openedAtInputString.ToLower() == "today")
+                    {
+                        added.ClosedAt = DateTime.Today;
+                    }
+                    else
+                    {
+                        added.ClosedAt = parsedOpenDt;
+                    }
+                }
+                else
+                {
+                    added.ClosedAt = null;
+                }
 
                 Console.WriteLine();
                 Console.WriteLine("The following fields are not mandatory, you may leave them empty.");
+                Console.WriteLine("You may write today to indicate today at 00:00, or write now, to put in the current time.");
                 Console.Write("Case closed at: ");
                 string closedAtInputString = Console.ReadLine();
                 DateTime parsedClosedDt;
-                while (!DateTime.TryParse(closedAtInputString, out parsedClosedDt) && closedAtInputString != string.Empty)
+                while (!DateTime.TryParse(closedAtInputString, out parsedClosedDt) 
+                    && closedAtInputString != string.Empty
+                    && closedAtInputString.ToLower() != "now"
+                    && closedAtInputString.ToLower() != "today")
                 {
                     Console.Write("Invalid input for closed at, please try again: ");
                     closedAtInputString = Console.ReadLine();
                 }
-                added.ClosedAt = (closedAtInputString == string.Empty ? null : parsedClosedDt);
+                if (closedAtInputString != string.Empty)
+                {
+                    if (closedAtInputString.ToLower() == "now")
+                    {
+                        added.ClosedAt = DateTime.Now;
+                    }
+                    else if (closedAtInputString.ToLower() == "today")
+                    {
+                        added.ClosedAt = DateTime.Today;
+                    }
+                    else
+                    {
+                        added.ClosedAt = parsedClosedDt;
+                    }
+                }
+                else
+                {
+                    added.ClosedAt = null;
+                }
 
 
                 Console.Write("Officer on case badgeNo.: ");
@@ -682,20 +765,34 @@ namespace HKDXX6_HFT_2023241.Client
                     precinctIdInputString = Console.ReadLine();
                 }
                 added.PrecinctID = precinctId;
-                
 
 
+                Console.WriteLine("You may write today to indicate today at 00:00, or write now, to put in the current time.");
                 Console.Write("Hired at: ");
                 string hireDateInputString = Console.ReadLine();
 
                 DateTime hireDate;
 
-                while (!DateTime.TryParse(hireDateInputString, out hireDate))
+                while (!DateTime.TryParse(hireDateInputString, out hireDate)
+                    && hireDateInputString.ToLower() != "now"
+                    && hireDateInputString.ToLower() != "today")
                 {
                     Console.Write("Invalid input for hire date, please try again: ");
                     hireDateInputString = Console.ReadLine();
                 }
-                added.HireDate = hireDate;
+                if (hireDateInputString.ToLower() == "now")
+                {
+                    added.HireDate = DateTime.Now;
+                }
+                else if (hireDateInputString.ToLower() == "today")
+                {
+                    added.HireDate = DateTime.Today;
+                }
+                else
+                {
+                    added.HireDate = hireDate;
+                }
+                
 
                 try
                 {

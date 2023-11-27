@@ -549,10 +549,22 @@ namespace HKDXX6_HFT_2023241.Client
                 Case added = new Case();
 
                 Console.Write("Case name: ");
-                added.Name = Console.ReadLine();
+                string nameInput = Console.ReadLine();
+                while (nameInput.Length < 10 || nameInput.Length > 240)
+                {
+                    Console.Write("Invalid input for name, please try again: ");
+                    nameInput = Console.ReadLine();
+                }
+                added.Name = nameInput;
 
                 Console.Write("Case description: ");
-                added.Description = Console.ReadLine();
+                string descInput = Console.ReadLine();
+                while (descInput.Length < 15)
+                {
+                    Console.Write("Invalid input for description, please try again: ");
+                    descInput = Console.ReadLine();
+                }
+                added.Description = descInput;
 
                 Console.Write("Case opened at: ");
                 string openedAtInputString = Console.ReadLine();
@@ -608,10 +620,20 @@ namespace HKDXX6_HFT_2023241.Client
                 Officer added = new Officer();
                 Console.Write("First name: ");
                 string fnameInput = Console.ReadLine();
+                while (fnameInput.Length < 2 || fnameInput.Length >100)
+                {
+                    Console.Write("Invalid input for first name, please try again: ");
+                    fnameInput = Console.ReadLine();
+                }
                 added.FirstName = fnameInput;
 
                 Console.Write("Last name: ");
                 string lnameInput = Console.ReadLine();
+                while (lnameInput.Length < 2 || lnameInput.Length >100)
+                {
+                    Console.Write("Invalid input for last name, please try again: ");
+                    lnameInput = Console.ReadLine();
+                }
                 added.LastName = lnameInput;
 
                 Console.WriteLine("Rank: ");
@@ -689,21 +711,28 @@ namespace HKDXX6_HFT_2023241.Client
             }
             if (TypeName == nameof(Precinct))
             {
+                Precinct added = new Precinct();
                 Console.Write("Precinct ID: ");
                 string precinctIdInputString = Console.ReadLine();
 
                 int precinctId;
 
-                while (!int.TryParse(precinctIdInputString, out precinctId))
+                while (!int.TryParse(precinctIdInputString, out precinctId) && (precinctId < 1 || precinctId > 139))
                 {
                     Console.Write("Invalid input for precinct ID, please try again: ");
                     precinctIdInputString = Console.ReadLine();
                 }
+                added.ID = precinctId;
+
 
                 Console.Write("Address: ");
                 string addressInput = Console.ReadLine();
-
-                Precinct added = new Precinct(precinctId, addressInput);
+                while (addressInput.Length < 10 || addressInput.Length > 100)
+                {
+                    Console.Write("Invalid input for address, please try again: ");
+                    addressInput = Console.ReadLine();
+                }
+                added.Address = addressInput;
 
                 try
                 {

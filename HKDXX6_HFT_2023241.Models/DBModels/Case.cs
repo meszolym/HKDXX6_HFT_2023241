@@ -108,5 +108,18 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
             return HashCode.Combine(ID, Name, Description, OpenedAt, ClosedAt, OfficerOnCaseID);
         }
 
+        public bool DataEquals(object obj)
+        {
+            Case b = obj as Case;
+            if (b == null)
+            {
+                return false;
+            }
+            return Name == b.Name
+                    && Description == b.Description
+                    && OpenedAt.Equals(b.OpenedAt)
+                    && ClosedAt.Equals(b.ClosedAt)
+                    && OfficerOnCaseID == b.OfficerOnCaseID;
+        }
     }
 }

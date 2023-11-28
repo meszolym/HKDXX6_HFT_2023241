@@ -121,5 +121,20 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
 
             return hash.ToHashCode();
         }
+
+        public bool DataEquals(object obj)
+        {
+            Officer b = obj as Officer;
+            if (b == null)
+            {
+                return false;
+            }
+            return FirstName == b.FirstName
+                    && LastName == b.LastName
+                    && Rank == b.Rank
+                    && DirectCO_BadgeNo == b.DirectCO_BadgeNo
+                    && PrecinctID == b.PrecinctID
+                    && HireDate == b.HireDate;
+        }
     }
 }

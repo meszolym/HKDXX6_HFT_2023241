@@ -82,7 +82,9 @@ namespace HKDXX6_HFT_2023241.Client
                 var table = new ConsoleTable("ID", "Name", "Officer on case");
                 foreach (var item in cases)
                 {
-                    table.AddRow(item.ID, item.Name, $"{item.OfficerOnCase.Rank} {item.OfficerOnCase.FirstName} {item.OfficerOnCase.LastName} ({item.OfficerOnCaseID})");
+                    string officerData = item.OfficerOnCase != null ?
+                        $"{item.OfficerOnCase.Rank} {item.OfficerOnCase.FirstName} {item.OfficerOnCase.LastName} ({item.OfficerOnCaseID})" : "Unassigned";
+                    table.AddRow(item.ID, item.Name, officerData);
                 }
                 table.Write(Format.Minimal);
                 Console.WriteLine("Press any key to go back.");
@@ -158,7 +160,7 @@ namespace HKDXX6_HFT_2023241.Client
                 Case c;
                 try
                 {
-                    c = Rest.GetSingle<Case>($"{TypeName}/{inputInt}");
+                    c = Rest.Get<Case>(inputInt, TypeName);
                 }
                 catch (Exception ex)
                 {
@@ -198,7 +200,7 @@ namespace HKDXX6_HFT_2023241.Client
                 Officer o;
                 try
                 {
-                    o = Rest.GetSingle<Officer>($"{TypeName}/{inputInt}");
+                    o = Rest.Get<Officer>(inputInt, TypeName);
                 }
                 catch (Exception ex)
                 {
@@ -236,7 +238,7 @@ namespace HKDXX6_HFT_2023241.Client
                 Precinct p;
                 try
                 {
-                    p = Rest.GetSingle<Precinct>($"{TypeName}/{inputInt}");
+                    p = Rest.Get<Precinct>(inputInt, TypeName);
                 }
                 catch (Exception ex)
                 {
@@ -252,7 +254,7 @@ namespace HKDXX6_HFT_2023241.Client
                 {
                     try
                     {
-                        var ro = Rest.GetSingle<Officer>($"Precinct/GetCaptain/{inputInt}");
+                        var ro = Rest.Get<Officer>(inputInt, "Precinct/GetCaptain");
                         table.AddRow("Ranking officer", $"{ro.Rank} {ro.FirstName} {ro.LastName} ({ro.BadgeNo})");
                     }
                     catch
@@ -321,7 +323,7 @@ namespace HKDXX6_HFT_2023241.Client
             if (TypeName == nameof(Case))
             {
                 //No need for try-catch as getdetails was called: getting the old item is handled there aswell.
-                Case updated = Rest.GetSingle<Case>($"{TypeName}/{inputInt}");
+                Case updated = Rest.Get<Case>(inputInt, TypeName);
 
                 Console.Write("Name: ");
                 string nameInput = Console.ReadLine();
@@ -443,7 +445,7 @@ namespace HKDXX6_HFT_2023241.Client
             if (TypeName == nameof(Officer))
             {
                 //No need for try-catch as getdetails was called: getting the old item is handled there aswell.
-                Officer updated = Rest.GetSingle<Officer>($"{TypeName}/{inputInt}");
+                Officer updated = Rest.Get<Officer>(inputInt, TypeName);
 
                 Console.Write("First name: ");
                 string fnameInput = Console.ReadLine();
@@ -552,7 +554,7 @@ namespace HKDXX6_HFT_2023241.Client
             if (TypeName == nameof(Precinct))
             {
                 //No need for try-catch as getdetails was called: getting the old item is handled there aswell.
-                Precinct updated = Rest.GetSingle<Precinct>($"{TypeName}/{inputInt}");
+                Precinct updated = Rest.Get<Precinct>(inputInt, TypeName);
 
                 Console.Write("Address: ");
                 string addressInput = Console.ReadLine();
@@ -620,24 +622,17 @@ namespace HKDXX6_HFT_2023241.Client
                     Console.Write("Invalid input for opened at, please try again: ");
                     openedAtInputString = Console.ReadLine();
                 }
-                if (openedAtInputString != string.Empty)
+                if (openedAtInputString.ToLower() == "now")
                 {
-                    if (openedAtInputString.ToLower() == "now")
-                    {
-                        added.ClosedAt = DateTime.Now;
-                    }
-                    else if (openedAtInputString.ToLower() == "today")
-                    {
-                        added.ClosedAt = DateTime.Today;
-                    }
-                    else
-                    {
-                        added.ClosedAt = parsedOpenDt;
-                    }
+                    added.OpenedAt = DateTime.Now;
+                }
+                else if (openedAtInputString.ToLower() == "today")
+                {
+                    added.OpenedAt = DateTime.Today;
                 }
                 else
                 {
-                    added.ClosedAt = null;
+                    added.OpenedAt = parsedOpenDt;
                 }
 
                 Console.WriteLine();
@@ -688,7 +683,7 @@ namespace HKDXX6_HFT_2023241.Client
                 try
                 {
                     Rest.Post(added, TypeName);
-                    Case addedCase = Rest.Get<Case>("Case").Find(t => t.Equals(added));
+                    Case addedCase = Rest.Get<Case>("Case").Find(t => t.DataEquals(added));
                     Console.WriteLine($"Case successfully added. Case ID: {addedCase.ID}");
                     Console.WriteLine("Press any key to go back.");
                     Console.ReadKey();
@@ -797,7 +792,7 @@ namespace HKDXX6_HFT_2023241.Client
                 try
                 {
                     Rest.Post(added, TypeName);
-                    Officer addedOfficer = Rest.Get<Officer>("Officer").Find(t => t.Equals(added));
+                    Officer addedOfficer = Rest.Get<Officer>("Officer").Find(t => t.DataEquals(added));
                     Console.WriteLine($"Officer successfully added. BadgeNo.: {addedOfficer.BadgeNo}");
                     Console.WriteLine("Press any key to go back.");
                     Console.ReadKey();
@@ -981,7 +976,7 @@ namespace HKDXX6_HFT_2023241.Client
             try
             {
                 Rest.Post(assignData, "Case/AutoAssign");
-                Case c = Rest.GetSingle<Case>($"Case/{caseInputInt}");
+                Case c = Rest.Get<Case>(caseInputInt, "Case");
                 Console.Write("Case sucsessfully assigned to ");
                 Console.WriteLine($"{c.OfficerOnCase.Rank} {c.OfficerOnCase.FirstName} {c.OfficerOnCase.LastName}.");
                 Console.WriteLine("Press any key to go back");

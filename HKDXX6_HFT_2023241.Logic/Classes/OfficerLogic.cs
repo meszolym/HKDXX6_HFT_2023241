@@ -39,6 +39,14 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("Cannot have two captains at one precinct.");
             }
+            if (item.DirectCO_BadgeNo != null)
+            {
+                Officer co = Read(item.DirectCO_BadgeNo.Value);
+                if (co.PrecinctID != item.PrecinctID)
+                {
+                    throw new ArgumentException("Commanding officer has to be in the same precinct as officer.");
+                }
+            }
             OfficerRepo.Create(item);
         }
 

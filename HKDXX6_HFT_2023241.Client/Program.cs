@@ -498,7 +498,7 @@ namespace HKDXX6_HFT_2023241.Client
                 Console.Write("Precinct ID: ");
                 string precinctIdInputString = Console.ReadLine();
                 int precinctId;
-                while (!int.TryParse(precinctIdInputString, out precinctId) && precinctIdInputString != "*")
+                while (!int.TryParse(precinctIdInputString, out precinctId) && precinctIdInputString != "*" && (precinctId > 139 || precinctId < 1))
                 {
 
                     Console.Write("Invalid input for precinct ID, please try again: ");
@@ -718,7 +718,7 @@ namespace HKDXX6_HFT_2023241.Client
                 }
                 added.LastName = lnameInput;
 
-                Console.WriteLine("Rank: ");
+                Console.Write("Rank: ");
                 string rankInputString = Console.ReadLine();
 
                 object parsedRank;
@@ -754,7 +754,7 @@ namespace HKDXX6_HFT_2023241.Client
                
                 int precinctId;
 
-                while (!int.TryParse(precinctIdInputString, out precinctId))
+                while (!int.TryParse(precinctIdInputString, out precinctId) && (precinctId > 139 || precinctId < 1))
                 {
                     Console.Write("Invalid input for precinct ID, please try again: ");
                     precinctIdInputString = Console.ReadLine();

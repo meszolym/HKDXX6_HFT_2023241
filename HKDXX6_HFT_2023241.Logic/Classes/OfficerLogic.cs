@@ -41,7 +41,23 @@ namespace HKDXX6_HFT_2023241.Logic
             }
             if (item.DirectCO_BadgeNo != null)
             {
-                Officer co = Read(item.DirectCO_BadgeNo.Value);
+                Officer co;
+                try
+                {
+                     co = Read(item.DirectCO_BadgeNo.Value);
+                }
+                catch (ArgumentException ex)
+                {
+                    if (ex.Message == "The officer you are looking for does not exist.")
+                    {
+                        throw new ArgumentException("The specified direct CO does not exist.");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                
                 if (co.PrecinctID != item.PrecinctID)
                 {
                     throw new ArgumentException("Commanding officer has to be in the same precinct as the officer.");
@@ -71,7 +87,23 @@ namespace HKDXX6_HFT_2023241.Logic
 
             if (item.DirectCO_BadgeNo != null)
             {
-                Officer co = Read(item.DirectCO_BadgeNo.Value);
+                Officer co;
+                try
+                {
+                    co = Read(item.DirectCO_BadgeNo.Value);
+                }
+                catch (ArgumentException ex)
+                {
+                    if (ex.Message == "The officer you are looking for does not exist.")
+                    {
+                        throw new ArgumentException("The specified direct CO does not exist.");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
                 if (co.PrecinctID != item.PrecinctID)
                 {
                     throw new ArgumentException("Commanding officer has to be in the same precinct as officer.");

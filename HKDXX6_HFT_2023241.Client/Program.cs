@@ -1042,7 +1042,18 @@ namespace HKDXX6_HFT_2023241.Client
                 if (input == "*") return;
             }
 
-            List<Case> cases = Rest.Get<Case>($"Statistics/CasesOfPrecinct/{inputInt}");
+            List<Case> cases;
+
+            try
+            {
+                cases = Rest.Get<Case>($"Statistics/CasesOfPrecinct/{inputInt}");
+            }
+            catch (Exception ex)
+            {
+                WriteErrorMsg(ex.Message);
+                Console.ReadKey();
+                return;
+            }
 
             var table = new ConsoleTable("ID", "Name", "Officer on case");
             foreach (var item in cases)

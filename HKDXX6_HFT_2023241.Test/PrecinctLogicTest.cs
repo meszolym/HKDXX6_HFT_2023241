@@ -17,6 +17,7 @@ namespace HKDXX6_HFT_2023241.Test
     {
         PrecinctLogic logic;
         Mock<IRepository<Precinct>> mockRepo;
+        Mock<IRepository<Officer>> officerRepo;
 
         [SetUp]
         public void Initialize()
@@ -31,7 +32,9 @@ namespace HKDXX6_HFT_2023241.Test
             mockRepo.Setup(r => r.ReadAll()).Returns(list.AsQueryable());
             mockRepo.Setup(r => r.Read(It.IsAny<int>())).Returns((int x) => list.AsQueryable().First(t => t.ID == x));
 
-            logic = new PrecinctLogic(mockRepo.Object);
+            officerRepo = new Mock<IRepository<Officer>>();
+
+            logic = new PrecinctLogic(mockRepo.Object, officerRepo.Object);
         }
 
         [Test]

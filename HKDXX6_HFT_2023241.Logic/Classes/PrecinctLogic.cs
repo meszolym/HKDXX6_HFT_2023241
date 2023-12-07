@@ -3,6 +3,7 @@ using HKDXX6_HFT_2023241.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,10 +12,12 @@ namespace HKDXX6_HFT_2023241.Logic
     public class PrecinctLogic : IPrecinctLogic
     {
         IRepository<Precinct> PrecinctRepo;
+        IRepository<Officer> OfficerRepo;
 
-        public PrecinctLogic(IRepository<Precinct> precinctRepo)
+        public PrecinctLogic(IRepository<Precinct> precinctRepo, IRepository<Officer> officerRepo)
         {
             PrecinctRepo = precinctRepo;
+            OfficerRepo = officerRepo;
         }
 
         public void Create(Precinct item)
@@ -48,6 +51,12 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("The precinct that should be deleted does not exist.");
             }
+
+            if (p.Officers.Count > 0)
+            {
+                throw new ArgumentException("Can't delete precinct with officers still assigned there.");
+            }
+
             PrecinctRepo.Delete(ID);
         }
 

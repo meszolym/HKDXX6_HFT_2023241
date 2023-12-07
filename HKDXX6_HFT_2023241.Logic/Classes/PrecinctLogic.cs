@@ -21,11 +21,11 @@ namespace HKDXX6_HFT_2023241.Logic
         {
             if (item.ID < 1 || item.ID > 139)
             {
-                throw new ArgumentException("ID must be between 1 and 139 inclusively.");
+                throw new ArgumentException("PrecinctID must be between 1 and 139 inclusively.");
             }
             if (item.Address == null || item.Address.Length < 10 || item.Address.Length > 100)
             {
-                throw new ArgumentException("Length of address must be between 10 and 100 characters.");
+                throw new ArgumentException("Length of the precint's address must be between 10 and 100 characters.");
             }
             PrecinctRepo.Create(item);
         }
@@ -36,7 +36,7 @@ namespace HKDXX6_HFT_2023241.Logic
 
             if (item.Address == null || item.Address.Length < 10 || item.Address.Length > 100)
             {
-                throw new ArgumentException("Length of address must be between 10 and 100 characters.");
+                throw new ArgumentException("Length of the precint's address must be between 10 and 100 characters.");
             }
             PrecinctRepo.Update(item);
         }
@@ -46,7 +46,7 @@ namespace HKDXX6_HFT_2023241.Logic
             var p = PrecinctRepo.Read(ID);
             if (p == null)
             {
-                throw new ArgumentException("Precinct does not exist.");
+                throw new ArgumentException("The precinct that should be deleted does not exist.");
             }
             PrecinctRepo.Delete(ID);
         }
@@ -56,7 +56,7 @@ namespace HKDXX6_HFT_2023241.Logic
             var p = PrecinctRepo.Read(ID);
             if (p == null)
             {
-                throw new ArgumentException("Precinct does not exist.");
+                throw new ArgumentException("The precinct you are looking for does not exist.");
             }
 
             return p;

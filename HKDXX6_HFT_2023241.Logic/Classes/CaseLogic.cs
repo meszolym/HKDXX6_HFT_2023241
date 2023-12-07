@@ -27,7 +27,7 @@ namespace HKDXX6_HFT_2023241.Logic
         {
             if (item.ID < 0)
             {
-                throw new ArgumentException("ID has to be positive or zero.");
+                throw new ArgumentException("CaseID has to be positive or zero.");
             }
             if (item.Name.Length < 10 || item.Name.Length > 240)
             {
@@ -53,7 +53,7 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 if (OfficerRepo.Read(item.OfficerOnCaseID.Value) == null)
                 {
-                    throw new ArgumentException("Officer does not exist.");
+                    throw new ArgumentException("The officer (to whom the case was to be assigned) does not exist.");
                 }
             }
             CaseRepo.Create(item);
@@ -89,7 +89,7 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 if (OfficerRepo.Read(item.OfficerOnCaseID.Value) == null)
                 {
-                    throw new ArgumentException("Officer does not exist.");
+                    throw new ArgumentException("The officer (to whom the case was to be assigned) does not exist.");
                 }
             }
 
@@ -101,7 +101,7 @@ namespace HKDXX6_HFT_2023241.Logic
             var c = CaseRepo.Read(ID);
             if (c == null)
             {
-                throw new ArgumentException("Case does not exist.");
+                throw new ArgumentException("The case that should be deleted does not exist.");
             }
 
             CaseRepo.Delete(ID);
@@ -112,7 +112,7 @@ namespace HKDXX6_HFT_2023241.Logic
             var c = CaseRepo.Read(ID);
             if (c == null)
             {
-                throw new ArgumentException("Case does not exist.");
+                throw new ArgumentException("The case that you are looking for does not exist.");
             }
 
             return c;
@@ -162,7 +162,7 @@ namespace HKDXX6_HFT_2023241.Logic
 
             if (c == null)
             {
-                throw new ArgumentException("Case does not exist.");
+                throw new ArgumentException("The case that you are looking for does not exist.");
             }
             if (c.OfficerOnCase != null || c.IsClosed)
             {
@@ -171,7 +171,7 @@ namespace HKDXX6_HFT_2023241.Logic
             var p = PrecinctRepo.Read(precintID);
             if (p == null)
             {
-                throw new ArgumentException("Precinct does not exist.");
+                throw new ArgumentException("Precinct that should be used for auto-assign does not exist.");
             }
 
             var Officer = PrecinctRepo.ReadAll().First(p => p.ID == precintID).Officers

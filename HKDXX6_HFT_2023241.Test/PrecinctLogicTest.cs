@@ -83,7 +83,7 @@ namespace HKDXX6_HFT_2023241.Test
 
             //Act+Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Update(p));
-            Assert.That(ex.Message == "Length of address must be between 10 and 100 characters.");
+            Assert.That(ex.Message == "Length of the precint's address must be between 10 and 100 characters.");
             mockRepo.Verify(r => r.Update(p), Times.Never);
 
         }

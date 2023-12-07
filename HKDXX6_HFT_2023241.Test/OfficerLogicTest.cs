@@ -125,20 +125,19 @@ namespace HKDXX6_HFT_2023241.Test
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
-            Assert.That(ex.Message == "First and last name must be at least two characters long");
+            Assert.That(ex.Message == "First and last name of the officer must be at least two characters long");
             mockRepo.Verify(r => r.Create(o), Times.Never);
         }
 
         [Test]
-        [TestCase(-1)]
-        public void CreateTest_WithIncorrectIDValues_ThrowsArgumentException(int ID)
+        public void CreateTest_WithIncorrectIDValues_ThrowsArgumentException()
         {
             //Arrange
-            var o = new Officer() { BadgeNo = ID, FirstName = "LongEnough", LastName = "NameValues", PrecinctID = 99 };
+            var o = new Officer() { BadgeNo = -1, FirstName = "LongEnough", LastName = "NameValues", PrecinctID = 99 };
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
-            Assert.That(ex.Message == "ID has to be positive or zero.");
+            Assert.That(ex.Message == "BadgeNo has to be positive or zero.");
             mockRepo.Verify(r => r.Create(o), Times.Never);
         }
 
@@ -153,7 +152,7 @@ namespace HKDXX6_HFT_2023241.Test
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
-            Assert.That(ex.Message == "PrecinctID must be between 1 and 139 inclusively.");
+            Assert.That(ex.Message == "Officer's PrecinctID must be between 1 and 139 inclusively.");
             mockRepo.Verify(r => r.Create(o), Times.Never);
         }
 
@@ -166,7 +165,7 @@ namespace HKDXX6_HFT_2023241.Test
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(o));
-            Assert.That(ex.Message == "HireDate cannot be in the future.");
+            Assert.That(ex.Message == "Officer's hire date cannot be in the future.");
             mockRepo.Verify(r => r.Create(o), Times.Never);
         }
 
@@ -186,7 +185,7 @@ namespace HKDXX6_HFT_2023241.Test
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Update(o));
-            Assert.That(ex.Message == "PrecinctID must be between 1 and 139 inclusively.");
+            Assert.That(ex.Message == "Officer's PrecinctID must be between 1 and 139 inclusively.");
             mockRepo.Verify(r => r.Update(o), Times.Never);
         }
 
@@ -207,7 +206,7 @@ namespace HKDXX6_HFT_2023241.Test
 
             //Act + Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Update(o));
-            Assert.That(ex.Message == "First and last name must be at least two characters long");
+            Assert.That(ex.Message == "First and last name of the officer must be at least two characters long");
             mockRepo.Verify(r => r.Update(o), Times.Never);
         }
 

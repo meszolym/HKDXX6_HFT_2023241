@@ -14,11 +14,13 @@ namespace HKDXX6_HFT_2023241.Logic
     {
         IRepository<Case> CaseRepo;
         IRepository<Precinct> PrecinctRepo;
+        IRepository<Officer> OfficerRepo;
 
-        public CaseLogic(IRepository<Case> caseRepo, IRepository<Precinct> precinctRepo)
+        public CaseLogic(IRepository<Case> caseRepo, IRepository<Precinct> precinctRepo, IRepository<Officer> officerRepo)
         {
             CaseRepo = caseRepo;
             PrecinctRepo = precinctRepo;
+            OfficerRepo = officerRepo;
         }
 
         public void Create(Case item)
@@ -47,7 +49,13 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("Case closure cannot be in the future.");
             }
-
+            if (item.OfficerOnCaseID != null)
+            {
+                if (OfficerRepo.Read(item.OfficerOnCaseID.Value) == null)
+                {
+                    throw new ArgumentException("Officer does not exist.");
+                }
+            }
             CaseRepo.Create(item);
         }
 
@@ -76,6 +84,13 @@ namespace HKDXX6_HFT_2023241.Logic
             if (item.ClosedAt > DateTime.Now)
             {
                 throw new ArgumentException("Case closure cannot be in the future.");
+            }
+            if (item.OfficerOnCaseID != null)
+            {
+                if (OfficerRepo.Read(item.OfficerOnCaseID.Value) == null)
+                {
+                    throw new ArgumentException("Officer does not exist.");
+                }
             }
 
             CaseRepo.Update(item);

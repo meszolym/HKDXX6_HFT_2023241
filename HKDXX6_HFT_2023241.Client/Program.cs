@@ -468,7 +468,7 @@ namespace HKDXX6_HFT_2023241.Client
                 Console.Write("Rank: ");
                 string rankInputString = Console.ReadLine();
                 object rank;
-                while (!Enum.TryParse(typeof(Ranks), rankInputString, out rank) && rankInputString != "*")
+                while ((!Enum.TryParse(typeof(Ranks), rankInputString, out rank) || !Enum.IsDefined(typeof(Ranks), rank)) && rankInputString != "*")
                 {
                     Console.Write("Invalid input for rank, please try again: ");
                     rankInputString = Console.ReadLine();
@@ -498,7 +498,7 @@ namespace HKDXX6_HFT_2023241.Client
                 Console.Write("Precinct ID: ");
                 string precinctIdInputString = Console.ReadLine();
                 int precinctId;
-                while (!int.TryParse(precinctIdInputString, out precinctId) && precinctIdInputString != "*" && (precinctId > 139 || precinctId < 1))
+                while ((!int.TryParse(precinctIdInputString, out precinctId) || (precinctId > 139 || precinctId < 1)) && precinctIdInputString != "*")
                 {
 
                     Console.Write("Invalid input for precinct ID, please try again: ");
@@ -723,7 +723,7 @@ namespace HKDXX6_HFT_2023241.Client
 
                 object parsedRank;
 
-                while (!Enum.TryParse(typeof(Ranks), rankInputString, out parsedRank))
+                while (!Enum.TryParse(typeof(Ranks), rankInputString, out parsedRank) || !Enum.IsDefined(typeof(Ranks),parsedRank))
                 {
                     Console.Write("Invalid input for rank, please try again: ");
                     rankInputString = Console.ReadLine();
@@ -754,7 +754,7 @@ namespace HKDXX6_HFT_2023241.Client
                
                 int precinctId;
 
-                while (!int.TryParse(precinctIdInputString, out precinctId) && (precinctId > 139 || precinctId < 1))
+                while (!int.TryParse(precinctIdInputString, out precinctId) || (precinctId > 139 || precinctId < 1))
                 {
                     Console.Write("Invalid input for precinct ID, please try again: ");
                     precinctIdInputString = Console.ReadLine();
@@ -814,7 +814,7 @@ namespace HKDXX6_HFT_2023241.Client
 
                 int precinctId;
 
-                while (!int.TryParse(precinctIdInputString, out precinctId) && (precinctId < 1 || precinctId > 139))
+                while (!int.TryParse(precinctIdInputString, out precinctId) || (precinctId < 1 || precinctId > 139))
                 {
                     Console.Write("Invalid input for precinct ID, please try again: ");
                     precinctIdInputString = Console.ReadLine();
@@ -965,7 +965,7 @@ namespace HKDXX6_HFT_2023241.Client
 
             int precinctInputInt;
 
-            while (!int.TryParse(precinctInput, out precinctInputInt))
+            while (!int.TryParse(precinctInput, out precinctInputInt) || (precinctInputInt < 1 || precinctInputInt > 139))
             {
                 Console.Write("Invalid input. Please try again: ");
                 precinctInput = Console.ReadLine();
@@ -1042,7 +1042,18 @@ namespace HKDXX6_HFT_2023241.Client
                 if (input == "*") return;
             }
 
-            List<Case> cases = Rest.Get<Case>($"Statistics/CasesOfPrecinct/{inputInt}");
+            List<Case> cases;
+
+            try
+            {
+                cases = Rest.Get<Case>($"Statistics/CasesOfPrecinct/{inputInt}");
+            }
+            catch (Exception ex)
+            {
+                WriteErrorMsg(ex.Message);
+                Console.ReadKey();
+                return;
+            }
 
             var table = new ConsoleTable("ID", "Name", "Officer on case");
             foreach (var item in cases)

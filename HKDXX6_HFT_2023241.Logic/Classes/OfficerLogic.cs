@@ -21,19 +21,19 @@ namespace HKDXX6_HFT_2023241.Logic
         {
             if (item.BadgeNo < 0)
             {
-                throw new ArgumentException("ID has to be positive or zero.");
+                throw new ArgumentException("BadgeNo has to be positive or zero.");
             }
             if (item.FirstName.Length < 2 || item.LastName.Length <2)
             {
-                throw new ArgumentException("First and last name must be at least two characters long");
+                throw new ArgumentException("First and last name of the officer must be at least two characters long");
             }
             if (item.PrecinctID < 1 ||  item.PrecinctID > 139)
             {
-                throw new ArgumentException("PrecinctID must be between 1 and 139 inclusively.");
+                throw new ArgumentException("Officer's PrecinctID must be between 1 and 139 inclusively.");
             }
             if (item.HireDate > DateTime.Now)
             {
-                throw new ArgumentException("HireDate cannot be in the future.");
+                throw new ArgumentException("Officer's hire date cannot be in the future.");
             }
             if (item.Rank == Ranks.Captain && item.Precinct.Officers.Any(t => t.Rank == Ranks.Captain))
             {
@@ -41,10 +41,26 @@ namespace HKDXX6_HFT_2023241.Logic
             }
             if (item.DirectCO_BadgeNo != null)
             {
-                Officer co = Read(item.DirectCO_BadgeNo.Value);
+                Officer co;
+                try
+                {
+                     co = Read(item.DirectCO_BadgeNo.Value);
+                }
+                catch (ArgumentException ex)
+                {
+                    if (ex.Message == "The officer you are looking for does not exist.")
+                    {
+                        throw new ArgumentException("The specified direct CO does not exist.");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                
                 if (co.PrecinctID != item.PrecinctID)
                 {
-                    throw new ArgumentException("Commanding officer has to be in the same precinct as officer.");
+                    throw new ArgumentException("Commanding officer has to be in the same precinct as the officer.");
                 }
             }
             OfficerRepo.Create(item);
@@ -62,16 +78,32 @@ namespace HKDXX6_HFT_2023241.Logic
 
             if (item.FirstName.Length < 2 || item.LastName.Length < 2)
             {
-                throw new ArgumentException("First and last name must be at least two characters long");
+                throw new ArgumentException("First and last name of the officer must be at least two characters long");
             }
             if (item.PrecinctID < 1 || item.PrecinctID > 139)
             {
-                throw new ArgumentException("PrecinctID must be between 1 and 139 inclusively.");
+                throw new ArgumentException("Officer's PrecinctID must be between 1 and 139 inclusively.");
             }
 
             if (item.DirectCO_BadgeNo != null)
             {
-                Officer co = Read(item.DirectCO_BadgeNo.Value);
+                Officer co;
+                try
+                {
+                    co = Read(item.DirectCO_BadgeNo.Value);
+                }
+                catch (ArgumentException ex)
+                {
+                    if (ex.Message == "The officer you are looking for does not exist.")
+                    {
+                        throw new ArgumentException("The specified direct CO does not exist.");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
                 if (co.PrecinctID != item.PrecinctID)
                 {
                     throw new ArgumentException("Commanding officer has to be in the same precinct as officer.");
@@ -130,7 +162,7 @@ namespace HKDXX6_HFT_2023241.Logic
             var o = OfficerRepo.Read(ID);
             if (o == null)
             {
-                throw new ArgumentException("Officer does not exist.");
+                throw new ArgumentException("The officer that should be deleted does not exist.");
             }
             RedirectOfficersUnderCommand(o);
             OfficerRepo.Delete(ID);
@@ -141,7 +173,7 @@ namespace HKDXX6_HFT_2023241.Logic
             var o = OfficerRepo.Read(ID);
             if (o == null)
             {
-                throw new ArgumentException("Officer does not exist.");
+                throw new ArgumentException("The officer you are looking for does not exist.");
             }
 
             return o;

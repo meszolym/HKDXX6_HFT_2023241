@@ -18,6 +18,7 @@ namespace HKDXX6_HFT_2023241.Test
         CaseLogic logic;
         Mock<IRepository<Case>> mockCaseRepo;
         Mock<IRepository<Precinct>> mockPrecinctRepo;
+        Mock<IRepository<Officer>> mockOfficerRepo;
         List<Officer> officers;
         List<Precinct> precincts;
         List<Case> cases;
@@ -27,7 +28,8 @@ namespace HKDXX6_HFT_2023241.Test
         {
             mockCaseRepo = new Mock<IRepository<Case>>();
             mockPrecinctRepo = new Mock<IRepository<Precinct>>();
-            logic = new CaseLogic(mockCaseRepo.Object, mockPrecinctRepo.Object);
+            mockOfficerRepo = new Mock<IRepository<Officer>>();
+            logic = new CaseLogic(mockCaseRepo.Object, mockPrecinctRepo.Object, mockOfficerRepo.Object); ;
 
             precincts = new List<Precinct>()
             {
@@ -35,15 +37,19 @@ namespace HKDXX6_HFT_2023241.Test
                 new Precinct(99,"211 Union Avenue")
             };
 
-            mockPrecinctRepo.Setup(r => r.ReadAll()).Returns(precincts.AsQueryable());
-            mockPrecinctRepo.Setup(r => r.Read(It.IsAny<int>())).Returns((int x) => precincts.AsQueryable().First(t => t.ID == x));
-
             InitializeOfficers();
 
             InitializeCases();
 
+            mockPrecinctRepo.Setup(r => r.ReadAll()).Returns(precincts.AsQueryable());
+            mockPrecinctRepo.Setup(r => r.Read(It.IsAny<int>())).Returns((int x) => precincts.AsQueryable().First(t => t.ID == x));
+
             mockCaseRepo.Setup(r => r.ReadAll()).Returns(cases.AsQueryable());
             mockCaseRepo.Setup(r => r.Read(It.IsAny<int>())).Returns((int x) => cases.AsQueryable().First(t => t.ID == x));
+
+            mockOfficerRepo.Setup(r => r.Read(It.IsAny<int>())).Returns((int x) => officers.AsQueryable().First(t => t.BadgeNo == x));
+            mockOfficerRepo.Setup(r => r.ReadAll()).Returns(officers.AsQueryable());
+
         }
 
         private void InitializeCases()
@@ -184,7 +190,7 @@ namespace HKDXX6_HFT_2023241.Test
 
             //Act+Assert
             var ex = Assert.Throws<ArgumentException>(() => logic.Create(c));
-            Assert.That(ex.Message == "ID has to be positive or zero.");
+            Assert.That(ex.Message == "CaseID has to be positive or zero.");
             mockCaseRepo.Verify(r => r.Create(c), Times.Never);
 
         }

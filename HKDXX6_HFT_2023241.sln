@@ -26,6 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Others", "Others", "{8FB972
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HKDXX6_GUI_2023242.WpfClient", "HKDXX6_GUI_2023242.WpfClient\HKDXX6_GUI_2023242.WpfClient.csproj", "{CFC4C7C3-CBF4-41EC-84B8-1F1525638525}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{E9AC9B42-7A38-48B0-B9D8-63B7D0121554}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9AC9B42-7A38-48B0-B9D8-63B7D0121554}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9AC9B42-7A38-48B0-B9D8-63B7D0121554}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFC4C7C3-CBF4-41EC-84B8-1F1525638525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFC4C7C3-CBF4-41EC-84B8-1F1525638525}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFC4C7C3-CBF4-41EC-84B8-1F1525638525}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFC4C7C3-CBF4-41EC-84B8-1F1525638525}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{13D467BF-39A9-4443-8F5A-3F1BE080EB23} = {2E15A83E-3821-4D69-8BF6-056F6CDE0F0E}
 		{34072A49-7A14-410D-857C-D3C3D5857454} = {2E15A83E-3821-4D69-8BF6-056F6CDE0F0E}
 		{E9AC9B42-7A38-48B0-B9D8-63B7D0121554} = {2E15A83E-3821-4D69-8BF6-056F6CDE0F0E}
+		{CFC4C7C3-CBF4-41EC-84B8-1F1525638525} = {C66278EB-95E6-475F-8840-B942B2D1D2A2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B6F12DC5-02EF-4622-940D-64CC127391E2}

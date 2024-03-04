@@ -1,0 +1,34 @@
+﻿<Window x:Class="HKDXX6_GUI_2023242.WpfClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HKDXX6_GUI_2023242.WpfClient"
+        xmlns:vms="clr-namespace:HKDXX6_GUI_2023242.WpfClient.ViewModels"
+        mc:Ignorable="d"
+        Title="NYPD Client" Height="450" Width="800" MinHeight="450" MinWidth="800">
+    <Window.DataContext>
+        <vms:MainWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="0,0,1,0"/>
+        <StackPanel Orientation="Vertical">
+            <Image Margin="10">
+                <Image.Source>
+                    <BitmapImage DecodePixelWidth="100" UriSource="/Images/nypd_logo.png"/>
+                </Image.Source>
+            </Image>
+            <Button Content="Precincts" FontSize="20" Padding="10" Command="{Binding NavToPrecincts}" Margin="0,0,1,0"/>
+            <Button Content="Officers" FontSize="20" Padding="10" Command="{Binding NavToOfficers}" Margin="0,0,1,0"/>
+            <Button Content="Cases" FontSize="20" Padding="10" Command="{Binding NavToCases}" Margin="0,0,1,0"/>
+            <Button Content="Statistics" FontSize="20" Padding="10" Command="{Binding NavToStatistics}" Margin="0,0,1,0"/>
+        </StackPanel>
+        <Label Margin="10" Content="HKDXX6 2024" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        <UserControl Grid.Column="1" Content="{Binding CurrentControl}"/>
+
+    </Grid>
+</Window>

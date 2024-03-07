@@ -16,9 +16,11 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Add officer" Padding="10"/>
+            <Button Content="Add officer" Padding="10" Command="{Binding AddCommand}"/>
+            <Button Content="Edit officer" Padding="10" Command="{Binding EditCommand}"/>
+            <Button Content="Delete officer" Padding="10" Command="{Binding DeleteCommand}"/>
         </StackPanel>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Officers}" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Officers}" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedItem}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding BadgeNo}" Header="BadgeNo"/>
                 <DataGridTextColumn Binding="{Binding Rank}" Header="Rank"/>
@@ -27,16 +29,6 @@
                 <DataGridTextColumn Binding="{Binding PrecinctID}" Header="PrecintNo."/>
                 <DataGridTextColumn Binding="{Binding DirectCO.FullNameWithRankAndBadgeNo}" Header="Commanding Officer" Width="*"/>
                 <DataGridTextColumn Binding="{Binding HireDate.Date, StringFormat=d}" Header="Hire date"/>
-                <DataGridTemplateColumn Header="Options">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="Edit" Margin="5" Padding="5,0,5,0"/>
-                                <Button Content="Delete" Margin="5" Padding="5,0,5,0"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -1,3 +1,4 @@
+using HKDXX6_HFT_2023241.Endpoint.Services;
 using HKDXX6_HFT_2023241.Logic;
 using HKDXX6_HFT_2023241.Models.DBModels;
 using HKDXX6_HFT_2023241.Repository;
@@ -32,6 +33,8 @@ namespace HKDXX6_HFT_2023241.Endpoint
             services.AddTransient<IPrecinctLogic, PrecinctLogic>();
             services.AddTransient<IOfficerLogic, OfficerLogic>();
             services.AddTransient<ICaseLogic, CaseLogic>();
+
+            services.AddSignalR();
 
             services.AddControllers();
 
@@ -74,6 +77,7 @@ namespace HKDXX6_HFT_2023241.Endpoint
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<SignalRHub>("/hub");
             });
         }
     }

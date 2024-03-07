@@ -16,22 +16,15 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Add precinct" Padding="10"/>
+            <Button Content="Add precinct" Padding="10" Command="{Binding AddCommand}"/>
+            <Button Content="View details" Padding="10" Command="{Binding DetailsCommand}"/>
+            <Button Content="Edit precinct" Padding="10" Command="{Binding EditCommand}"/>
+            <Button Content="Delete precinct" Padding="10" Command="{Binding DeleteCommand}"/>
         </StackPanel>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Precincts}" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Precincts}" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedItem}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="PrecintNo" Binding="{Binding ID}"/>
                 <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
-                <DataGridTemplateColumn Header="Options">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="Edit" Margin="5" Padding="5,0,5,0"/>
-                                <Button Content="Delete" Margin="5" Padding="5,0,5,0"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 

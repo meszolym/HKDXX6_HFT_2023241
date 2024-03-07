@@ -11,20 +11,19 @@ using System.Windows.Input;
 
 namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 {
-    public class PrecinctControlViewModel:ObservableRecipient
+
+    public class CaseControlViewModel:ObservableRecipient
     {
-        RestCollection<Precinct> precincts;
+        public RestCollection<Case> Cases { get; set; }
 
-        public RestCollection<Precinct> Precincts { get; set; }
+        private Case selectedItem;
 
-        private Precinct selectedItem;
-
-        public Precinct SelectedItem
+        public Case SelectedItem
         {
             get { return selectedItem; }
-            set 
+            set
             {
-                if(SetProperty(ref selectedItem, value))
+                if (SetProperty(ref selectedItem, value))
                 {
                     (EditCommand as RelayCommand).NotifyCanExecuteChanged();
                     (DeleteCommand as RelayCommand).NotifyCanExecuteChanged();
@@ -33,15 +32,14 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
             }
         }
 
-
         public ICommand EditCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
         public ICommand AddCommand { get; set; }
         public ICommand DetailsCommand { get; set; }
 
-        public PrecinctControlViewModel()
+        public CaseControlViewModel()
         {
-            Precincts = new RestCollection<Precinct>("http://localhost:33410/", "precinct", "hub");
+            Cases = new RestCollection<Case>("http://localhost:33410/", "case", "hub");
 
             EditCommand = new RelayCommand(() =>
             {
@@ -56,11 +54,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
             {
                 try
                 {
-                    Precincts.Delete(selectedItem.ID);
+                    Cases.Delete(selectedItem.ID);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message,"Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             },
             () =>

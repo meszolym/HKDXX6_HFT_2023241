@@ -44,14 +44,6 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
         [Range(1, 6)]
         public Ranks Rank { get; set; }
 
-        //BadgeNo of officer directly "above" the officer (Direct Commanding Officer), if any
-        public int? DirectCO_BadgeNo { get; set; }
-
-        //Lazyload the DCO of the officer
-        [NotMapped]
-        public virtual Officer DirectCO { get; set; }
-
-        [NotMapped]
         public string FullNameWithRankAndBadgeNo
         {
             get
@@ -69,6 +61,13 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
 
             }
         }
+
+        //BadgeNo of officer directly "above" the officer (Direct Commanding Officer), if any
+        public int? DirectCO_BadgeNo { get; set; }
+
+        //Lazyload the DCO of the officer
+        [NotMapped]
+        public virtual Officer DirectCO { get; set; }
 
         //Lazyload officers who are under the command of officer (officers where this officer is DCO)
         [NotMapped]

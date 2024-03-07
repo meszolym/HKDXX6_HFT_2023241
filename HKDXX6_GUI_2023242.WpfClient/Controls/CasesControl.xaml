@@ -4,9 +4,33 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HKDXX6_GUI_2023242.WpfClient.Controls"
+             xmlns:vms="clr-namespace:HKDXX6_GUI_2023242.WpfClient.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <Control.DataContext>
+        <vms:CaseControlViewModel/>
+    </Control.DataContext>
     <Grid>
-        <Label Content="Cases"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Add case" Padding="10" Command="{Binding AddCommand}"/>
+            <Button Content="View details" Padding="10" Command="{Binding DetailsCommand}"/>
+            <Button Content="Auto-assign case" Padding="10" Command="{Binding DetailsCommand}"/>
+            <Button Content="Edit case" Padding="10" Command="{Binding EditCommand}"/>
+            <Button Content="Delete case" Padding="10" Command="{Binding DeleteCommand}"/>
+        </StackPanel>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Cases}" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedItem}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding ID}"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Officer" Binding="{Binding OfficerOnCase.FullNameWithRankAndBadgeNo}" Width="*"/>
+                <DataGridTextColumn Header="Opened at" Binding="{Binding OpenedAt}" Width="*"/>
+                <DataGridTextColumn Header="Closed" Binding="{Binding IsClosed}"/>
+                <DataGridTextColumn Header="Closed at" Binding="{Binding ClosedAt}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

@@ -62,9 +62,9 @@ namespace HKDXX6_HFT_2023241.Repository
                 new Officer(9544,"Jake","Peralta", Ranks.Detective,378,99, new DateTime(2004, 03, 10)),
                 new Officer(426,"Charles","Boyle", Ranks.Detective,378,99, new DateTime(2000, 05, 16)),
                 new Officer(3118,"Rosa","Diaz", Ranks.Detective,378,99, new DateTime(2004, 06, 18)),
-                new Officer(18324,"Teri","Haver", Ranks.PatrolOfficer,3263,99, new DateTime(2013, 08, 06)),
-                new Officer(7529,"Lou","Vargas", Ranks.PatrolOfficer,3263,99, new DateTime(2015, 03, 18)),
-                new Officer(94499,"Gary","Jennings", Ranks.PatrolOfficer,3263,99, new DateTime(2016, 11, 26))
+                new Officer(18324,"Teri","Haver", Ranks.Officer,3263,99, new DateTime(2013, 08, 06)),
+                new Officer(7529,"Lou","Vargas", Ranks.Officer,3263,99, new DateTime(2015, 03, 18)),
+                new Officer(94499,"Gary","Jennings", Ranks.Officer,3263,99, new DateTime(2016, 11, 26))
             });
 
             modelBuilder.Entity<Case>().HasData(new Case[]

@@ -13,7 +13,7 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
     public enum Ranks
     {
         Recruit = 1,
-        PatrolOfficer = 2,
+        Officer = 2,
         Detective = 3,
         Sergeant = 4,
         Lieutenant = 5,
@@ -50,6 +50,25 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
         //Lazyload the DCO of the officer
         [NotMapped]
         public virtual Officer DirectCO { get; set; }
+
+        [NotMapped]
+        public string FullNameWithRankAndBadgeNo
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(Rank.ToString());
+                sb.Append(" ");
+                sb.Append(FirstName);
+                sb.Append(" ");
+                sb.Append(LastName);
+                sb.Append(" (");
+                sb.Append(BadgeNo);
+                sb.Append(")");
+                return sb.ToString();
+
+            }
+        }
 
         //Lazyload officers who are under the command of officer (officers where this officer is DCO)
         [NotMapped]

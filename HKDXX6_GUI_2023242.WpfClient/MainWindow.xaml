@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:HKDXX6_GUI_2023242.WpfClient"
         xmlns:vms="clr-namespace:HKDXX6_GUI_2023242.WpfClient.ViewModels"
         mc:Ignorable="d"
-        Title="NYPD Client" Height="450" Width="800" MinHeight="450" MinWidth="800">
+        Title="NYPD Client" Height="450" Width="1000" MinHeight="450" MinWidth="1000">
     <Window.DataContext>
         <vms:MainWindowViewModel/>
     </Window.DataContext>

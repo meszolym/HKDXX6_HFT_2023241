@@ -52,11 +52,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 return SelectedItem != null;
             });
 
-            DeleteCommand = new RelayCommand(() =>
+            DeleteCommand = new RelayCommand(async() =>
             {
                 try
                 {
-                    Precincts.Delete(selectedItem.ID);
+                    await Precincts.Delete(selectedItem.ID);
                 }
                 catch (Exception ex)
                 {

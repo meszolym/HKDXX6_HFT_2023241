@@ -300,16 +300,7 @@ namespace HKDXX6_GUI_2023242
                 });
                 this.notify.AddHandler<T>(type.Name + "Deleted", (T item) =>
                 {
-                    var element = items.FirstOrDefault(t => t.Equals(item));
-                    if (element != null)
-                    {
-                        items.Remove(item);
-                        CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                    }
-                    else
-                    {
-                        Init();
-                    }
+                    Init();
 
                 });
                 this.notify.AddHandler<T>(type.Name + "Updated", (T item) =>
@@ -346,15 +337,15 @@ namespace HKDXX6_GUI_2023242
             else return new List<T>().GetEnumerator();
         }
 
-        public void Add(T item)
+        public async Task Add(T item)
         {
             if (hasSignalR)
             {
-                this.rest.PostAsync(item, typeof(T).Name);
+                await this.rest.PostAsync(item, typeof(T).Name);
             }
             else
             {
-                this.rest.PostAsync(item, typeof(T).Name).ContinueWith((t) =>
+                await this.rest.PostAsync(item, typeof(T).Name).ContinueWith((t) =>
                 {
                     Init().ContinueWith(z =>
                     {
@@ -368,15 +359,15 @@ namespace HKDXX6_GUI_2023242
 
         }
 
-        public void Update(T item)
+        public async Task Update(T item)
         {
             if (hasSignalR)
             {
-                this.rest.PutAsync(item, typeof(T).Name);
+                await this.rest.PutAsync(item, typeof(T).Name);
             }
             else
             {
-                this.rest.PutAsync(item, typeof(T).Name).ContinueWith((t) =>
+                await this.rest.PutAsync(item, typeof(T).Name).ContinueWith((t) =>
                 {
                     Init().ContinueWith(z =>
                     {
@@ -389,15 +380,15 @@ namespace HKDXX6_GUI_2023242
             }
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
             if (hasSignalR)
             {
-                this.rest.DeleteAsync(id, typeof(T).Name);
+                await this.rest.DeleteAsync(id, typeof(T).Name);
             }
             else
             {
-                this.rest.DeleteAsync(id, typeof(T).Name).ContinueWith((t) =>
+                await this.rest.DeleteAsync(id, typeof(T).Name).ContinueWith((t) =>
                 {
                     Init().ContinueWith(z =>
                     {

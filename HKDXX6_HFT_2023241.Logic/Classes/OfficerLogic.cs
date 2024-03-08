@@ -125,9 +125,14 @@ namespace HKDXX6_HFT_2023241.Logic
 
         private void RedirectOfficersUnderCommand(Officer o)
         {
+            if (o.OfficersUnderCommand.Count == 0)
+            {
+                return;
+            }
             var p = o.Precinct;
             Officer c;
-
+            
+            
             if (p.Officers.Any(t => t.Rank == Ranks.Captain && t.BadgeNo != o.BadgeNo))
             {
                 c = p.Officers.Single(t => t.Rank == Ranks.Captain && t.BadgeNo != o.BadgeNo);

@@ -4,6 +4,7 @@ using HKDXX6_HFT_2023241.Models.DBModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -56,7 +57,7 @@ namespace HKDXX6_HFT_2023241.Endpoint.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var o = this.logic.Read(id);
+            Officer o = this.logic.Read(id);
             logic.Delete(id);
             this.hub.Clients.All.SendAsync("OfficerDeleted", o);
         }

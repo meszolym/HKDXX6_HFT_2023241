@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace HKDXX6_HFT_2023241.Models.NonCrudModels
@@ -14,6 +14,7 @@ namespace HKDXX6_HFT_2023241.Models.NonCrudModels
         public string openTimeSpanString { get; set; }
 
         [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public TimeSpan openTimeSpan {
             get
             {

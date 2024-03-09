@@ -36,7 +36,7 @@ namespace HKDXX6_HFT_2023241.Endpoint
 
             services.AddSignalR();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             services.AddSwaggerGen(c =>
             {

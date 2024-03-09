@@ -21,8 +21,6 @@
             <xctk:DateTimePicker Value="{Binding Case.OpenedAt, UpdateSourceTrigger=Explicit}" Margin="5,0,5,5" Padding="5"  DockPanel.Dock="Top"/>
             <Label Background="LightBlue" Margin="5,0,5,5" Content="Closed at: " DockPanel.Dock="Top"/>
             <xctk:DateTimePicker Margin="5,0,5,5" Padding="5" Value="{Binding Case.ClosedAt, UpdateSourceTrigger=Explicit}" DockPanel.Dock="Top"/>
-            <Label Background="LightBlue" Margin="5,0,5,5" Content="Open timespan: " DockPanel.Dock="Top"/>
-            <TextBox Margin="5,0,5,5" Padding="5" Text="{Binding Case.OpenTimeSpan, Mode=OneWay}" IsEnabled="False" IsReadOnly="True" DockPanel.Dock="Top"/>
             <Label Background="LightBlue" Margin="5,0,5,5" Content="Officer on case: " DockPanel.Dock="Top"/>
             <ComboBox Margin="5,0,5,5" Padding="5" SelectedItem="{Binding Case.OfficerOnCase, UpdateSourceTrigger=Explicit}" ItemsSource="{Binding Officers, Mode=OneWay}" DockPanel.Dock="Top"/>
             <Label Background="LightBlue" Margin="5,0,5,5" Content="Description: " DockPanel.Dock="Top"/>

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
 using HKDXX6_HFT_2023241.Models.DBModels;
 using System;
@@ -42,7 +43,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 
         public CaseControlViewModel()
         {
-            Cases = new RestCollection<Case>("http://localhost:33410/", "case", "hub");
+            Cases = new RestCollection<Case>("http://localhost:33410/", "Case", "hub");
 
             EditCommand = new RelayCommand(async() =>
             {
@@ -51,6 +52,10 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 {
                     try
                     {
+                        if (selectedItem.OfficerOnCaseID != selectedItem.OfficerOnCase.BadgeNo)
+                        {
+                            selectedItem.OfficerOnCaseID = selectedItem.OfficerOnCase.BadgeNo;
+                        }
                         await Cases.Update(selectedItem);
                     }
                     catch (Exception ex)

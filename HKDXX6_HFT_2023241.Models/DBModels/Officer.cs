@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -72,6 +72,7 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
         //Lazyload officers who are under the command of officer (officers where this officer is DCO)
         [NotMapped]
         [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<Officer> OfficersUnderCommand { get; set; }
 
         //The id of the precinct of the officer, where they are working
@@ -86,6 +87,7 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
         //Lazyload all cases where the officer is attached
         [NotMapped]
         [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<Case> Cases { get; set; }
 
         [Required]

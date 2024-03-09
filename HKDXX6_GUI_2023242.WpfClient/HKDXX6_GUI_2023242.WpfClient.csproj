@@ -16,6 +16,7 @@
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.2" />
+	<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>

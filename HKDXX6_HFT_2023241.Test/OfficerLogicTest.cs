@@ -89,19 +89,19 @@ namespace HKDXX6_HFT_2023241.Test
             precincts[1].Officers.Add(Rosa);
             Terry.OfficersUnderCommand.Add(Rosa);
 
-            var Teri = new Officer(18324, "Teri", "Haver", Ranks.PatrolOfficer, 3263, 99, new DateTime(2013, 08, 06));
+            var Teri = new Officer(18324, "Teri", "Haver", Ranks.Officer, 3263, 99, new DateTime(2013, 08, 06));
             Teri.DirectCO = Amy;
             Teri.Precinct = precincts[1];
             precincts[1].Officers.Add(Teri);
             Amy.OfficersUnderCommand.Add(Teri);
 
-            var Lou = new Officer(7529, "Lou", "Vargas", Ranks.PatrolOfficer, 3263, 99, new DateTime(2015, 03, 18));
+            var Lou = new Officer(7529, "Lou", "Vargas", Ranks.Officer, 3263, 99, new DateTime(2015, 03, 18));
             Lou.DirectCO = Amy;
             Lou.Precinct = precincts[1];
             precincts[1].Officers.Add(Lou);
             Amy.OfficersUnderCommand.Add(Lou);
 
-            var Gary = new Officer(94499, "Gary", "Jennings", Ranks.PatrolOfficer, 3263, 99, new DateTime(2016, 11, 26));
+            var Gary = new Officer(94499, "Gary", "Jennings", Ranks.Officer, 3263, 99, new DateTime(2016, 11, 26));
             Gary.DirectCO = Amy;
             Gary.Precinct = precincts[1];
             precincts[1].Officers.Add(Gary);

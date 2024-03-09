@@ -71,7 +71,10 @@ namespace HKDXX6_GUI_2023242
             else
             {
                 var error = await response.Content.ReadAsAsync<RestExceptionInfo>();
-                throw new ArgumentException(error.Msg);
+                if (error != null)
+                {
+                    throw new ArgumentException(error.Msg);
+                }
             }
             return items;
         }

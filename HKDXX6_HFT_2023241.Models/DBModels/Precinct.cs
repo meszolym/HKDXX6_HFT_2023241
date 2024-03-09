@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text.Json.Serialization;
 
 namespace HKDXX6_HFT_2023241.Models.DBModels
 {
@@ -17,6 +17,7 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
         //Lazyload the officers of the precinct
         [NotMapped]
         [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<Officer> Officers { get; set; }
 
         //The address of the precinct in NY

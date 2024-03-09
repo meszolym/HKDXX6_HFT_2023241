@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace HKDXX6_HFT_2023241.Models.DBModels
@@ -58,6 +58,7 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
 
         [NotMapped]
         [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public Precinct Precinct
         {
             get
@@ -120,6 +121,19 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
                     && OpenedAt.Equals(b.OpenedAt)
                     && ClosedAt.Equals(b.ClosedAt)
                     && OfficerOnCaseID == b.OfficerOnCaseID;
+        }
+
+        public Case GetCopy()
+        {
+            Case c = new Case();
+            c.ID = ID;
+            c.Name = Name;
+            c.Description = Description;
+            c.OpenedAt = OpenedAt;
+            c.ClosedAt = ClosedAt;
+            c.OfficerOnCaseID = OfficerOnCaseID;
+            c.OfficerOnCase = OfficerOnCase;
+            return c;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using HKDXX6_HFT_2023241.Models.DBModels;
+﻿using CommunityToolkit.Mvvm.Input;
+using HKDXX6_HFT_2023241.Models.DBModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,10 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 return officers;
             }
         }
+
         public Case Case { get; set; }
+
+        public ICommand SaveCommand { get; set; }
 
         public EditCaseWindowViewModel(Case @case)
         {

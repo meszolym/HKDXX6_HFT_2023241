@@ -27,4 +27,8 @@
     <Resource Include="Images\nypd_logo.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Tools\" />
+  </ItemGroup>
+
 </Project>

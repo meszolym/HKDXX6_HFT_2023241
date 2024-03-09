@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using HKDXX6_GUI_2023242.WpfClient.Tools;
 using HKDXX6_HFT_2023241.Models.DBModels;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,8 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 {
     public class EditCaseWindowViewModel
     {
-        RestCollection<Officer> officers;
-        public RestCollection<Officer> Officers { 
+        List<Officer> officers;
+        public List<Officer> Officers { 
             get
             {
                 return officers;
@@ -25,7 +26,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 
         public EditCaseWindowViewModel(Case @case)
         {
-            officers = new RestCollection<Officer>("http://localhost:33410/", "officer", "hub");
+            officers = new List<Officer>();
             Case = @case;
         }
     }

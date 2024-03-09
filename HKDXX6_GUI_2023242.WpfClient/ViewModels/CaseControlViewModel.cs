@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
+using HKDXX6_GUI_2023242.WpfClient.Tools;
 using HKDXX6_HFT_2023241.Models.DBModels;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,8 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 
     public class CaseControlViewModel:ObservableRecipient
     {
-        public RestCollection<Case> Cases { get; set; }
+
+        public List<Case> Cases { get; set; }
 
         private Case selectedItem;
 
@@ -43,20 +44,17 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 
         public CaseControlViewModel()
         {
-            Cases = new RestCollection<Case>("http://localhost:33410/", "Case", "hub");
+            Cases = new List<Case>();
 
-            EditCommand = new RelayCommand(async() =>
+            EditCommand = new RelayCommand(() =>
             {
                 var window = new EditCaseWindow(selectedItem);
                 if (window.ShowDialog().Value)
                 {
+                    selectedItem.OfficerOnCaseID = selectedItem.OfficerOnCase.BadgeNo;
                     try
                     {
-                        if (selectedItem.OfficerOnCaseID != selectedItem.OfficerOnCase.BadgeNo)
-                        {
-                            selectedItem.OfficerOnCaseID = selectedItem.OfficerOnCase.BadgeNo;
-                        }
-                        await Cases.Update(selectedItem);
+                        
                     }
                     catch (Exception ex)
                     {
@@ -69,11 +67,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 return SelectedItem != null;
             });
 
-            DeleteCommand = new RelayCommand(async() =>
+            DeleteCommand = new RelayCommand(() =>
             {
                 try
                 {
-                    await Cases.Delete(selectedItem.ID);
+                    
                 }
                 catch (Exception ex)
                 {
@@ -85,9 +83,17 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 return SelectedItem != null;
             });
 
-            AddCommand = new RelayCommand(async () =>
+            AddCommand = new RelayCommand(() =>
             {
-                MessageBox.Show("Add");
+                Case c = new Case(0,"New case","This is a newly added case.",DateTime.Now);
+                try
+                {
+                    
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             });
 
             DetailsCommand = new RelayCommand(() =>

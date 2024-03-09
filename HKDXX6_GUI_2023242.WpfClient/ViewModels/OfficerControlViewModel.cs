@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HKDXX6_GUI_2023242.WpfClient.Tools;
 using HKDXX6_HFT_2023241.Models.DBModels;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 {
     public class OfficerControlViewModel:ObservableRecipient
     {
-
-        public RestCollection<Officer> Officers { get; set; }
+        public List<Officer> Officers { get; set; }
 
         private Officer selectedItem;
 
@@ -37,7 +37,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 
         public OfficerControlViewModel()
         {
-            Officers = new RestCollection<Officer>("http://localhost:33410/", "officer", "hub");
+            Officers = new List<Officer>();
 
             EditCommand = new RelayCommand(() => 
             {
@@ -52,7 +52,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
             {
                 try
                 {
-                    Officers.Delete(selectedItem.BadgeNo);
+                    
                 }
                 catch (Exception ex)
                 {

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HKDXX6_GUI_2023242.WpfClient.Tools;
 using HKDXX6_HFT_2023241.Models.DBModels;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,10 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 {
     public class PrecinctControlViewModel:ObservableRecipient
     {
-        RestCollection<Precinct> precincts;
 
-        public RestCollection<Precinct> Precincts { get; set; }
+        List<Precinct> precincts;
+
+        public List<Precinct> Precincts { get; set; }
 
         private Precinct selectedItem;
 
@@ -41,7 +43,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 
         public PrecinctControlViewModel()
         {
-            Precincts = new RestCollection<Precinct>("http://localhost:33410/", "precinct", "hub");
+            Precincts = new List<Precinct>();
 
             EditCommand = new RelayCommand(() =>
             {
@@ -52,11 +54,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 return SelectedItem != null;
             });
 
-            DeleteCommand = new RelayCommand(async() =>
+            DeleteCommand = new RelayCommand(() =>
             {
                 try
                 {
-                    await Precincts.Delete(selectedItem.ID);
+                    
                 }
                 catch (Exception ex)
                 {

@@ -2,6 +2,7 @@
 using HKDXX6_HFT_2023241.Models.DBModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,6 +38,12 @@ namespace HKDXX6_GUI_2023242.WpfClient.PopUpWindows
                 }
                 bt_save.Visibility = Visibility.Hidden;
             }
+        }
+
+        public EditCaseWindow(ref Case @case)
+        {
+            InitializeComponent();
+            this.DataContext = new EditCaseWindowViewModel(@case);
         }
 
         private void bt_save_Click(object sender, RoutedEventArgs e)

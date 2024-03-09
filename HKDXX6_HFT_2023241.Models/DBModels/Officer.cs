@@ -154,5 +154,10 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
                     && PrecinctID == b.PrecinctID
                     && HireDate == b.HireDate;
         }
+
+        public override string ToString()
+        {
+            return FullNameWithRankAndBadgeNo;
+        }
     }
 }

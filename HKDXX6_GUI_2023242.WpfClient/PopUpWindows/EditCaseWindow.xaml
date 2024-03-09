@@ -1,0 +1,33 @@
+﻿<Window x:Class="HKDXX6_GUI_2023242.WpfClient.PopUpWindows.EditCaseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HKDXX6_GUI_2023242.WpfClient.PopUpWindows" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="Case details" Height="600" Width="400" MinHeight="600" MinWidth="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" x:Name="dockpanel">
+            <Label Margin="5" Content="Case details" FontSize="16" FontWeight="Bold" DockPanel.Dock="Top"/>
+            <Label Background="LightBlue" Margin="5,0,5,5" Content="ID: " DockPanel.Dock="Top"/>
+            <TextBox Margin="5,0,5,5" Padding="5" Text="{Binding Case.ID, Mode=OneWay}" IsEnabled="False" IsReadOnly="True" DockPanel.Dock="Top"/>
+            <Label Background="LightBlue" Margin="5,0,5,5" Content="Name: " DockPanel.Dock="Top"/>
+            <TextBox Margin="5,0,5,5" Padding="5" Text="{Binding Case.Name, UpdateSourceTrigger=Explicit}" DockPanel.Dock="Top"/>
+            <Label Background="LightBlue" Margin="5,0,5,5" Content="Opened at: " DockPanel.Dock="Top"/>
+            <xctk:DateTimePicker Value="{Binding Case.OpenedAt, UpdateSourceTrigger=Explicit}" Margin="5,0,5,5" Padding="5"  DockPanel.Dock="Top"/>
+            <Label Background="LightBlue" Margin="5,0,5,5" Content="Closed at: " DockPanel.Dock="Top"/>
+            <xctk:DateTimePicker Margin="5,0,5,5" Padding="5" Value="{Binding Case.ClosedAt, UpdateSourceTrigger=Explicit}" DockPanel.Dock="Top"/>
+            <Label Background="LightBlue" Margin="5,0,5,5" Content="Open timespan: " DockPanel.Dock="Top"/>
+            <TextBox Margin="5,0,5,5" Padding="5" Text="{Binding Case.OpenTimeSpan, Mode=OneWay}" IsEnabled="False" IsReadOnly="True" DockPanel.Dock="Top"/>
+            <Label Background="LightBlue" Margin="5,0,5,5" Content="Officer on case: " DockPanel.Dock="Top"/>
+            <ComboBox Margin="5,0,5,5" Padding="5" SelectedItem="{Binding Case.OfficerOnCase, UpdateSourceTrigger=Explicit}" ItemsSource="{Binding Officers, Mode=OneWay}" DockPanel.Dock="Top"/>
+            <Label Background="LightBlue" Margin="5,0,5,5" Content="Description: " DockPanel.Dock="Top"/>
+            <TextBox Margin="5,0,5,5" Padding="5" Text="{Binding Case.Description, UpdateSourceTrigger=Explicit}" AcceptsReturn="True" TextWrapping="Wrap" DockPanel.Dock="Top"/>
+        </DockPanel>
+        <Button x:Name="bt_save" Content="Save" Grid.Row="1" Margin="5,0,5,5" Padding="5" Click="bt_save_Click"/>
+    </Grid>
+</Window>

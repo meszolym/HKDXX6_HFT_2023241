@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKDXX6_GUI_2023242.WpfClient.APIModels;
+using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,19 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 
             EditCommand = new RelayCommand(async () =>
             {
-                MessageBox.Show("Edit");
+                var window = new CaseEditorPopUp(SelectedItem);
+                if (!window.ShowDialog().Value)
+                {
+                    return;
+                }
+                try
+                {
+                    await Cases.Update(SelectedItem);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             },
             () =>
             {
@@ -73,12 +86,13 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 
             AddCommand = new RelayCommand(async () =>
             {
-                MinimalCaseModel c = new MinimalCaseModel()
+                var c = new FullCaseModel();
+                c.OpenedAt = DateTime.Now;
+                var window = new CaseEditorPopUp(c);
+                if (!window.ShowDialog().Value)
                 {
-                    Name = "Newly added case",
-                    Description = "This is a newly added case.",
-                    OpenedAt = DateTime.Now
-                };
+                    return;
+                }
                 try
                 {
                     await Cases.Add(c);
@@ -91,7 +105,8 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 
             DetailsCommand = new RelayCommand(() =>
             {
-                MessageBox.Show("Details");
+                var window = new CaseEditorPopUp(SelectedItem, false);
+                window.ShowDialog();
             },
             () =>
             {
@@ -100,7 +115,25 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 
             AutoAssignCommand = new RelayCommand(() =>
             {
-                MessageBox.Show("AutoAssign");
+                var AssignModel = new AutoAssignCaseModel();
+                AssignModel.CaseID = SelectedItem.ID;
+                PrecinctModel? prec = null;
+                var window = new CaseAutoAssignPopUp(SelectedItem.Name, ref prec);
+                
+                if (!window.ShowDialog().Value)
+                {
+                    return;
+                }
+                try
+                {
+                    AssignModel.PrecinctID = prec.ID;
+                    new RestService("http://localhost:33410/", "Case").Post(AssignModel, "/Case/AutoAssign");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
             },
             () =>
             {

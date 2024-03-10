@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
+namespace HKDXX6_GUI_2023242.WpfClient.PopUpWindows.ViewModels
 {
-    internal class PrecinctEditorPopUpViewModel
+    public class PrecinctEditorPopUpViewModel
     {
         public PrecinctModel Precinct { get; set; }
 
@@ -16,9 +16,9 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
             Precinct = p;
         }
 
-        public PrecinctEditorPopUpViewModel() 
+        public PrecinctEditorPopUpViewModel()
         {
-            
+
         }
     }
 }

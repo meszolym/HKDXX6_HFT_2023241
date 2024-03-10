@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKDXX6_GUI_2023242.WpfClient.APIModels;
+using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
+namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 {
-    public class OfficerControlViewModel:ObservableRecipient
+    public class OfficerControlViewModel : ObservableRecipient
     {
         public RestCollection<FullOfficerModel, MinimalOfficerModel> Officers { get; set; }
 
@@ -39,9 +40,21 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
         {
             Officers = new RestCollection<FullOfficerModel, MinimalOfficerModel>("http://localhost:33410/", "Officer", "hub");
 
-            EditCommand = new RelayCommand(() => 
+            EditCommand = new RelayCommand(async () =>
             {
-                MessageBox.Show("Edit");
+                var window = new OfficerEditorPopUp(SelectedItem);
+                if (!window.ShowDialog().Value)
+                {
+                    return;
+                }
+                try
+                {
+                    await Officers.Update(SelectedItem);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             },
             () =>
             {
@@ -64,9 +77,23 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 return SelectedItem != null;
             });
 
-            AddCommand = new RelayCommand(() =>
+            AddCommand = new RelayCommand(async () =>
             {
-                MessageBox.Show("Add");
+                var o = new FullOfficerModel();
+                o.HireDate = DateTime.Today;
+                var window = new OfficerEditorPopUp(o);
+                if (!window.ShowDialog().Value)
+                {
+                    return;
+                }
+                try
+                {
+                    await Officers.Add(o);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             });
 
         }

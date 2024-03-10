@@ -38,5 +38,26 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
                 SetProperty(ref address, value);
             }
         }
+
+        public override bool Equals(object? obj)
+        {
+            PrecinctModel b = obj as PrecinctModel;
+            if (b == null)
+            {
+                return false;
+            }
+            return ID == b.ID && Address == b.Address;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(ID, Address);
+        }
+
+        public override string ToString()
+        {
+            return $"{ID} ({Address})";
+        }
+
     }
 }

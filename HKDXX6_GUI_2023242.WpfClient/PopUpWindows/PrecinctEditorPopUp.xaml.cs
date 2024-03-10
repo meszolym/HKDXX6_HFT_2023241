@@ -1,5 +1,5 @@
 ﻿using HKDXX6_GUI_2023242.WpfClient.APIModels;
-using HKDXX6_GUI_2023242.WpfClient.ViewModels;
+using HKDXX6_GUI_2023242.WpfClient.PopUpWindows.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

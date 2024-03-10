@@ -35,7 +35,10 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("Officer's hire date cannot be in the future.");
             }
-            if (item.Rank == Ranks.Captain && item.Precinct.Officers.Any(t => t.Rank == Ranks.Captain))
+            if (item.Rank == Ranks.Captain
+                && OfficerRepo.ReadAll()
+                    .Any(t => t.PrecinctID == item.PrecinctID
+                    && t.Rank == Ranks.Captain))
             {
                 throw new ArgumentException("Cannot have two captains at one precinct.");
             }

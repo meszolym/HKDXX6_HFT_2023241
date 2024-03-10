@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
+namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 {
 
-    public class CaseControlViewModel:ObservableRecipient
+    public class CaseControlViewModel : ObservableRecipient
     {
 
-        public RestCollection<FullCaseModel,MinimalCaseModel> Cases { get; set; }
+        public RestCollection<FullCaseModel, MinimalCaseModel> Cases { get; set; }
 
         private FullCaseModel selectedItem;
 

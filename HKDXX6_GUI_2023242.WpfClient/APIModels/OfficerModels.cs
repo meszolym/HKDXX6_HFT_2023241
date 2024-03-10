@@ -48,7 +48,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
         }
 
         [JsonIgnore]
-        int? directCO_BadgeNo;
+        protected int? directCO_BadgeNo;
         public int? DirectCO_BadgeNo
         {
             get { return directCO_BadgeNo; }
@@ -56,7 +56,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
         }
 
         [JsonIgnore]
-        int precinctID;
+        protected int precinctID;
 
         public int PrecinctID
         {
@@ -148,6 +148,15 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
             set 
             { 
                 SetProperty(ref directCO, value);
+                if (value != null)
+                {
+                    SetProperty(ref directCO_BadgeNo, value.badgeNo);
+                }
+                else
+                {
+                    SetProperty(ref directCO_BadgeNo, null);
+                }
+                
             } 
         }
 
@@ -167,7 +176,14 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
         public PrecinctModel Precinct
         {
             get { return precint; }
-            set { SetProperty(ref precint, value); }
+            set 
+            {
+                SetProperty(ref precint, value);
+                if (value != null)
+                {
+                    SetProperty(ref precinctID, value.ID);
+                }
+            }
         }
 
         [JsonProperty(nameof(Precinct))]

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:HKDXX6_GUI_2023242.WpfClient.PopUpWindows"
         xmlns:vms="clr-namespace:HKDXX6_GUI_2023242.WpfClient.ViewModels"
         mc:Ignorable="d"
-        Title="Precinct Editor" Height="250" Width="300">
+        Title="Precinct Editor" Height="250" Width="300" MinHeight="250" MinWidth="300">
     <Grid x:Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>

@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
+namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 {
-    public class PrecinctControlViewModel:ObservableRecipient
+    public class PrecinctControlViewModel : ObservableRecipient
     {
 
-        RestCollection<PrecinctModel,PrecinctModel> precincts;
+        RestCollection<PrecinctModel, PrecinctModel> precincts;
 
         public RestCollection<PrecinctModel, PrecinctModel> Precincts { get; set; }
 
@@ -25,9 +25,9 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
         public PrecinctModel SelectedItem
         {
             get { return selectedItem; }
-            set 
+            set
             {
-                if(SetProperty(ref selectedItem, value))
+                if (SetProperty(ref selectedItem, value))
                 {
                     (EditCommand as RelayCommand).NotifyCanExecuteChanged();
                     (DeleteCommand as RelayCommand).NotifyCanExecuteChanged();
@@ -49,7 +49,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 var window = new PrecinctEditorPopUp(SelectedItem);
                 if (!window.ShowDialog().Value)
                 {
-                    return;                    
+                    return;
                 }
                 try
                 {
@@ -57,7 +57,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message,"Error!",MessageBoxButton.OK,MessageBoxImage.Error);
+                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             },
             () =>
@@ -73,7 +73,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message,"Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                     await Precincts.Refresh();
                 }
             },

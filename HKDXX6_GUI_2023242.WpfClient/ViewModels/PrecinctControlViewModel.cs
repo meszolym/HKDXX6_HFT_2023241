@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKDXX6_GUI_2023242.WpfClient.APIModels;
+using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,6 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 {
                     (EditCommand as RelayCommand).NotifyCanExecuteChanged();
                     (DeleteCommand as RelayCommand).NotifyCanExecuteChanged();
-                    (DetailsCommand as RelayCommand).NotifyCanExecuteChanged();
                 }
             }
         }
@@ -39,15 +39,26 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
         public ICommand EditCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
         public ICommand AddCommand { get; set; }
-        public ICommand DetailsCommand { get; set; }
 
         public PrecinctControlViewModel()
         {
             Precincts = new RestCollection<PrecinctModel, PrecinctModel>("http://localhost:33410/", "Precinct", "hub");
 
-            EditCommand = new RelayCommand(() =>
+            EditCommand = new RelayCommand(async () =>
             {
-                MessageBox.Show("Edit");
+                var window = new PrecinctEditorPopUp(SelectedItem);
+                if (!window.ShowDialog().Value)
+                {
+                    return;                    
+                }
+                try
+                {
+                    await Precincts.Update(SelectedItem);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message,"Error!",MessageBoxButton.OK,MessageBoxImage.Error);
+                }
             },
             () =>
             {
@@ -70,18 +81,22 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 return SelectedItem != null;
             });
 
-            AddCommand = new RelayCommand(() =>
+            AddCommand = new RelayCommand(async () =>
             {
-                MessageBox.Show("Add");
-            });
-
-            DetailsCommand = new RelayCommand(() =>
-            {
-                MessageBox.Show("Details");
-            },
-            () =>
-            {
-                return SelectedItem != null;
+                var p = new PrecinctModel();
+                var window = new PrecinctEditorPopUp(p);
+                if (!window.ShowDialog().Value)
+                {
+                    return;
+                }
+                try
+                {
+                    await Precincts.Add(p);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             });
         }
     }

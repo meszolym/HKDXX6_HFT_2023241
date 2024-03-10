@@ -23,7 +23,7 @@
         </StackPanel>
         <DataGrid Grid.Row="1" ItemsSource="{Binding Precincts}" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedItem}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="PrecintNo" Binding="{Binding ID}"/>
+                <DataGridTextColumn Header="No." Binding="{Binding ID}"/>
                 <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>

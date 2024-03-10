@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
-using HKDXX6_HFT_2023241.Models.DBModels;
+using HKDXX6_GUI_2023242.WpfClient.Tools.MovieDbApp.RestClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +16,13 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
     public class PrecinctControlViewModel:ObservableRecipient
     {
 
-        List<Precinct> precincts;
+        RestCollection<PrecinctModel,PrecinctModel> precincts;
 
-        public List<Precinct> Precincts { get; set; }
+        public RestCollection<PrecinctModel, PrecinctModel> Precincts { get; set; }
 
-        private Precinct selectedItem;
+        private PrecinctModel selectedItem;
 
-        public Precinct SelectedItem
+        public PrecinctModel SelectedItem
         {
             get { return selectedItem; }
             set 
@@ -43,7 +44,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 
         public PrecinctControlViewModel()
         {
-            Precincts = new List<Precinct>();
+            Precincts = new RestCollection<PrecinctModel, PrecinctModel>("http://localhost:33410/", "Precinct", "hub");
 
             EditCommand = new RelayCommand(() =>
             {
@@ -54,11 +55,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 return SelectedItem != null;
             });
 
-            DeleteCommand = new RelayCommand(() =>
+            DeleteCommand = new RelayCommand(async () =>
             {
                 try
                 {
-                    
+                    await Precincts.Delete(SelectedItem.ID);
                 }
                 catch (Exception ex)
                 {

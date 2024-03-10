@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
-using HKDXX6_HFT_2023241.Models.DBModels;
+using HKDXX6_GUI_2023242.WpfClient.Tools.MovieDbApp.RestClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 {
     public class OfficerControlViewModel:ObservableRecipient
     {
-        public List<Officer> Officers { get; set; }
+        public RestCollection<FullOfficerModel, MinimalOfficerModel> Officers { get; set; }
 
-        private Officer selectedItem;
+        private FullOfficerModel selectedItem;
 
-        public Officer SelectedItem
+        public FullOfficerModel SelectedItem
         {
             get { return selectedItem; }
             set
@@ -37,7 +38,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 
         public OfficerControlViewModel()
         {
-            Officers = new List<Officer>();
+            Officers = new RestCollection<FullOfficerModel, MinimalOfficerModel>("http://localhost:33410/", "Officer", "hub");
 
             EditCommand = new RelayCommand(() => 
             {
@@ -48,11 +49,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 return SelectedItem != null;
             });
 
-            DeleteCommand = new RelayCommand(() =>
+            DeleteCommand = new RelayCommand(async () =>
             {
                 try
                 {
-                    
+                    await Officers.Delete(SelectedItem.BadgeNo);
                 }
                 catch (Exception ex)
                 {

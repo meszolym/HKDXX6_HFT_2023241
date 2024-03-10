@@ -26,7 +26,7 @@
                 <DataGridTextColumn Binding="{Binding Rank}" Header="Rank"/>
                 <DataGridTextColumn Binding="{Binding FirstName}" Header="First name"/>
                 <DataGridTextColumn Binding="{Binding LastName}" Header="Last name"/>
-                <DataGridTextColumn Binding="{Binding PrecinctID}" Header="PrecintNo."/>
+                <DataGridTextColumn Binding="{Binding PrecinctID}" Header="Precinct"/>
                 <DataGridTextColumn Binding="{Binding DirectCO.FullNameWithRankAndBadgeNo}" Header="Commanding Officer" Width="*"/>
                 <DataGridTextColumn Binding="{Binding HireDate.Date, StringFormat=d}" Header="Hire date"/>
             </DataGrid.Columns>

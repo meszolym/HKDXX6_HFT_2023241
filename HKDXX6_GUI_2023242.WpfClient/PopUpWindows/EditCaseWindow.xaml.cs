@@ -1,5 +1,5 @@
-﻿using HKDXX6_GUI_2023242.WpfClient.ViewModels;
-using HKDXX6_HFT_2023241.Models.DBModels;
+﻿using HKDXX6_GUI_2023242.WpfClient.APIModels;
+using HKDXX6_GUI_2023242.WpfClient.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,7 +23,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.PopUpWindows
     /// </summary>
     public partial class EditCaseWindow : Window
     {
-        public EditCaseWindow(Case @case, bool editable=true)
+        public EditCaseWindow(FullCaseModel @case, bool editable=true)
         {
             InitializeComponent();
             this.DataContext = new EditCaseWindowViewModel(@case);
@@ -40,7 +40,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.PopUpWindows
             }
         }
 
-        public EditCaseWindow(ref Case @case)
+        public EditCaseWindow(ref FullCaseModel @case)
         {
             InitializeComponent();
             this.DataContext = new EditCaseWindowViewModel(@case);

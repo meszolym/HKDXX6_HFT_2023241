@@ -122,18 +122,5 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
                     && ClosedAt.Equals(b.ClosedAt)
                     && OfficerOnCaseID == b.OfficerOnCaseID;
         }
-
-        public Case GetCopy()
-        {
-            Case c = new Case();
-            c.ID = ID;
-            c.Name = Name;
-            c.Description = Description;
-            c.OpenedAt = OpenedAt;
-            c.ClosedAt = ClosedAt;
-            c.OfficerOnCaseID = OfficerOnCaseID;
-            c.OfficerOnCase = OfficerOnCase;
-            return c;
-        }
     }
 }

@@ -26,6 +26,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding ID}"/>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Precinct" Binding="{Binding OfficerOnCase.PrecinctID}"/>
                 <DataGridTextColumn Header="Officer" Binding="{Binding OfficerOnCase.FullNameWithRankAndBadgeNo}" Width="*"/>
                 <DataGridTextColumn Header="Opened at" Binding="{Binding OpenedAt}" Width="*"/>
                 <DataGridTextColumn Header="Closed" Binding="{Binding IsClosed}"/>

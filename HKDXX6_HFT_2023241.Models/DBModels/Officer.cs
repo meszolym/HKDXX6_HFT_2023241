@@ -44,24 +44,6 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
         [Range(1, 6)]
         public Ranks Rank { get; set; }
 
-        public string FullNameWithRankAndBadgeNo
-        {
-            get
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.Append(Rank.ToString());
-                sb.Append(" ");
-                sb.Append(FirstName);
-                sb.Append(" ");
-                sb.Append(LastName);
-                sb.Append(" (");
-                sb.Append(BadgeNo);
-                sb.Append(")");
-                return sb.ToString();
-
-            }
-        }
-
         //BadgeNo of officer directly "above" the officer (Direct Commanding Officer), if any
         public int? DirectCO_BadgeNo { get; set; }
 
@@ -155,11 +137,6 @@ namespace HKDXX6_HFT_2023241.Models.DBModels
                     && DirectCO_BadgeNo == b.DirectCO_BadgeNo
                     && PrecinctID == b.PrecinctID
                     && HireDate == b.HireDate;
-        }
-
-        public override string ToString()
-        {
-            return FullNameWithRankAndBadgeNo;
         }
     }
 }

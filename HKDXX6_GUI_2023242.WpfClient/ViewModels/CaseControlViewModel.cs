@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
-using HKDXX6_HFT_2023241.Models.DBModels;
+using HKDXX6_GUI_2023242.WpfClient.Tools.MovieDbApp.RestClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
     public class CaseControlViewModel:ObservableRecipient
     {
 
-        public List<Case> Cases { get; set; }
+        public RestCollection<FullCaseModel,MinimalCaseModel> Cases { get; set; }
 
-        private Case selectedItem;
+        private FullCaseModel selectedItem;
 
-        public Case SelectedItem
+        public FullCaseModel SelectedItem
         {
             get { return selectedItem; }
             set
@@ -44,17 +45,21 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 
         public CaseControlViewModel()
         {
-            Cases = new List<Case>();
 
-            EditCommand = new RelayCommand(() =>
+            Cases = new RestCollection<FullCaseModel, MinimalCaseModel>("http://localhost:33410/", "Case", "hub");
+
+            EditCommand = new RelayCommand(async () =>
             {
-                var window = new EditCaseWindow(selectedItem);
+                var window = new EditCaseWindow(SelectedItem);
                 if (window.ShowDialog().Value)
                 {
-                    selectedItem.OfficerOnCaseID = selectedItem.OfficerOnCase.BadgeNo;
+                    if (SelectedItem.OfficerOnCase != null)
+                    {
+                        SelectedItem.OfficerOnCaseID = SelectedItem.OfficerOnCase.BadgeNo;
+                    }
                     try
                     {
-                        
+                        await Cases.Update(SelectedItem);
                     }
                     catch (Exception ex)
                     {
@@ -67,11 +72,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 return SelectedItem != null;
             });
 
-            DeleteCommand = new RelayCommand(() =>
+            DeleteCommand = new RelayCommand(async () =>
             {
                 try
                 {
-                    
+                    await Cases.Delete((SelectedItem as FullCaseModel).ID);
                 }
                 catch (Exception ex)
                 {
@@ -83,12 +88,17 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 return SelectedItem != null;
             });
 
-            AddCommand = new RelayCommand(() =>
+            AddCommand = new RelayCommand(async () =>
             {
-                Case c = new Case(0,"New case","This is a newly added case.",DateTime.Now);
+                MinimalCaseModel c = new MinimalCaseModel()
+                {
+                    Name = "Newly added case",
+                    Description = "This is a newly added case.",
+                    OpenedAt = DateTime.Now
+                };
                 try
                 {
-                    
+                    await Cases.Add(c);
                 }
                 catch (Exception ex)
                 {
@@ -98,7 +108,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 
             DetailsCommand = new RelayCommand(() =>
             {
-                var window = new EditCaseWindow(selectedItem,false);
+                var window = new EditCaseWindow((SelectedItem as FullCaseModel),false);
                 window.ShowDialog();
             },
             () =>

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Humanizer;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
 
         [JsonIgnore]
         DateTime? closedAt;
-        public DateTime? ClosedAt 
+        public virtual DateTime? ClosedAt 
         {
             get
             {
@@ -109,7 +110,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
         [JsonIgnore]
         DateTime? closedAt;
 
-        public new DateTime? ClosedAt
+        public override DateTime? ClosedAt
         {
             get
             {
@@ -118,60 +119,35 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
             set
             {
                 SetProperty(ref closedAt, value);
-                OnPropertyChanged(nameof(isClosed));
                 OnPropertyChanged(nameof(IsClosed));
-                OnPropertyChanged(nameof(openTimeSpan));
                 OnPropertyChanged(nameof(OpenTimeSpan));
+                OnPropertyChanged(nameof(OpenTimeSpanHumanized));
             }
         }
-
-        [JsonIgnore]
-        bool isClosed;
 
         [JsonIgnore]
         public bool IsClosed
         {
             get
             {
-                return isClosed;
-            }
-            set
-            {
-                SetProperty(ref isClosed, value);
+                 return ClosedAt != null;
             }
         }
-
-        [JsonProperty(nameof(IsClosed))]
-        public bool SetIsClosed 
-        { 
-            set 
-            {
-                SetProperty(ref isClosed, value);
-            }
-        }
-
-        [JsonIgnore]
-        TimeSpan? openTimeSpan;
 
         [JsonIgnore]
         public TimeSpan? OpenTimeSpan 
         { 
             get
             {
-                return openTimeSpan;
-            }
-            set
-            {
-                SetProperty(ref openTimeSpan, value);
+                return ClosedAt - OpenedAt;
             }
         }
 
-        [JsonProperty(nameof(OpenTimeSpan))]
-        public TimeSpan? SetOpenTimeSpan
+        public string? OpenTimeSpanHumanized
         {
-            set
+            get
             {
-                SetProperty(ref openTimeSpan, value);
+                return OpenTimeSpan == null ? null : OpenTimeSpan.Value.Humanize(2);
             }
         }
 

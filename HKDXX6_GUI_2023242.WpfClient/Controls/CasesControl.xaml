@@ -22,15 +22,45 @@
             <Button Content="Edit case" Padding="10" Command="{Binding EditCommand}"/>
             <Button Content="Delete case" Padding="10" Command="{Binding DeleteCommand}"/>
         </StackPanel>
+        <!-- 
+        <ListBox Grid.Row="1" ItemsSource="{Binding Cases}" HorizontalContentAlignment="Stretch" SelectedItem="{Binding SelectedItem}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Black" BorderThickness="2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" Content="{Binding ID}" ContentStringFormat="ID: {0}"/>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Name}" ContentStringFormat="Name: {0}"/>
+                            <Label Grid.Row="1" Grid.Column="0" Content="{Binding OfficerOnCase.PrecinctID}" ContentStringFormat="Precinct: {0}"/>
+                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding OfficerOnCase.FullNameWithRankAndBadgeNo}" ContentStringFormat="Officer: {0}"/>
+                            <Label Grid.Row="2" Grid.Column="0" Content="{Binding OpenedAt}" ContentStringFormat="Opened: {0}"/>
+                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding IsClosed}" ContentStringFormat="Closure state: {0}"/>
+                            <Label Grid.Row="3" Grid.Column="0" Content="{Binding ClosedAt}" ContentStringFormat="Closed: {0}"/>
+                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding OpenTimeSpan}" ContentStringFormat="Open time: {0}"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        -->
         <DataGrid Grid.Row="1" ItemsSource="{Binding Cases}" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedItem}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding ID}"/>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Precinct" Binding="{Binding OfficerOnCase.PrecinctID}"/>
-                <DataGridTextColumn Header="Officer" Binding="{Binding OfficerOnCase.FullNameWithRankAndBadgeNo}" Width="*"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="auto"/>
+                <DataGridTextColumn Header="Prec." Binding="{Binding OfficerOnCase.PrecinctID}" Width="auto"/>
+                <DataGridTextColumn Header="Officer" Binding="{Binding OfficerOnCase.FullNameWithRankAndBadgeNo}" Width="auto"/>
                 <DataGridTextColumn Header="Opened at" Binding="{Binding OpenedAt}" Width="*"/>
-                <DataGridTextColumn Header="Closed" Binding="{Binding IsClosed}"/>
+                <DataGridTextColumn Header="Closed" Binding="{Binding IsClosed}" Width="auto"/>
                 <DataGridTextColumn Header="Closed at" Binding="{Binding ClosedAt}" Width="*"/>
+                <DataGridTextColumn Header="Time open" Binding="{Binding OpenTimeSpanHumanized}" Width="auto"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

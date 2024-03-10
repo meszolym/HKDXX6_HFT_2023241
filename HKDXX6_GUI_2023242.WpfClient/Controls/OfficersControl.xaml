@@ -20,15 +20,44 @@
             <Button Content="Edit officer" Padding="10" Command="{Binding EditCommand}"/>
             <Button Content="Delete officer" Padding="10" Command="{Binding DeleteCommand}"/>
         </StackPanel>
+        <!--
+        <ListBox Grid.Row="1" ItemsSource="{Binding Officers}" SelectedItem="{Binding SelectedItem}" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Black" BorderThickness="2">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" Content="{Binding BadgeNo}" ContentStringFormat="BadgeNo.: {0}"/>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding PrecinctID}" ContentStringFormat="Precinct: {0}"/>
+                            <Label Grid.Row="1" Grid.Column="0" Content="{Binding Rank}" ContentStringFormat="Rank: {0}"/>
+                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding HireDate}" ContentStringFormat="Hired at: {0:d}"/>
+                            <Label Grid.Row="2" Grid.Column="0" Content="{Binding FirstName}" ContentStringFormat="First name: {0}"/>
+                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding LastName}" ContentStringFormat="Last name: {0}"/>
+                            <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding DirectCO.FullNameWithRankAndBadgeNo}" ContentStringFormat="Direct commanding officer: {0}"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        -->
         <DataGrid Grid.Row="1" ItemsSource="{Binding Officers}" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedItem}">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding BadgeNo}" Header="BadgeNo"/>
-                <DataGridTextColumn Binding="{Binding Rank}" Header="Rank"/>
-                <DataGridTextColumn Binding="{Binding FirstName}" Header="First name"/>
-                <DataGridTextColumn Binding="{Binding LastName}" Header="Last name"/>
-                <DataGridTextColumn Binding="{Binding PrecinctID}" Header="Precinct"/>
+                <DataGridTextColumn Binding="{Binding BadgeNo}" Header="BadgeNo" Width="auto"/>
+                <DataGridTextColumn Binding="{Binding Rank}" Header="Rank" Width="auto"/>
+                <DataGridTextColumn Binding="{Binding FirstName}" Header="First name" Width="auto"/>
+                <DataGridTextColumn Binding="{Binding LastName}" Header="Last name" Width="auto"/>
+                <DataGridTextColumn Binding="{Binding PrecinctID}" Header="Prec." Width="auto"/>
                 <DataGridTextColumn Binding="{Binding DirectCO.FullNameWithRankAndBadgeNo}" Header="Commanding Officer" Width="*"/>
-                <DataGridTextColumn Binding="{Binding HireDate.Date, StringFormat=d}" Header="Hire date"/>
+                <DataGridTextColumn Binding="{Binding HireDate.Date, StringFormat=d}" Header="Hire date" Width="auto"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

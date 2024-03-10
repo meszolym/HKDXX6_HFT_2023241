@@ -21,6 +21,24 @@
             <Button Content="Edit precinct" Padding="10" Command="{Binding EditCommand}"/>
             <Button Content="Delete precinct" Padding="10" Command="{Binding DeleteCommand}"/>
         </StackPanel>
+        <!--
+        Grid.Row="1" ItemsSource="{Binding Precincts}" SelectedItem="{Binding SelectedItem}" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Black" BorderThickness="2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="{Binding ID}" ContentStringFormat="No.: {0}"/>
+                            <Label Grid.Column="1" Content="{Binding Address}" ContentStringFormat="Address: {0}"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        -->
         <DataGrid Grid.Row="1" ItemsSource="{Binding Precincts}" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedItem}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="No." Binding="{Binding ID}"/>

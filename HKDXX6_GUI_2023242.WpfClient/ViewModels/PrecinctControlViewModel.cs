@@ -74,6 +74,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message,"Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    await Precincts.Refresh();
                 }
             },
             () =>
@@ -84,7 +85,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
             AddCommand = new RelayCommand(async () =>
             {
                 var p = new PrecinctModel();
-                var window = new PrecinctEditorPopUp(p);
+                var window = new PrecinctEditorPopUp(p, true);
                 if (!window.ShowDialog().Value)
                 {
                     return;

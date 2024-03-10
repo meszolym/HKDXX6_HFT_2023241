@@ -21,28 +21,45 @@ namespace HKDXX6_GUI_2023242.WpfClient.PopUpWindows
     /// </summary>
     public partial class PrecinctEditorPopUp : Window
     {
-        public PrecinctEditorPopUp(PrecinctModel p)
+        public PrecinctEditorPopUp(PrecinctModel p, bool addition = false)
         {
             InitializeComponent();
             this.DataContext = new PrecinctEditorPopUpViewModel();
             (this.DataContext as PrecinctEditorPopUpViewModel).Init(p);
+
+            if (!addition)
+            {
+                tb_ID.IsEnabled= false;
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            bool fail = false;
+            if (!int.TryParse(tb_ID.Text, out int id) || id < 1 || id >140)
+            {
+                tb_ID.Background = Brushes.OrangeRed;
+                fail = true;
+            }
+
+            if (tb_Address.Text.Length < 10)
+            {
+                tb_Address.Background = Brushes.OrangeRed;
+                fail = true;
+            }
+
+            if (fail)
+            {
+                return;
+            }    
+
             foreach (var item in grid.Children)
             {
                 if (item is TextBox tb)
                 {
-                    try
-                    {
-                        tb.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-                        tb.Background = default;
-                    }
-                    catch
-                    {
-                        tb.Background = Brushes.OrangeRed;
-                    }
+
+                    tb.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+
                 }
             }
             this.DialogResult = true;

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,59 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
         Captain = 6
 
     }
-    public class MinimalOfficerModel
+    public class MinimalOfficerModel : ObservableObject
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public Ranks Rank { get; set; }
-        public int? DirectCO_BadgeNo { get; set; }
-        public int PrecinctID { get; set; }
-        public DateTime HireDate { get; set; }
+        [JsonIgnore]
+        string firstName;
+
+        public string FirstName 
+        {
+            get { return firstName; }
+            set { SetProperty(ref firstName, value); }
+        }
+
+        [JsonIgnore]
+        string lastName;
+
+        public string LastName
+        {
+            get { return lastName; }
+            set { SetProperty(ref lastName, value);}
+        }
+
+        [JsonIgnore]
+        Ranks rank;
+
+        public Ranks Rank 
+        {
+            get { return rank; }
+            set { SetProperty(ref rank, value);}
+        }
+
+        [JsonIgnore]
+        int? directCO_BadgeNo;
+        public int? DirectCO_BadgeNo
+        {
+            get { return directCO_BadgeNo; }
+            set { SetProperty(ref directCO_BadgeNo, value);}
+        }
+
+        [JsonIgnore]
+        int precinctID;
+
+        public int PrecinctID
+        {
+            get { return precinctID; }
+            set { SetProperty(ref precinctID, value); }
+        }
+
+        [JsonIgnore]
+        DateTime hireDate;
+        public DateTime HireDate
+        {
+            get { return hireDate; }
+            set { SetProperty( ref hireDate, value); }
+        }
 
         public override bool Equals(object obj)
         {
@@ -58,7 +104,13 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
 
     public class FullOfficerModel : MinimalOfficerModel
     {
-        public int BadgeNo { get; set; }
+        [JsonIgnore]
+        int badgeNo;
+        public int BadgeNo 
+        {
+            get { return badgeNo; }
+            set { SetProperty(ref badgeNo, value); }
+        }
 
 
         [JsonIgnore]
@@ -95,7 +147,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
             } 
             set 
             { 
-                directCO = value;
+                SetProperty(ref directCO, value);
             } 
         }
 
@@ -104,7 +156,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
         {
             set
             {
-                directCO = value;
+                SetProperty(ref directCO, value);
             }
         }
 
@@ -112,14 +164,18 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
         PrecinctModel precint;
 
         [JsonIgnore]
-        public PrecinctModel Precinct { get; set; }
+        public PrecinctModel Precinct
+        {
+            get { return precint; }
+            set { SetProperty(ref precint, value); }
+        }
 
         [JsonProperty(nameof(Precinct))]
         public PrecinctModel SetPrecinct
         {
             set
             {
-                precint = value;
+                SetProperty(ref precint, value);
             }
         }
 

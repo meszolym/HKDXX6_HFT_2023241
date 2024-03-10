@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
-using HKDXX6_GUI_2023242.WpfClient.Tools.MovieDbApp.RestClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;

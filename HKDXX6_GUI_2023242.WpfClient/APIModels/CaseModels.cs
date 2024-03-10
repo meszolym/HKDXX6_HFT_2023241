@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +9,65 @@ using System.Windows.Controls;
 
 namespace HKDXX6_GUI_2023242.WpfClient.APIModels
 {
-    public class MinimalCaseModel
+    public class MinimalCaseModel : ObservableObject
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public DateTime OpenedAt { get; set; }
-        public DateTime? ClosedAt { get; set; }
-        public int? OfficerOnCaseID { get; set; }
+        [JsonIgnore]
+        string name;
+
+        public string Name
+        {
+            get { return name; }
+            set { SetProperty(ref name, value); }
+        }
+
+        [JsonIgnore]
+        string description;
+        public string Description
+        {
+            get { return description; }
+            set { SetProperty(ref description, value); }
+        }
+
+        [JsonIgnore]
+        DateTime openedAt;
+
+        public DateTime OpenedAt
+        {
+            get
+            {
+                return openedAt;
+            }
+            set { SetProperty(ref openedAt, value); }
+        }
+
+        [JsonIgnore]
+        DateTime? closedAt;
+        public DateTime? ClosedAt 
+        {
+            get
+            {
+                return closedAt;
+            }
+            set
+            {
+                SetProperty(ref closedAt, value);
+            }
+        }
+
+        [JsonIgnore]
+        int? officerOnCaseID;
+
+        public int? OfficerOnCaseID 
+        {
+            get
+            {
+                return officerOnCaseID;
+            }
+            set
+            {
+                SetProperty(ref officerOnCaseID, value);
+            }
+        }
 
         public override bool Equals(object obj)
         {
@@ -39,7 +92,38 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
 
     public class FullCaseModel : MinimalCaseModel
     {
-        public int ID { get; set; }
+        [JsonIgnore]
+        int iD;
+        public int ID
+        {
+            get
+            {
+                return iD;
+            }
+            set
+            {
+                SetProperty(ref iD, value);
+            }
+        }
+
+        [JsonIgnore]
+        DateTime? closedAt;
+
+        public new DateTime? ClosedAt
+        {
+            get
+            {
+                return closedAt;
+            }
+            set
+            {
+                SetProperty(ref closedAt, value);
+                OnPropertyChanged(nameof(isClosed));
+                OnPropertyChanged(nameof(IsClosed));
+                OnPropertyChanged(nameof(openTimeSpan));
+                OnPropertyChanged(nameof(OpenTimeSpan));
+            }
+        }
 
         [JsonIgnore]
         bool isClosed;
@@ -53,7 +137,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
             }
             set
             {
-                isClosed = value;
+                SetProperty(ref isClosed, value);
             }
         }
 
@@ -61,8 +145,8 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
         public bool SetIsClosed 
         { 
             set 
-            { 
-                isClosed = value; 
+            {
+                SetProperty(ref isClosed, value);
             }
         }
 
@@ -78,7 +162,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
             }
             set
             {
-                openTimeSpan = value;
+                SetProperty(ref openTimeSpan, value);
             }
         }
 
@@ -87,7 +171,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
         {
             set
             {
-                openTimeSpan = value;
+                SetProperty(ref openTimeSpan, value);
             }
         }
 
@@ -103,7 +187,12 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
 
             set
             {
-                officerOnCase = value;
+                SetProperty(ref officerOnCase, value);
+                if (officerOnCase != null)
+                {
+                    OfficerOnCaseID = value.BadgeNo;
+                }
+                
             }
         }
 
@@ -112,7 +201,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.APIModels
         {
             set
             {
-                officerOnCase = value;
+                SetProperty(ref officerOnCase, value);
+                if (officerOnCase != null)
+                {
+                    OfficerOnCaseID = value.BadgeNo;
+                }
             }
         }
 

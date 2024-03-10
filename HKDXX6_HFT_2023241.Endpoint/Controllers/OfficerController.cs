@@ -60,6 +60,7 @@ namespace HKDXX6_HFT_2023241.Endpoint.Controllers
             Officer o = this.logic.Read(id);
             logic.Delete(id);
             this.hub.Clients.All.SendAsync("OfficerDeleted", o);
+            this.hub.Clients.All.SendAsync("OfficerUpdated", null); //All officers under command are updated by logic
         }
     }
 }

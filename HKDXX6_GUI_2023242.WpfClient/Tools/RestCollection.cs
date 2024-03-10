@@ -1,501 +1,503 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.SignalR.Client;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace HKDXX6_GUI_2023242.WpfClient.Tools
 {
-    using Microsoft.AspNetCore.SignalR.Client;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Windows;
-
-    namespace MovieDbApp.RestClient
+    public class RestService
     {
-        public class RestService
+        HttpClient client;
+
+        public RestService(string baseurl, string pingableEndpoint = "swagger")
         {
-            HttpClient client;
-
-            public RestService(string baseurl, string pingableEndpoint = "swagger")
+            bool isOk = false;
+            do
             {
-                bool isOk = false;
-                do
-                {
-                    isOk = Ping(baseurl + pingableEndpoint);
-                } while (isOk == false);
-                Init(baseurl);
+                isOk = Ping(baseurl + pingableEndpoint);
+            } while (isOk == false);
+            Init(baseurl);
+        }
+
+        private bool Ping(string url)
+        {
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.DownloadData(url);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private void Init(string baseurl)
+        {
+            client = new HttpClient();
+            client.BaseAddress = new Uri(baseurl);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue
+                ("application/json"));
+            try
+            {
+                client.GetAsync("").GetAwaiter().GetResult();
+            }
+            catch (HttpRequestException)
+            {
+                throw new ArgumentException("Endpoint is not available!");
             }
 
-            private bool Ping(string url)
+        }
+
+        public async Task<List<T>> GetAsync<T>(string endpoint)
+        {
+            List<T> items = new List<T>();
+            HttpResponseMessage response = await client.GetAsync(endpoint);
+            if (response.IsSuccessStatusCode)
             {
-                try
-                {
-                    WebClient wc = new WebClient();
-                    wc.DownloadData(url);
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
+                items = await response.Content.ReadAsAsync<List<T>>();
             }
-
-            private void Init(string baseurl)
+            else
             {
-                client = new HttpClient();
-                client.BaseAddress = new Uri(baseurl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(
-                    new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue
-                    ("application/json"));
-                try
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
-                    client.GetAsync("").GetAwaiter().GetResult();
-                }
-                catch (HttpRequestException)
-                {
-                    throw new ArgumentException("Endpoint is not available!");
-                }
-
-            }
-
-            public async Task<List<T>> GetAsync<T>(string endpoint)
-            {
-                List<T> items = new List<T>();
-                HttpResponseMessage response = await client.GetAsync(endpoint);
-                if (response.IsSuccessStatusCode)
-                {
-                    items = await response.Content.ReadAsAsync<List<T>>();
+                    var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
+                    throw new ArgumentException(error.Msg);
                 }
                 else
                 {
-                    if (response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
-                        throw new ArgumentException(error.Msg);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(response.StatusCode.ToString());
-                    }
+                    throw new ArgumentException(response.StatusCode.ToString());
                 }
-                return items;
             }
+            return items;
+        }
 
-            public List<T> Get<T>(string endpoint)
+        public List<T> Get<T>(string endpoint)
+        {
+            List<T> items = new List<T>();
+            HttpResponseMessage response = client.GetAsync(endpoint).GetAwaiter().GetResult();
+            if (response.IsSuccessStatusCode)
             {
-                List<T> items = new List<T>();
-                HttpResponseMessage response = client.GetAsync(endpoint).GetAwaiter().GetResult();
-                if (response.IsSuccessStatusCode)
+                items = response.Content.ReadAsAsync<List<T>>().GetAwaiter().GetResult();
+            }
+            else
+            {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
-                    items = response.Content.ReadAsAsync<List<T>>().GetAwaiter().GetResult();
+                    var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
+                    throw new ArgumentException(error.Msg);
                 }
                 else
                 {
-                    if (response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
-                        throw new ArgumentException(error.Msg);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(response.StatusCode.ToString());
-                    }
+                    throw new ArgumentException(response.StatusCode.ToString());
                 }
-                return items;
             }
+            return items;
+        }
 
-            public async Task<T> GetSingleAsync<T>(string endpoint)
+        public async Task<T> GetSingleAsync<T>(string endpoint)
+        {
+            T item = default(T);
+            HttpResponseMessage response = await client.GetAsync(endpoint);
+            if (response.IsSuccessStatusCode)
             {
-                T item = default(T);
-                HttpResponseMessage response = await client.GetAsync(endpoint);
-                if (response.IsSuccessStatusCode)
+                item = await response.Content.ReadAsAsync<T>();
+            }
+            else
+            {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
-                    item = await response.Content.ReadAsAsync<T>();
+                    var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
+                    throw new ArgumentException(error.Msg);
                 }
                 else
                 {
-                    if (response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
-                        throw new ArgumentException(error.Msg);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(response.StatusCode.ToString());
-                    }
+                    throw new ArgumentException(response.StatusCode.ToString());
                 }
-                return item;
             }
+            return item;
+        }
 
-            public T GetSingle<T>(string endpoint)
+        public T GetSingle<T>(string endpoint)
+        {
+            T item = default(T);
+            HttpResponseMessage response = client.GetAsync(endpoint).GetAwaiter().GetResult();
+            if (response.IsSuccessStatusCode)
             {
-                T item = default(T);
-                HttpResponseMessage response = client.GetAsync(endpoint).GetAwaiter().GetResult();
-                if (response.IsSuccessStatusCode)
+                item = response.Content.ReadAsAsync<T>().GetAwaiter().GetResult();
+            }
+            else
+            {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
-                    item = response.Content.ReadAsAsync<T>().GetAwaiter().GetResult();
+                    var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
+                    throw new ArgumentException(error.Msg);
                 }
                 else
                 {
-                    if (response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
-                        throw new ArgumentException(error.Msg);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(response.StatusCode.ToString());
-                    }
+                    throw new ArgumentException(response.StatusCode.ToString());
                 }
-                return item;
             }
+            return item;
+        }
 
-            public async Task<T> GetAsync<T>(int id, string endpoint)
+        public async Task<T> GetAsync<T>(int id, string endpoint)
+        {
+            T item = default(T);
+            HttpResponseMessage response = await client.GetAsync(endpoint + "/" + id.ToString());
+            if (response.IsSuccessStatusCode)
             {
-                T item = default(T);
-                HttpResponseMessage response = await client.GetAsync(endpoint + "/" + id.ToString());
-                if (response.IsSuccessStatusCode)
+                item = await response.Content.ReadAsAsync<T>();
+            }
+            else
+            {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
-                    item = await response.Content.ReadAsAsync<T>();
+                    var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
+                    throw new ArgumentException(error.Msg);
                 }
                 else
                 {
-                    if (response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
-                        throw new ArgumentException(error.Msg);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(response.StatusCode.ToString());
-                    }
+                    throw new ArgumentException(response.StatusCode.ToString());
                 }
-                return item;
             }
+            return item;
+        }
 
-            public T Get<T>(int id, string endpoint)
+        public T Get<T>(int id, string endpoint)
+        {
+            T item = default(T);
+            HttpResponseMessage response = client.GetAsync(endpoint + "/" + id.ToString()).GetAwaiter().GetResult();
+            if (response.IsSuccessStatusCode)
             {
-                T item = default(T);
-                HttpResponseMessage response = client.GetAsync(endpoint + "/" + id.ToString()).GetAwaiter().GetResult();
-                if (response.IsSuccessStatusCode)
+                item = response.Content.ReadAsAsync<T>().GetAwaiter().GetResult();
+            }
+            else
+            {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
-                    item = response.Content.ReadAsAsync<T>().GetAwaiter().GetResult();
+                    var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
+                    throw new ArgumentException(error.Msg);
                 }
                 else
                 {
-                    if (response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
-                        throw new ArgumentException(error.Msg);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(response.StatusCode.ToString());
-                    }
+                    throw new ArgumentException(response.StatusCode.ToString());
                 }
-                return item;
+            }
+            return item;
+        }
+
+        public async Task PostAsync<T>(T item, string endpoint)
+        {
+            HttpResponseMessage response =
+                await client.PostAsJsonAsync(endpoint, item);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
+                    throw new ArgumentException(error.Msg);
+                }
+                else
+                {
+                    throw new ArgumentException(response.StatusCode.ToString());
+                }
+            }
+            response.EnsureSuccessStatusCode();
+        }
+
+        public void Post<T>(T item, string endpoint)
+        {
+            HttpResponseMessage response =
+                client.PostAsJsonAsync(endpoint, item).GetAwaiter().GetResult();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
+                    throw new ArgumentException(error.Msg);
+                }
+                else
+                {
+                    throw new ArgumentException(response.StatusCode.ToString());
+                }
+            }
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task DeleteAsync(int id, string endpoint)
+        {
+            HttpResponseMessage response =
+                await client.DeleteAsync(endpoint + "/" + id.ToString());
+
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
+                    throw new ArgumentException(error.Msg);
+                }
+                else
+                {
+                    throw new ArgumentException(response.StatusCode.ToString());
+                }
             }
 
-            public async Task PostAsync<T>(T item, string endpoint)
-            {
-                HttpResponseMessage response =
-                    await client.PostAsJsonAsync(endpoint, item);
+            response.EnsureSuccessStatusCode();
+        }
 
-                if (!response.IsSuccessStatusCode)
+        public void Delete(int id, string endpoint)
+        {
+            HttpResponseMessage response =
+                client.DeleteAsync(endpoint + "/" + id.ToString()).GetAwaiter().GetResult();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
-                    if (response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
-                        throw new ArgumentException(error.Msg);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(response.StatusCode.ToString());
-                    }
+                    var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
+                    throw new ArgumentException(error.Msg);
                 }
-                response.EnsureSuccessStatusCode();
+                else
+                {
+                    throw new ArgumentException(response.StatusCode.ToString());
+                }
             }
 
-            public void Post<T>(T item, string endpoint)
-            {
-                HttpResponseMessage response =
-                    client.PostAsJsonAsync(endpoint, item).GetAwaiter().GetResult();
+            response.EnsureSuccessStatusCode();
+        }
 
-                if (!response.IsSuccessStatusCode)
+        public async Task PutAsync<T>(T item, string endpoint)
+        {
+            HttpResponseMessage response =
+                await client.PutAsJsonAsync(endpoint, item);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
-                    if (response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
-                        throw new ArgumentException(error.Msg);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(response.StatusCode.ToString());
-                    }
+                    var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
+                    throw new ArgumentException(error.Msg);
                 }
-                response.EnsureSuccessStatusCode();
+                else
+                {
+                    throw new ArgumentException(response.StatusCode.ToString());
+                }
             }
 
-            public async Task DeleteAsync(int id, string endpoint)
-            {
-                HttpResponseMessage response =
-                    await client.DeleteAsync(endpoint + "/" + id.ToString());
+            response.EnsureSuccessStatusCode();
+        }
 
-                if (!response.IsSuccessStatusCode)
+        public void Put<T>(T item, string endpoint)
+        {
+            HttpResponseMessage response =
+                client.PutAsJsonAsync(endpoint, item).GetAwaiter().GetResult();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
-                    if (response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
-                        throw new ArgumentException(error.Msg);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(response.StatusCode.ToString());
-                    }
+                    var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
+                    throw new ArgumentException(error.Msg);
                 }
-
-                response.EnsureSuccessStatusCode();
-            }
-
-            public void Delete(int id, string endpoint)
-            {
-                HttpResponseMessage response =
-                    client.DeleteAsync(endpoint + "/" + id.ToString()).GetAwaiter().GetResult();
-
-                if (!response.IsSuccessStatusCode)
+                else
                 {
-                    if (response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
-                        throw new ArgumentException(error.Msg);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(response.StatusCode.ToString());
-                    }
+                    throw new ArgumentException(response.StatusCode.ToString());
                 }
-
-                response.EnsureSuccessStatusCode();
-            }
-
-            public async Task PutAsync<T>(T item, string endpoint)
-            {
-                HttpResponseMessage response =
-                    await client.PutAsJsonAsync(endpoint, item);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    if (response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
-                        throw new ArgumentException(error.Msg);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(response.StatusCode.ToString());
-                    }
-                }
-
-                response.EnsureSuccessStatusCode();
-            }
-
-            public void Put<T>(T item, string endpoint)
-            {
-                HttpResponseMessage response =
-                    client.PutAsJsonAsync(endpoint, item).GetAwaiter().GetResult();
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    if (response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        var error = response.Content.ReadAsAsync<RestExceptionInfo>().GetAwaiter().GetResult();
-                        throw new ArgumentException(error.Msg);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(response.StatusCode.ToString());
-                    }
                     
-                }
-
-
-                response.EnsureSuccessStatusCode();
             }
 
-        }
-        public class RestExceptionInfo
-        {
-            public RestExceptionInfo()
-            {
 
-            }
-            public string Msg { get; set; }
-        }
-        class NotifyService
-        {
-            private HubConnection conn;
-
-            public NotifyService(string url)
-            {
-                conn = new HubConnectionBuilder()
-                    .WithUrl(url)
-                    .Build();
-
-                conn.Closed += async (error) =>
-                {
-                    await Task.Delay(new Random().Next(0, 5) * 1000);
-                    await conn.StartAsync();
-                };
-            }
-
-            public void AddHandler<T>(string methodname, Action<T> value)
-            {
-                conn.On<T>(methodname, value);
-            }
-
-            public async void Init()
-            {
-                await conn.StartAsync();
-            }
-
+            response.EnsureSuccessStatusCode();
         }
 
-        public class RestCollection<TItems,TMinimalItems> : INotifyCollectionChanged, IEnumerable<TItems>
-        {
-            public event NotifyCollectionChangedEventHandler? CollectionChanged;
-
-            NotifyService notify;
-            RestService rest;
-            List<TItems> items;
-            bool hasSignalR;
-            string endpoint;
-
-            public RestCollection(string baseurl, string endpoint, string hub = null)
-            {
-                this.endpoint = endpoint;
-                hasSignalR = hub != null;
-                this.rest = new RestService(baseurl, endpoint);
-                if (hub != null)
-                {
-                    this.notify = new NotifyService(baseurl + hub);
-                    this.notify.AddHandler<TItems>(endpoint + "Created", (TItems item) =>
-                    {
-                        items.Add(item);
-                        CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                    });
-                    this.notify.AddHandler<TItems>(endpoint + "Deleted", (TItems item) =>
-                    {
-                        Init();
-                    });
-                    this.notify.AddHandler<TItems>(endpoint + "Updated", (TItems item) =>
-                    {
-                        Init();
-                    });
-
-                    this.notify.Init();
-                }
-                Init();
-            }
-
-            private async Task Init()
-            {
-                items = await rest.GetAsync<TItems>(endpoint);
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            }
-
-            public IEnumerator<TItems> GetEnumerator()
-            {
-                if (items != null)
-                {
-                    return items.GetEnumerator();
-                }
-                else return new List<TItems>().GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                if (items != null)
-                {
-                    return items.GetEnumerator();
-                }
-                else return new List<TItems>().GetEnumerator();
-            }
-
-            public async Task Add(TMinimalItems item)
-            {
-                if (hasSignalR)
-                {
-                    await this.rest.PostAsync(item, endpoint);
-                }
-                else
-                {
-                    await this.rest.PostAsync(item, endpoint).ContinueWith((t) =>
-                    {
-                        Init().ContinueWith(z =>
-                        {
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                            });
-                        });
-                    });
-                }
-
-            }
-
-            public async Task Update(TMinimalItems item)
-            {
-                if (hasSignalR)
-                {
-                    await this.rest.PutAsync(item, endpoint);
-                }
-                else
-                {
-                    await this.rest.PutAsync(item, endpoint).ContinueWith((t) =>
-                    {
-                        Init().ContinueWith(z =>
-                        {
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                            });
-                        });
-                    });
-                }
-            }
-
-            public async Task Delete(int id)
-            {
-                if (hasSignalR)
-                {
-                    await this.rest.DeleteAsync(id, endpoint);
-                }
-                else
-                {
-                    await this.rest.DeleteAsync(id, endpoint).ContinueWith((t) =>
-                    {
-                        Init().ContinueWith(z =>
-                        {
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                            });
-                        });
-                    });
-                }
-
-            }
-
-
-        }
     }
+    public class RestExceptionInfo
+    {
+        public RestExceptionInfo()
+        {
+
+        }
+        public string Msg { get; set; }
+    }
+    class NotifyService
+    {
+        private HubConnection conn;
+
+        public NotifyService(string url)
+        {
+            conn = new HubConnectionBuilder()
+                .WithUrl(url)
+                .Build();
+
+            conn.Closed += async (error) =>
+            {
+                await Task.Delay(new Random().Next(0, 5) * 1000);
+                await conn.StartAsync();
+            };
+        }
+
+        public void AddHandler<T>(string methodname, Action<T> value)
+        {
+            conn.On<T>(methodname, value);
+        }
+
+        public async void Init()
+        {
+            await conn.StartAsync();
+        }
+
+    }
+
+    public class RestCollection<TItems,TMinimalItems> : INotifyCollectionChanged, IEnumerable<TItems>
+    {
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
+
+        NotifyService notify;
+        RestService rest;
+        List<TItems> items;
+        bool hasSignalR;
+        string endpoint;
+
+        public RestCollection(string baseurl, string endpoint, string hub = null)
+        {
+            this.endpoint = endpoint;
+            hasSignalR = hub != null;
+            this.rest = new RestService(baseurl, endpoint);
+            if (hub != null)
+            {
+                this.notify = new NotifyService(baseurl + hub);
+                this.notify.AddHandler<TItems>(endpoint + "Created", (TItems item) =>
+                {
+                    items.Add(item);
+                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                });
+                this.notify.AddHandler<TItems>(endpoint + "Deleted", (TItems item) =>
+                {
+                    var element = items.FirstOrDefault(t => t.Equals(item));
+                    if (element != null)
+                    {
+                        items.Remove(item);
+                        CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                    }
+                    else
+                    {
+                        Init();
+                    }
+
+                });
+                this.notify.AddHandler<TItems>(endpoint + "Updated", (TItems item) =>
+                {
+                    Init();
+                });
+
+                this.notify.Init();
+            }
+            Init();
+        }
+
+        private async Task Init()
+        {
+            items = await rest.GetAsync<TItems>(endpoint);
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+        public IEnumerator<TItems> GetEnumerator()
+        {
+            if (items != null)
+            {
+                return items.GetEnumerator();
+            }
+            else return new List<TItems>().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            if (items != null)
+            {
+                return items.GetEnumerator();
+            }
+            else return new List<TItems>().GetEnumerator();
+        }
+
+        public async Task Add(TMinimalItems item)
+        {
+            if (hasSignalR)
+            {
+                await this.rest.PostAsync(item, endpoint);
+            }
+            else
+            {
+                await this.rest.PostAsync(item, endpoint).ContinueWith((t) =>
+                {
+                    Init().ContinueWith(z =>
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                        });
+                    });
+                });
+            }
+
+        }
+
+        public async Task Update(TMinimalItems item)
+        {
+            if (hasSignalR)
+            {
+                await this.rest.PutAsync(item, endpoint);
+            }
+            else
+            {
+                await this.rest.PutAsync(item, endpoint).ContinueWith((t) =>
+                {
+                    Init().ContinueWith(z =>
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                        });
+                    });
+                });
+            }
+        }
+
+        public async Task Delete(int id)
+        {
+            if (hasSignalR)
+            {
+                await this.rest.DeleteAsync(id, endpoint);
+            }
+            else
+            {
+                await this.rest.DeleteAsync(id, endpoint).ContinueWith((t) =>
+                {
+                    Init().ContinueWith(z =>
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                        });
+                    });
+                });
+            }
+
+        }
+
+
+    }
+    
 }

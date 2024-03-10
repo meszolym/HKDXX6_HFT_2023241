@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKDXX6_GUI_2023242.WpfClient.APIModels;
-using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
-using HKDXX6_GUI_2023242.WpfClient.Tools.MovieDbApp.RestClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,22 +48,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 
             EditCommand = new RelayCommand(async () =>
             {
-                var window = new EditCaseWindow(SelectedItem);
-                if (window.ShowDialog().Value)
-                {
-                    if (SelectedItem.OfficerOnCase != null)
-                    {
-                        SelectedItem.OfficerOnCaseID = SelectedItem.OfficerOnCase.BadgeNo;
-                    }
-                    try
-                    {
-                        await Cases.Update(SelectedItem);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
+                MessageBox.Show("Edit");
             },
             () =>
             {
@@ -76,7 +59,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
             {
                 try
                 {
-                    await Cases.Delete((SelectedItem as FullCaseModel).ID);
+                    await Cases.Delete(SelectedItem.ID);
                 }
                 catch (Exception ex)
                 {
@@ -108,8 +91,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 
             DetailsCommand = new RelayCommand(() =>
             {
-                var window = new EditCaseWindow((SelectedItem as FullCaseModel),false);
-                window.ShowDialog();
+                MessageBox.Show("Details");
             },
             () =>
             {

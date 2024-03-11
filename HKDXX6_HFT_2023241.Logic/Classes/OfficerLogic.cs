@@ -72,9 +72,13 @@ namespace HKDXX6_HFT_2023241.Logic
         public void Update(Officer item)
         {
             var o = Read(item.BadgeNo);
-            
 
-            if (item.Rank == Ranks.Captain && item.Precinct.Officers.Any(t => t.Rank == Ranks.Captain && t.BadgeNo != item.BadgeNo))
+
+            if (item.Rank == Ranks.Captain
+                && OfficerRepo.ReadAll()
+                    .Any(t => t.PrecinctID == item.PrecinctID
+                    && t.Rank == Ranks.Captain
+                    && t.BadgeNo != item.BadgeNo))
             {
                 throw new ArgumentException("Cannot have two captains at one precinct.");
             }

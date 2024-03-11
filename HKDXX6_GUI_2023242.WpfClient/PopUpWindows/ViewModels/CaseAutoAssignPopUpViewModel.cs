@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace HKDXX6_GUI_2023242.WpfClient.PopUpWindows.ViewModels
 {
@@ -14,17 +15,19 @@ namespace HKDXX6_GUI_2023242.WpfClient.PopUpWindows.ViewModels
 
         public string CaseName { get; private set; }
 
-        public PrecinctModel? Precinct { get; set; }
+        public PrecinctModel SelectedItem {
+            get;
+            set;
+        }
 
         public CaseAutoAssignPopUpViewModel()
         {
             Precincts = new RestService("http://localhost:33410/", "Precinct").Get<PrecinctModel>("Precinct");
         }
 
-        public void Init(string CaseName, ref PrecinctModel? p)
+        public void Init(string CaseName)
         {
             this.CaseName = CaseName;
-            this.Precinct = p;
         }
     }
 }

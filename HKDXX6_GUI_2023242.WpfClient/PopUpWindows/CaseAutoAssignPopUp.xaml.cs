@@ -21,13 +21,12 @@ namespace HKDXX6_GUI_2023242.WpfClient.PopUpWindows
     /// </summary>
     public partial class CaseAutoAssignPopUp : Window
     {
-        public CaseAutoAssignPopUp(string CaseName, ref PrecinctModel? Precinct)
+        public CaseAutoAssignPopUp(string CaseName)
         {
-
             InitializeComponent();
             var viewModel = new CaseAutoAssignPopUpViewModel();
             this.DataContext = viewModel;
-            viewModel.Init(CaseName, ref Precinct);
+            viewModel.Init(CaseName);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

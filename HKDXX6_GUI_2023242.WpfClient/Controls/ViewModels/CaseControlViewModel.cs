@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
+using HKDXX6_GUI_2023242.WpfClient.PopUpWindows.ViewModels;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
 using System;
 using System.Collections.Generic;
@@ -117,8 +118,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
             {
                 var AssignModel = new AutoAssignCaseModel();
                 AssignModel.CaseID = SelectedItem.ID;
-                PrecinctModel? prec = null;
-                var window = new CaseAutoAssignPopUp(SelectedItem.Name, ref prec);
+                var window = new CaseAutoAssignPopUp(SelectedItem.Name);
                 
                 if (!window.ShowDialog().Value)
                 {
@@ -126,7 +126,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 }
                 try
                 {
-                    AssignModel.PrecinctID = prec.ID;
+                    if ((window.DataContext as CaseAutoAssignPopUpViewModel).SelectedItem == null)
+                    {
+                        throw new ArgumentException("No precinct chosen!");
+                    }
+                    AssignModel.PrecinctID = (window.DataContext as CaseAutoAssignPopUpViewModel).SelectedItem.ID;
                     new RestService("http://localhost:33410/", "Case").Post(AssignModel, "/Case/AutoAssign");
                 }
                 catch (Exception ex)

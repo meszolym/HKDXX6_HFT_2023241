@@ -25,7 +25,7 @@
             <Button Content="Precincts" FontSize="20" Padding="10" Command="{Binding NavToPrecincts}" Margin="0,0,1,0"/>
             <Button Content="Officers" FontSize="20" Padding="10" Command="{Binding NavToOfficers}" Margin="0,0,1,0"/>
             <Button Content="Cases" FontSize="20" Padding="10" Command="{Binding NavToCases}" Margin="0,0,1,0"/>
-            <Button Content="Statistics" FontSize="20" Padding="10" Command="{Binding NavToStatistics}" Margin="0,0,1,0"/>
+            <!-- Button Content="Statistics" FontSize="20" Padding="10" Command="{Binding NavToStatistics}" Margin="0,0,1,0"/ -->
         </StackPanel>
         <Label Margin="10" Content="HKDXX6 2024" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
         <UserControl Grid.Column="1" Content="{Binding CurrentControl}"/>

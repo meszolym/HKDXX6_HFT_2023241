@@ -24,6 +24,7 @@ namespace HKDXX6_GUI_2023242.WpfClient
                 .AddSingleton<ICaseEditor, CaseEditorViaWindow>()
                 .AddSingleton<IOfficerEditor, OfficerEditorViaWindow>()
                 .AddSingleton<IPrecinctEditor, PrecinctEditorViaWindow>()
+                .AddSingleton<IControlsNavigator, ControlsNavigatorService>()
                 .BuildServiceProvider()
                 );
         }

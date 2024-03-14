@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HKDXX6_GUI_2023242.WpfClient.Services.Interfaces
 {
-    internal interface IPrecinctEditor
+    public interface IPrecinctEditor
     {
         public bool Add(PrecinctModel precinctModel);
         public bool Edit(PrecinctModel precinctModel);

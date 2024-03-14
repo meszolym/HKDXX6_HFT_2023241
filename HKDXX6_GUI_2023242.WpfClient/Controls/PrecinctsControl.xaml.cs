@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls
         public PrecinctsControl()
         {
             InitializeComponent();
+        }
+
+        public void RefreshLists()
+        {
+            (this.DataContext as IUserControlViewModel).RefreshLists();
         }
     }
 }

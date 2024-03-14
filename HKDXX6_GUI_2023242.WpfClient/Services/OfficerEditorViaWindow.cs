@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HKDXX6_GUI_2023242.WpfClient.Services
 {
-    internal class OfficerEditorViaWindow : IOfficerEditor
+    public class OfficerEditorViaWindow : IOfficerEditor
     {
         public bool Add(FullOfficerModel officerModel)
         {

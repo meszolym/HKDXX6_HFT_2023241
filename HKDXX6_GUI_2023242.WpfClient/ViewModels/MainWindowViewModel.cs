@@ -6,20 +6,17 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using HKDXX6_GUI_2023242.WpfClient.Controls;
 using HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels;
+using HKDXX6_GUI_2023242.WpfClient.Services.Interfaces;
 
 
 namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
 {
     public class MainWindowViewModel : ObservableRecipient
     {
-        WelcomeControl welcomeControl;
-        PrecinctsControl precinctsControl;
-        OfficersControl officersControl;
-        CasesControl casesControl;
-        StatisticsControl statisticsControl;
 
         UserControl currentControl;
         public UserControl CurrentControl
@@ -37,40 +34,33 @@ namespace HKDXX6_GUI_2023242.WpfClient.ViewModels
         public ICommand NavToPrecincts { get; set; }
         public ICommand NavToCases { get; set; }
         public ICommand NavToOfficers { get; set; }
-        //public ICommand NavToStatistics { get; set; }
+
+        IControlsNavigator navigator;
 
         public MainWindowViewModel()
         { 
-            welcomeControl = new WelcomeControl();
-            precinctsControl = new PrecinctsControl();
-            officersControl = new OfficersControl();
-            casesControl = new CasesControl();
-            //statisticsControl = new StatisticsControl();
             
-            CurrentControl = welcomeControl;
+            if (navigator == null)
+            {
+                navigator = Ioc.Default.GetService<IControlsNavigator>();
+            }
+
+            CurrentControl = navigator.WelcomeControl;
             
             NavToPrecincts = new RelayCommand(() =>
             {
-                (precinctsControl.DataContext as IUserControlViewModel).RefreshLists();
-                CurrentControl = precinctsControl;
+                CurrentControl = navigator.PrecinctsControl;
             });
 
             NavToOfficers = new RelayCommand(() =>
             {
-                (officersControl.DataContext as IUserControlViewModel).RefreshLists();
-                CurrentControl = officersControl;
+                CurrentControl = navigator.OfficersControl;
             });
 
             NavToCases = new RelayCommand(() =>
             {
-                (casesControl.DataContext as IUserControlViewModel).RefreshLists();
-                CurrentControl = casesControl;
+                CurrentControl = navigator.CasesControl;
             });
-
-            /*NavToStatistics = new RelayCommand(() =>
-            {
-                CurrentControl = statisticsControl;
-            });*/
         }
     }
 }

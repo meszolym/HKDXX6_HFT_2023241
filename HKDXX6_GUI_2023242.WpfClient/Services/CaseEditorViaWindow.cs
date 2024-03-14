@@ -1,6 +1,7 @@
 ﻿using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows.ViewModels;
+using HKDXX6_GUI_2023242.WpfClient.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

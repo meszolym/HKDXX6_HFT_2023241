@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HKDXX6_GUI_2023242.WpfClient.Services
+namespace HKDXX6_GUI_2023242.WpfClient.Services.Interfaces
 {
     internal interface IPrecinctEditor
     {

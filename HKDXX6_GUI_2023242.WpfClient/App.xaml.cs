@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
 using HKDXX6_GUI_2023242.WpfClient.Services;
+using HKDXX6_GUI_2023242.WpfClient.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

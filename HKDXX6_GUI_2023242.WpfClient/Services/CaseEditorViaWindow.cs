@@ -22,17 +22,13 @@ namespace HKDXX6_GUI_2023242.WpfClient.Services
         {
             var AssignModel = new AutoAssignCaseModel();
             AssignModel.CaseID = caseModel.ID;
-            var window = new CaseAutoAssignPopUp(caseModel.Name);
+            PrecinctModel precinct = new PrecinctModel();
+            var window = new CaseAutoAssignPopUp(caseModel.Name, AssignModel);
             if (!window.ShowDialog().Value)
             {
                 return null;
             }
 
-            if ((window.DataContext as CaseAutoAssignPopUpViewModel).SelectedItem == null)
-            {
-                throw new ArgumentException("No precinct chosen!");
-            }
-            AssignModel.PrecinctID = (window.DataContext as CaseAutoAssignPopUpViewModel).SelectedItem.ID;
             return AssignModel;
         }
 

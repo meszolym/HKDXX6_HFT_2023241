@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
+using HKDXX6_GUI_2023242.WpfClient.Services;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
 using System;
 using System.Collections.Generic;
@@ -37,14 +39,20 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
         public ICommand DeleteCommand { get; set; }
         public ICommand AddCommand { get; set; }
 
+        IPrecinctEditor editor;
+
         public PrecinctControlViewModel()
         {
             Precincts = new RestCollection<PrecinctModel, PrecinctModel>("http://localhost:33410/", "Precinct", "hub");
 
+            if (editor == null)
+            {
+                editor = Ioc.Default.GetService<IPrecinctEditor>();
+            }
+
             EditCommand = new RelayCommand(async () =>
             {
-                var window = new PrecinctEditorPopUp(SelectedItem);
-                if (!window.ShowDialog().Value)
+                if (!editor.Edit(SelectedItem))
                 {
                     return;
                 }
@@ -82,8 +90,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
             AddCommand = new RelayCommand(async () =>
             {
                 var p = new PrecinctModel();
-                var window = new PrecinctEditorPopUp(p, true);
-                if (!window.ShowDialog().Value)
+                if (!editor.Add(p))
                 {
                     return;
                 }

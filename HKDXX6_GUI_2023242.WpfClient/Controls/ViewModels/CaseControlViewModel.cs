@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows.ViewModels;
+using HKDXX6_GUI_2023242.WpfClient.Services;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
 using System;
 using System.Collections.Generic;
@@ -43,15 +45,23 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
         public ICommand DetailsCommand { get; set; }
         public ICommand AutoAssignCommand { get; set; }
 
+        ICaseEditor editor;
+
         public CaseControlViewModel()
         {
 
             Cases = new RestCollection<FullCaseModel, MinimalCaseModel>("http://localhost:33410/", "Case", "hub");
 
-            EditCommand = new RelayCommand(async () =>
+            if (editor == null)
             {
-                var window = new CaseEditorPopUp(SelectedItem);
-                if (!window.ShowDialog().Value)
+                editor = Ioc.Default.GetService<ICaseEditor>();
+            }
+            
+
+
+            EditCommand = new RelayCommand(async () =>
+            {                
+                if (!editor.Edit(SelectedItem))
                 {
                     return;
                 }
@@ -89,8 +99,8 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
             {
                 var c = new FullCaseModel();
                 c.OpenedAt = DateTime.Now;
-                var window = new CaseEditorPopUp(c);
-                if (!window.ShowDialog().Value)
+                
+                if (!editor.Add(c))
                 {
                     return;
                 }
@@ -116,22 +126,14 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 
             AutoAssignCommand = new RelayCommand(() =>
             {
-                var AssignModel = new AutoAssignCaseModel();
-                AssignModel.CaseID = SelectedItem.ID;
-                var window = new CaseAutoAssignPopUp(SelectedItem.Name);
-                
-                if (!window.ShowDialog().Value)
-                {
-                    return;
-                }
                 try
                 {
-                    if ((window.DataContext as CaseAutoAssignPopUpViewModel).SelectedItem == null)
+                    var assignModel = editor.AutoAssign(SelectedItem);
+                    if (assignModel == null)
                     {
-                        throw new ArgumentException("No precinct chosen!");
+                        return;
                     }
-                    AssignModel.PrecinctID = (window.DataContext as CaseAutoAssignPopUpViewModel).SelectedItem.ID;
-                    new RestService("http://localhost:33410/", "Case").Post(AssignModel, "/Case/AutoAssign");
+                    new RestService("http://localhost:33410/", "Case").Post(assignModel, "/Case/AutoAssign");
                 }
                 catch (Exception ex)
                 {

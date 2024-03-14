@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
+using HKDXX6_GUI_2023242.WpfClient.Services;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
 using System;
 using System.Collections.Generic;
@@ -36,14 +38,20 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
         public ICommand DeleteCommand { get; set; }
         public ICommand AddCommand { get; set; }
 
+        IOfficerEditor editor;
+
         public OfficerControlViewModel()
         {
             Officers = new RestCollection<FullOfficerModel, MinimalOfficerModel>("http://localhost:33410/", "Officer", "hub");
 
+            if (editor == null)
+            {
+                editor = Ioc.Default.GetService<IOfficerEditor>();
+            }
+
             EditCommand = new RelayCommand(async () =>
             {
-                var window = new OfficerEditorPopUp(SelectedItem);
-                if (!window.ShowDialog().Value)
+                if (!editor.Edit(SelectedItem))
                 {
                     return;
                 }
@@ -81,8 +89,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
             {
                 var o = new FullOfficerModel();
                 o.HireDate = DateTime.Today;
-                var window = new OfficerEditorPopUp(o);
-                if (!window.ShowDialog().Value)
+                if (!editor.Add(o))
                 {
                     return;
                 }

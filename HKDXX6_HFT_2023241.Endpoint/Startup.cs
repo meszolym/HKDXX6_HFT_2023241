@@ -72,6 +72,12 @@ namespace HKDXX6_HFT_2023241.Endpoint
 
             }));
 
+            app.UseCors(x => x
+            .AllowCredentials()
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithOrigins("http://localhost:41220"));
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

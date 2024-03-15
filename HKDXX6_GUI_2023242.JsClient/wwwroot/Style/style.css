@@ -1,4 +1,4 @@
-﻿taken from purecss.io, made some changed - meszolym
+﻿/*taken from purecss.io, made some changed - meszolym*/
 .pure-menu {
     box-sizing: border-box;
     margin-bottom: 10px;
@@ -320,6 +320,11 @@ a.pure-button-selected {
     flex-direction:column;
 }
 
-#editorDiv input, button {
+#editorDiv input {
     margin-bottom: 10px;
+}
+
+.addTable {
+    border:1px solid black;
+    margin-bottom:10px;
 }

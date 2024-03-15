@@ -12,8 +12,4 @@
     <Resource Include="wwwroot\Sources\nypd_logo.png" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\Pages\" />
-  </ItemGroup>
-
 </Project>

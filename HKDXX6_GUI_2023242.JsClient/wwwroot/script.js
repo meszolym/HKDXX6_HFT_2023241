@@ -2,6 +2,9 @@
 let officers = [];
 let cases = [];
 
+let precinctIdForUpdate = -1;
+let officerIdForUpdate = -1;
+
 class Case {
     id;
     name;
@@ -46,20 +49,24 @@ class TimeSpan {
     totalSeconds;
 }
 
+getPrecinctData();
+getOfficerData();
+getCaseData();
+
 function showMain() {
     document.getElementById('welcomeDiv').style.display = 'block';
-    document.getElementById('precinctsDiv').style.display = 'none';
-    document.getElementById('officersDiv').style.display = 'none';
-    document.getElementById('casesDiv').style.display = 'none';
+    document.getElementById('precinctDiv').style.display = 'none';
+    document.getElementById('officerDiv').style.display = 'none';
+    document.getElementById('caseDiv').style.display = 'none';
 }
 
 // #region Precinct
 function showPrecincts() {
     document.getElementById('welcomeDiv').style.display = 'none';
-    document.getElementById('precinctsDiv').style.display = 'block';
+    document.getElementById('precinctDiv').style.display = 'block';
     resetPrecinctMenu();
-    document.getElementById('officersDiv').style.display = 'none';
-    document.getElementById('casesDiv').style.display = 'none';
+    document.getElementById('officerDiv').style.display = 'none';
+    document.getElementById('caseDiv').style.display = 'none';
 
     getPrecinctData();
 }
@@ -163,20 +170,21 @@ function showEditPrecinct(id) {
     document.getElementById('precinctEditDiv').style.display = 'inline-grid';
 
     let p = precincts.find(p => p.id == id);
+    precinctIdForUpdate = id;
 
     document.getElementById('editPrecinctID').value = id;
     document.getElementById('editPrecinctAddress').value = p.address;
 }
 
 function editPrecinct() {
-    let idInput = document.getElementById('editPrecinctID').value;
+    
     let addressInput = document.getElementById('editPrecinctAddress').value;
 
     fetch('http://localhost:33410/precinct', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', },
         body: JSON.stringify(
-            { id: idInput, address: addressInput }
+            { id: precinctIdForUpdate, address: addressInput }
         )
     }).then(response => {
         if (!response.ok) {
@@ -204,8 +212,11 @@ function editPrecinct() {
 function resetPrecinctMenu() {
     document.getElementById('addPrecinctID').value = '';
     document.getElementById('addPrecinctAddress').value = '';
+
     document.getElementById('editPrecinctID').value = '';
     document.getElementById('editPrecinctAddress').value = '';
+    precinctIdForUpdate = -1;
+
     document.getElementById('precinctAddDiv').style.display = 'none';
     document.getElementById('precinctEditDiv').style.display = 'none';
     document.getElementById('precinctContentDiv').style.display = 'block';
@@ -216,9 +227,10 @@ function resetPrecinctMenu() {
 // #region Officer
 function showOfficers() {
     document.getElementById('welcomeDiv').style.display = 'none';
-    document.getElementById('precinctsDiv').style.display = 'none';
-    document.getElementById('officersDiv').style.display = 'block';
-    document.getElementById('casesDiv').style.display = 'none';
+    document.getElementById('precinctDiv').style.display = 'none';
+    document.getElementById('officerDiv').style.display = 'block';
+    resetOfficerMenu();
+    document.getElementById('caseDiv').style.display = 'none';
     getOfficerData();
 }
 
@@ -242,7 +254,7 @@ function displayOfficer() {
                 <td>${o.lastName}</td>
                 <td>${o.precinctID}</td>`;
 
-        
+
 
         if (o.directCO != null) {
             elementRow += `<td>${Ranks[o.directCO.rank]} ${o.directCO.firstName} ${o.directCO.lastName} (${o.directCO.badgeNo})</td>`;
@@ -254,12 +266,11 @@ function displayOfficer() {
         elementRow += `<td>${date.toDateString()}.</td>
                 <td>
                     <button class="pure-button" type="button" onclick=removeOfficer('${o.badgeNo}')>Delete</button>
-                    <button class="pure-button" type="button" onclick=editOfficer('${o.badgeNo}') > Edit</button >
+                    <button class="pure-button" type="button" onclick=showEditOfficer('${o.badgeNo}') > Edit</button >
                 </td></tr>`;
 
         document.getElementById('officersTableBody').innerHTML += elementRow;
     });
-
 }
 
 const Ranks = {
@@ -300,14 +311,266 @@ function removeOfficer(id) {
 
 }
 
+function showAddOfficer() {
+    document.getElementById('officerContentDiv').style.display = 'none';
+    document.getElementById('officerAddDiv').style.display = 'inline-grid';
+
+    document.getElementById('addPrecinctSelector').innerHTML = '';
+    precincts.forEach(p => {
+        document.getElementById('addPrecinctSelector').innerHTML +=
+            `<option value='${p.id}'>${p.id} (${p.address})</option>`;
+    });
+
+    selectedPrecinctID = document.getElementById('addPrecinctSelector').value;
+
+    document.getElementById('addCoSelector').innerHTML = "<option value=null selected='selected'></option>";
+    officers.filter(o => o.precinctID == selectedPrecinctID).forEach(o => {
+        document.getElementById('addCoSelector').innerHTML +=
+            `<option value='${o.badgeNo}'>${Ranks[o.rank]} ${o.firstName} ${o.lastName} (${o.badgeNo})</option>`;
+    })
+
+    let ranksList = Object.keys(Ranks);
+
+    if (officers.filter(o => o.precinctID == selectedPrecinctID).some(o => o.rank == 6)) {
+        ranksList = ranksList.filter(r => r != 6)
+    }
+
+    document.getElementById('addRankSelector').innerHTML = '';
+    ranksList.forEach(r => {
+        document.getElementById('addRankSelector').innerHTML +=
+            `<option value='${r}'>${Ranks[r]}</option>`;
+    });
+}
+
+function addPrecinctSelectionChanged() {
+    precinctID = document.getElementById('addPrecinctSelector').value;
+
+    document.getElementById('addCoSelector').innerHTML = "<option value=null selected='selected'></option>";
+    officers.filter(o => o.precinctID == precinctID).forEach(o => {
+
+        document.getElementById('addCoSelector').innerHTML +=
+            `<option value='${o.badgeNo}'>${Ranks[o.rank]} ${o.firstName} ${o.lastName} (${o.badgeNo})</option>`;
+
+    });
+
+    let ranksList = Object.keys(Ranks);
+
+    if (officers.filter(o => o.precinctID == precinctID).some(o => o.rank == 6)) {
+        ranksList = ranksList.filter(r => r != 6)
+    }
+
+    document.getElementById('addRankSelector').innerHTML = '';
+    ranksList.forEach(r => {
+        document.getElementById('addRankSelector').innerHTML +=
+            `<option value='${r}'>${Ranks[r]}</option>`;
+    });
+
+}
+function addOfficer() {
+
+    inputFirstName = document.getElementById('addOfficerFirstName').value;
+    inputLastName = document.getElementById('addOfficerLastName').value;
+    inputHireDate = document.getElementById('addOfficerHireDate').value;
+    inputPrecinctID = document.getElementById('addPrecinctSelector').value;
+    inputCoID = document.getElementById('addCoSelector').value;
+    inputRankID = document.getElementById('addRankSelector').value;
+
+    fetch('http://localhost:33410/officer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(
+            { firstName: inputFirstName, lastName: inputLastName, hireDate: inputHireDate, precinctID: inputPrecinctID, directCO_badgeNo: inputCoID, rank: inputRankID }
+        )
+    }).then(response => {
+        if (!response.ok) {
+            return response.json();
+        }
+    }).then(data => {
+        if (data != undefined) {
+            console.log(data);
+            if (data.msg != undefined) {
+                throw new Error(data.msg);
+            }
+            if (data.status != undefined && data.status != 200) {
+                throw new Error(data.title)
+            }
+        }
+    }).catch(error => {
+        console.error(error);
+        alert(error.message);
+    });
+
+    resetOfficerMenu();
+    getOfficerData();
+
+
+}
+
+function showEditOfficer(id) {
+    document.getElementById('officerContentDiv').style.display = 'none';
+    document.getElementById('officerEditDiv').style.display = 'inline-grid';
+
+    officer = officers.find(t => t.badgeNo == id);
+    officerIdForUpdate = id;
+
+    document.getElementById('editOfficerFirstName').value = officer.firstName;
+    document.getElementById('editOfficerLastName').value = officer.lastName;
+    document.getElementById('editOfficerHireDate').value = officer.hireDate.split('T')[0];
+
+    document.getElementById('editPrecinctSelector').innerHTML = '';
+    precincts.forEach(p => {
+        if (p.id == officer.precinctID) {
+            document.getElementById('editPrecinctSelector').innerHTML +=
+                `<option value='${p.id}' selected='selected'>${p.id} (${p.address})</option>`;
+        }
+        else {
+            document.getElementById('editPrecinctSelector').innerHTML +=
+                `<option value='${p.id}'>${p.id} (${p.address})</option>`;
+        }
+    });
+
+    document.getElementById('editCoSelector').innerHTML = '<option value=null></option>';
+    officers.filter(o => o.precinctID == officer.precinctID && o.badgeNo != officerIdForUpdate).forEach(o => {
+        if (officer.directCO != null && o.badgeNo == officer.directCO.badgeNo) {
+            document.getElementById('editCoSelector').innerHTML +=
+                `<option value='${o.badgeNo}' selected='selected'>${Ranks[o.rank]} ${o.firstName} ${o.lastName} (${o.badgeNo})</option>`;
+        }
+        else {
+            document.getElementById('editCoSelector').innerHTML +=
+                `<option value='${o.badgeNo}'>${Ranks[o.rank]} ${o.firstName} ${o.lastName} (${o.badgeNo})</option>`;
+        }
+    });
+
+    let ranksList = null;
+    ranksList = Object.keys(Ranks);
+
+    if (officers.filter(o => o.rank == 6 && o.precinctID == officer.precinctID).some(o=> o.badgeNo != officerIdForUpdate)) {
+        ranksList = ranksList.filter(r => r != 6)
+    }
+
+    document.getElementById('editRankSelector').innerHTML = '';
+    ranksList.forEach(r => {
+        if (officer.rank == r) {
+            document.getElementById('editRankSelector').innerHTML +=
+                `<option value='${r}' selected='selected'>${Ranks[r]}</option>`;
+        }
+        else {
+            document.getElementById('editRankSelector').innerHTML +=
+                `<option value='${r}'>${Ranks[r]}</option>`;
+        }
+        
+    });
+
+}
+
+function editPrecinctSelectionChanged() {
+    officer = officers.find(t => t.badgeNo == officerIdForUpdate);
+
+    precinctID = document.getElementById('editPrecinctSelector').value;
+
+    document.getElementById('editCoSelector').innerHTML = '<option value=null></option>';
+    officers.filter(o => o.precinctID == precinctID && o.badgeNo != officerIdForUpdate).forEach(o => {
+
+        if (officer.directCO != null && o.badgeNo == officer.directCO.badgeNo) {
+            document.getElementById('editCoSelector').innerHTML +=
+                `<option value='${o.badgeNo}' selected='selected'>${Ranks[o.rank]} ${o.firstName} ${o.lastName} (${o.badgeNo})</option>`;
+        }
+        else {
+            document.getElementById('editCoSelector').innerHTML +=
+                `<option value='${o.badgeNo}'>${Ranks[o.rank]} ${o.firstName} ${o.lastName} (${o.badgeNo})</option>`;
+        }
+        
+    });
+
+    let ranksList = null;
+    ranksList = Object.keys(Ranks);
+
+    if (officers.filter(o => o.rank == 6 && o.precinctID == precinctID).some(o => o.badgeNo != officerIdForUpdate)) {
+        ranksList = ranksList.filter(r => r != 6)
+    }
+    
+    document.getElementById('editRankSelector').innerHTML = '';
+    ranksList.forEach(r => {
+        if (officer.rank == r) {
+            document.getElementById('editRankSelector').innerHTML +=
+                `<option value='${r}' selected='selected'>${Ranks[r]}</option>`;
+        }
+        else {
+            document.getElementById('editRankSelector').innerHTML +=
+                `<option value='${r}'>${Ranks[r]}</option>`;
+        }
+    });
+}
+
+function editOfficer() {
+
+    inputFirstName = document.getElementById('editOfficerFirstName').value;
+    inputLastName = document.getElementById('editOfficerLastName').value;
+    inputHireDate = document.getElementById('editOfficerHireDate').value;
+    inputPrecinctID = document.getElementById('editPrecinctSelector').value;
+    inputCoID = document.getElementById('editCoSelector').value;
+    inputRankID = document.getElementById('editRankSelector').value;
+
+    fetch('http://localhost:33410/officer', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(
+            { badgeNo: officerIdForUpdate, firstName: inputFirstName, lastName: inputLastName, hireDate: inputHireDate, precinctID: inputPrecinctID, directCO_badgeNo: inputCoID, rank: inputRankID }
+        )
+    }).then(response => {
+        if (!response.ok) {
+            return response.json();
+        }
+    }).then(data => {
+        if (data != undefined) {
+            console.log(data);
+            if (data.msg != undefined) {
+                throw new Error(data.msg);
+            }
+            if (data.status != undefined && data.status != 200) {
+                throw new Error(data.title)
+            }
+        }
+    }).catch(error => {
+        console.error(error);
+        alert(error.message);
+    });
+
+    resetOfficerMenu();
+    getOfficerData();
+
+}
+
+function resetOfficerMenu() {
+
+    document.getElementById('addOfficerFirstName').value = '';
+    document.getElementById('addOfficerLastName').value = '';
+    document.getElementById('addOfficerHireDate').value = '';
+    document.getElementById('addPrecinctSelector').value = '';
+    document.getElementById('addCoSelector').value = '';
+    document.getElementById('addRankSelector').value = '';
+
+    document.getElementById('editOfficerFirstName').value = '';
+    document.getElementById('editOfficerLastName').value = '';
+    document.getElementById('editOfficerHireDate').value = '';
+    document.getElementById('editPrecinctSelector').value = '';
+    document.getElementById('editCoSelector').value = '';
+    document.getElementById('editRankSelector').value = '';
+    officerIdForUpdate = -1;
+
+    document.getElementById('officerAddDiv').style.display = 'none';
+    document.getElementById('officerEditDiv').style.display = 'none';
+    document.getElementById('officerContentDiv').style.display = 'block';
+}
+
 // #endregion
 
 // #region Case
 function showCases() {
     document.getElementById('welcomeDiv').style.display = 'none';
-    document.getElementById('precinctsDiv').style.display = 'none';
-    document.getElementById('officersDiv').style.display = 'none';
-    document.getElementById('casesDiv').style.display = 'block';
+    document.getElementById('precinctDiv').style.display = 'none';
+    document.getElementById('officerDiv').style.display = 'none';
+    document.getElementById('caseDiv').style.display = 'block';
     getCaseData();
 }
 
@@ -351,7 +614,7 @@ function displayCase() {
 
         elementRow += `<td>
                     <button class="pure-button" type="button" onclick=removeCase('${c.id}')>Delete</button>
-                    <button class="pure-button" type="button" onclick=editCase('${c.id}') > Edit</button >
+                    <button class="pure-button" type="button" onclick=showEditCase('${c.id}') > Edit</button >
                 </td></tr>`
 
         document.getElementById('casesTableBody').innerHTML += elementRow;

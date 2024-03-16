@@ -27,7 +27,7 @@
         <h1 class="titleMessage">Welcome to the NYPD WebClient!</h1>
     </div>
 
-    <div id="precinctsDiv">
+    <div id="precinctDiv">
         <div id="precinctAddDiv">
             <h1>Add precinct</h1>
             <label>ID</label>
@@ -63,28 +63,70 @@
         </div>
     </div>
 
-    <div id="officersDiv">
-        <h1>Officers</h1>
-        <div id="officerContentTableDiv" class="contentTable">
-            <button class="pure-button" onclick="showAddOfficer()">Add</button>
-            <table class="pure-table">
-                <thead>
-                <th>BadgeNo</th>
-                <th>Rank</th>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Prec.</th>
-                <th>Commanding officer</th>
-                <th>Hire date</th>
-                <th>Options</th>
-                </thead>
-                <tbody id="officersTableBody">
-                </tbody>
-            </table>
+    <div id="officerDiv">
+        <div id="officerAddDiv">
+            <h1>Add officer</h1>
+            <label>First name</label>
+            <input type="text" id="addOfficerFirstName" />
+            <label>Last name</label>
+            <input type="text" id="addOfficerLastName" />
+            <label>Hire date</label>
+            <input type="date" id="addOfficerHireDate" />
+            <label>Precinct</label>
+            <select id="addPrecinctSelector" onchange="addPrecinctSelectionChanged()">
+            </select>
+            <label>Commanding officer</label>
+            <select id="addCoSelector">
+            </select>
+            <label>Rank</label>
+            <select id="addRankSelector">
+            </select>
+            <button type="button" class="pure-button" onclick="addOfficer()">Add</button>
+        </div>
+
+        <div id="officerEditDiv">
+            <h1>Edit officer</h1>
+            <label>First name</label>
+            <input type="text" id="editOfficerFirstName" />
+            <label>Last name</label>
+            <input type="text" id="editOfficerLastName" />
+            <label>Hire date</label>
+            <input type="date" id="editOfficerHireDate" />
+            <label>Precinct</label>
+            <select id="editPrecinctSelector" onchange="editPrecinctSelectionChanged()">
+            </select>
+            <label>Commanding officer</label>
+            <select id="editCoSelector">
+            </select>
+            <label>Rank</label>
+            <select id="editRankSelector">
+            </select>
+            <button type="button" class="pure-button" onclick="editOfficer()">Save</button>
+        </div>
+
+        <div id="officerContentDiv">
+            <h1>Officers</h1>
+            <div id="officerContentTableDiv" class="contentTable">
+                <button class="pure-button" onclick="showAddOfficer()">Add</button>
+                <table class="pure-table">
+                    <thead>
+                    <th>BadgeNo</th>
+                    <th>Rank</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Prec.</th>
+                    <th>Commanding officer</th>
+                    <th>Hire date</th>
+                    <th>Options</th>
+                    </thead>
+                    <tbody id="officersTableBody">
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <div id="casesDiv">
+    <div id="caseDiv">
         <h1>Cases</h1>
         <div id="caseContentTableDiv" class="contentTable">
             <button class="pure-button" onclick="showAddCase()">Add</button>

@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>NYPD WebClient</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+    <div class="pure-menu pure-menu-horizontal">
+        <img class="pure-menu-heading pure-menu-link menuLogo" onclick="showMain()" src="Sources/nypd_logo.png" class="menuLogo" />
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item">
+                <label class="pure-menu-link" onclick="showPrecincts()">Precincts</label>
+            </li>
+            <li class="pure-menu-item">
+                <label class="pure-menu-link" onclick="showOfficers()">Officers</label>
+            </li>
+            <li class="pure-menu-item">
+                <label class="pure-menu-link" onclick="showCases()">Cases</label>
+            </li>
+        </ul>
+    </div>
+
+    <div id="welcomeDiv">
+        <img src="Sources/nypd_logo.png" class="mainLogo" />
+        <h1 class="titleMessage">Welcome to the NYPD WebClient!</h1>
+    </div>
+
+    <div id="precinctsDiv">
+        
+    </div>
+
+    <div id="officersDiv">
+        
+    </div>
+
+    <div id="casesDiv">
+        
+    </div>
+
+    <footer class="footer">
+        HKDXX6 2024
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

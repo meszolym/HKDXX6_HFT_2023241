@@ -304,7 +304,7 @@ a.pure-button-selected {
 }
 
 .titleMessage {
-    text-align: center
+    text-align: center;
 }
 
 .footer {
@@ -315,16 +315,14 @@ a.pure-button-selected {
     text-align: center
 }
 
-#editorDiv {
-    display: inline-flex;
-    flex-direction:column;
+#precinctsDiv {
+    display: none;
 }
 
-#editorDiv input {
-    margin-bottom: 10px;
+#officersDiv {
+    display: none
 }
 
-.addTable {
-    border:1px solid black;
-    margin-bottom:10px;
+#casesDiv {
+    display: none
 }

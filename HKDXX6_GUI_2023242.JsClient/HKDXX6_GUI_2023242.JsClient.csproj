@@ -9,6 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\index.html" />
+    <None Include="wwwroot\style.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="wwwroot\Sources\nypd_logo.png" />
   </ItemGroup>
 

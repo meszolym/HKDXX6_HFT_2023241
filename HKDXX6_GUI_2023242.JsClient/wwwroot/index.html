@@ -28,52 +28,81 @@
     </div>
 
     <div id="precinctsDiv">
-        <h1>Precincts</h1>
-        <table class="pure-table">
-            <thead>
-            <th>No.</th>
-            <th>Address</th>
-            <th>Options</th>
-            </thead>
-            <tbody id="precinctsTableBody">
-            </tbody>
-        </table>
+        <div id="precinctAddDiv">
+            <h1>Add precinct</h1>
+            <label>ID</label>
+            <input type="number" id="addPrecinctID" />
+            <label>Address</label>
+            <input type="text" id="addPrecinctAddress" />
+            <button type="button" class="pure-button" onclick="addPrecinct()">Add</button>
+        </div>
+
+        <div id="precinctEditDiv">
+            <h1>Edit precinct</h1>
+            <label>ID</label>
+            <input type="number" id="editPrecinctID" disabled/>
+            <label>Address</label>
+            <input type="text" id="editPrecinctAddress" />
+            <button type="button" class="pure-button" onclick="editPrecinct()">Save</button>
+        </div>
+
+        <div id="precinctContentDiv">
+            <h1>Precincts</h1>
+            <div id="precinctContentTableDiv" class="contentTable">
+                <button class="pure-button" onclick="showAddPrecinct()">Add</button>
+                <table class="pure-table">
+                    <thead>
+                    <th>No.</th>
+                    <th>Address</th>
+                    <th>Options</th>
+                    </thead>
+                    <tbody id="precinctsTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <div id="officersDiv">
         <h1>Officers</h1>
-        <table class="pure-table">
-            <thead>
-            <th>BadgeNo</th>
-            <th>Rank</th>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Prec.</th>
-            <th>Commanding officer</th>
-            <th>Hire date</th>
-            <th>Options</th>
-            </thead>
-            <tbody id="officersTableBody">
-            </tbody>
-        </table>
+        <div id="officerContentTableDiv" class="contentTable">
+            <button class="pure-button" onclick="showAddOfficer()">Add</button>
+            <table class="pure-table">
+                <thead>
+                <th>BadgeNo</th>
+                <th>Rank</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Prec.</th>
+                <th>Commanding officer</th>
+                <th>Hire date</th>
+                <th>Options</th>
+                </thead>
+                <tbody id="officersTableBody">
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div id="casesDiv">
         <h1>Cases</h1>
-        <table class="pure-table">
-            <thead>
-            <th>Name</th>
-            <th>Prec.</th>
-            <th>Officer</th>
-            <th>Opened at</th>
-            <th>Closed</th>
-            <th>Closed at</th>
-            <th>Time open</th>
-            <th>Options</th>
-            </thead>
-            <tbody id="casesTableBody">
-            </tbody>
-        </table>
+        <div id="caseContentTableDiv" class="contentTable">
+            <button class="pure-button" onclick="showAddCase()">Add</button>
+            <table class="pure-table">
+                <thead>
+                <th>Name</th>
+                <th>Prec.</th>
+                <th>Officer</th>
+                <th>Opened at</th>
+                <th>Closed</th>
+                <th>Closed at</th>
+                <th>Time open</th>
+                <th>Options</th>
+                </thead>
+                <tbody id="casesTableBody">
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <footer class="footer">

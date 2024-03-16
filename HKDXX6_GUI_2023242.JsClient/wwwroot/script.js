@@ -2,6 +2,50 @@
 let officers = [];
 let cases = [];
 
+class Case {
+    id;
+    name;
+    description;
+    openedAt;
+    closedAt;
+    isClosed;
+    openTimeSpan;
+    officerOnCaseID;
+    officerOnCase;
+
+}
+
+class Officer {
+    badgeNo;
+    firstName;
+    lastName;
+    rank;
+    directCO_badgeNo;
+    directCO;
+    precinctID;
+    precinct;
+    hireDate;
+}
+
+class Precinct {
+    id;
+    address;
+}
+
+class TimeSpan {
+    ticks;
+    days;
+    hours;
+    milliseconds;
+    minutes;
+    seconds;
+    totalDays;
+    totalHours;
+    totalMilliseconds;
+    totalMinutes;
+    totalSeconds;
+}
+
 function showMain() {
     document.getElementById('welcomeDiv').style.display = 'block';
     document.getElementById('precinctsDiv').style.display = 'none';
@@ -13,6 +57,7 @@ function showMain() {
 function showPrecincts() {
     document.getElementById('welcomeDiv').style.display = 'none';
     document.getElementById('precinctsDiv').style.display = 'block';
+    resetPrecinctMenu();
     document.getElementById('officersDiv').style.display = 'none';
     document.getElementById('casesDiv').style.display = 'none';
 
@@ -38,7 +83,7 @@ function displayPrecinct() {
                 <td>${p.address}</td>
                 <td>
                     <button class="pure-button" type="button" onclick=removePrecinct('${p.id}')>Delete</button>
-                    <button class="pure-button" type="button" onclick=editPrecinct('${p}')>Edit</button>
+                    <button class="pure-button" type="button" onclick=showEditPrecinct('${p.id}')>Edit</button>
                 </td>
             </tr>`
     });
@@ -63,12 +108,107 @@ function removePrecinct(id) {
             if (data.msg != undefined) {
                 throw new Error(data.msg);
             }
+            if (data.status != undefined && data.status != 200) {
+                throw new Error(data.title)
+            }
         }
     }).catch(error => {
         console.error(error);
         alert(error.message);
     });
 
+}
+
+function showAddPrecinct() {
+    document.getElementById('precinctContentDiv').style.display = 'none';
+    document.getElementById('precinctAddDiv').style.display = 'inline-grid';
+}
+
+function addPrecinct() {
+
+    let idInput = document.getElementById('addPrecinctID').value;
+    let addressInput = document.getElementById('addPrecinctAddress').value;
+
+    fetch('http://localhost:33410/precinct', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(
+            { id: idInput, address: addressInput }
+        )
+    }).then(response => {
+        if (!response.ok) {
+            return response.json();
+        }
+    }).then(data => {
+        if (data != undefined) {
+            console.log(data);
+            if (data.msg != undefined) {
+                throw new Error(data.msg);
+            }
+            if (data.status != undefined && data.status != 200) {
+                throw new Error(data.title)
+            }
+        }
+    }).catch(error => {
+        console.error(error);
+        alert(error.message);
+    });
+
+    resetPrecinctMenu();
+    getPrecinctData();
+}
+
+function showEditPrecinct(id) {
+    document.getElementById('precinctContentDiv').style.display = 'none';
+    document.getElementById('precinctEditDiv').style.display = 'inline-grid';
+
+    let p = precincts.find(p => p.id == id);
+
+    document.getElementById('editPrecinctID').value = id;
+    document.getElementById('editPrecinctAddress').value = p.address;
+}
+
+function editPrecinct() {
+    let idInput = document.getElementById('editPrecinctID').value;
+    let addressInput = document.getElementById('editPrecinctAddress').value;
+
+    fetch('http://localhost:33410/precinct', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(
+            { id: idInput, address: addressInput }
+        )
+    }).then(response => {
+        if (!response.ok) {
+            return response.json();
+        }
+    }).then(data => {
+        if (data != undefined) {
+            console.log(data);
+            if (data.msg != undefined) {
+                throw new Error(data.msg);
+            }
+            if (data.status != undefined && data.status != 200) {
+                throw new Error(data.title)
+            }
+        }
+    }).catch(error => {
+        console.error(error);
+        alert(error.message);
+    });
+
+    resetPrecinctMenu();
+    getPrecinctData();
+}
+
+function resetPrecinctMenu() {
+    document.getElementById('addPrecinctID').value = '';
+    document.getElementById('addPrecinctAddress').value = '';
+    document.getElementById('editPrecinctID').value = '';
+    document.getElementById('editPrecinctAddress').value = '';
+    document.getElementById('precinctAddDiv').style.display = 'none';
+    document.getElementById('precinctEditDiv').style.display = 'none';
+    document.getElementById('precinctContentDiv').style.display = 'block';
 }
 
 // #endregion
@@ -114,7 +254,7 @@ function displayOfficer() {
         elementRow += `<td>${date.toDateString()}.</td>
                 <td>
                     <button class="pure-button" type="button" onclick=removeOfficer('${o.badgeNo}')>Delete</button>
-                    <button class="pure-button" type="button" onclick=editOfficer('${o}') > Edit</button >
+                    <button class="pure-button" type="button" onclick=editOfficer('${o.badgeNo}') > Edit</button >
                 </td></tr>`;
 
         document.getElementById('officersTableBody').innerHTML += elementRow;
@@ -148,6 +288,9 @@ function removeOfficer(id) {
             console.log(data);
             if (data.msg != undefined) {
                 throw new Error(data.msg);
+            }
+            if (data.status != undefined && data.status != 200) {
+                throw new Error(data.title)
             }
         }
     }).catch(error => {
@@ -208,7 +351,7 @@ function displayCase() {
 
         elementRow += `<td>
                     <button class="pure-button" type="button" onclick=removeCase('${c.id}')>Delete</button>
-                    <button class="pure-button" type="button" onclick=editCase('${c}') > Edit</button >
+                    <button class="pure-button" type="button" onclick=editCase('${c.id}') > Edit</button >
                 </td></tr>`
 
         document.getElementById('casesTableBody').innerHTML += elementRow;
@@ -216,10 +359,13 @@ function displayCase() {
 }
 
 function timeSpanString(timespan) {
-    days = timespan.split('.')[0];
-    hhmmss = timespan.split('.')[1];
+    if (timespan.includes('.')) {
+        days = timespan.split('.')[0];
+        hhmmss = timespan.split('.')[1];
 
-    return `${days} days, ${hhmmss}`;
+        return `${days} days, ${hhmmss}`;
+    }
+    return timespan;
 }
 
 function removeCase(id) {
@@ -239,6 +385,9 @@ function removeCase(id) {
             console.log(data);
             if (data.msg != undefined) {
                 throw new Error(data.msg);
+            }
+            if (data.status != undefined && data.status != 200) {
+                throw new Error(data.title)
             }
         }
     }).catch(error => {

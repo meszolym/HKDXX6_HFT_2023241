@@ -104,6 +104,7 @@
 
 .pure-table {
     Remove spacing between table cells (from Normalize.css) border-collapse: collapse;
+    text-align:left;
     border-spacing: 0;
     empty-cells: show;
     border: 1px solid #cbcbcb;
@@ -315,7 +316,7 @@ a.pure-button-selected {
 }
 
 #precinctsDiv {
-    display: none;
+    display:none;
 }
 
 #officersDiv {
@@ -329,4 +330,17 @@ a.pure-button-selected {
 th, td {
     padding-right: 5px;
     padding-left: 5px
+}
+
+.contentTable{
+    display:inline-block;
+    text-align:right;
+}
+
+#precinctAddDiv {
+    display:none;
+}
+
+#precinctEditDiv {
+    display:none;
 }

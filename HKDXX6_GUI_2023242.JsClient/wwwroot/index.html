@@ -8,7 +8,7 @@
 <body>
 
     <div class="pure-menu pure-menu-horizontal">
-        <img class="pure-menu-heading pure-menu-link menuLogo" onclick="showMain()" src="Sources/nypd_logo.png" class="menuLogo" />
+        <img class="pure-menu-heading pure-menu-link menuLogo" onclick="showMain()" src="Sources/nypd_logo.png" />
         <ul class="pure-menu-list">
             <li class="pure-menu-item">
                 <label class="pure-menu-link" onclick="showPrecincts()">Precincts</label>
@@ -52,9 +52,11 @@
                 <button class="pure-button" onclick="showAddPrecinct()">Add</button>
                 <table class="pure-table">
                     <thead>
-                    <th>No.</th>
-                    <th>Address</th>
-                    <th>Options</th>
+                        <tr>
+                            <th>No.</th>
+                            <th>Address</th>
+                            <th>Options</th>
+                        </tr>
                     </thead>
                     <tbody id="precinctsTableBody">
                     </tbody>
@@ -110,14 +112,16 @@
                 <button class="pure-button" onclick="showAddOfficer()">Add</button>
                 <table class="pure-table">
                     <thead>
-                    <th>BadgeNo</th>
-                    <th>Rank</th>
-                    <th>First name</th>
-                    <th>Last name</th>
-                    <th>Prec.</th>
-                    <th>Commanding officer</th>
-                    <th>Hire date</th>
-                    <th>Options</th>
+                        <tr>
+                            <th>BadgeNo</th>
+                            <th>Rank</th>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Prec.</th>
+                            <th>Commanding officer</th>
+                            <th>Hire date</th>
+                            <th>Options</th>
+                        </tr>
                     </thead>
                     <tbody id="officersTableBody">
                     </tbody>
@@ -127,23 +131,57 @@
     </div>
 
     <div id="caseDiv">
-        <h1>Cases</h1>
-        <div id="caseContentTableDiv" class="contentTable">
-            <button class="pure-button" onclick="showAddCase()">Add</button>
-            <table class="pure-table">
-                <thead>
-                <th>Name</th>
-                <th>Prec.</th>
-                <th>Officer</th>
-                <th>Opened at</th>
-                <th>Closed</th>
-                <th>Closed at</th>
-                <th>Time open</th>
-                <th>Options</th>
-                </thead>
-                <tbody id="casesTableBody">
-                </tbody>
-            </table>
+        <div id="caseAddDiv">
+            <h1>Add case</h1>
+            <label>Name</label>
+            <input type="text" id="addCaseName" />
+            <label>Officer</label>
+            <select id="addCaseOfficerSelect"></select>
+            <label>Opened at</label>
+            <input type="datetime-local" id="addCaseOpenedAt" />
+            <label>Closed at</label>
+            <input type="datetime-local" id="addCaseClosedAt" />
+            <label>Description</label>
+            <textarea id="addCaseDescription" cols="32"></textarea>
+            <button type="button" class="pure-button" onclick="addCase()">Add</button>
+        </div>
+
+        <div id="caseEditDiv">
+            <h1>Edit case</h1>
+            <label>Name</label>
+            <input type="text" id="updateCaseName" />
+            <label>Officer</label>
+            <select id="updateCaseOfficerSelect"></select>
+            <label>Opened at</label>
+            <input type="datetime-local" id="updateCaseOpenedAt" />
+            <label>Closed at</label>
+            <input type="datetime-local" id="updateCaseClosedAt" />
+            <label>Description</label>
+            <textarea id="updateCaseDescription" cols="32"></textarea>
+            <button type="button" class="pure-button" onclick="editCase()">Save</button>
+        </div>
+
+        <div id="caseContentDiv">
+            <h1>Cases</h1>
+            <div id="caseContentTableDiv" class="contentTable">
+                <button class="pure-button" onclick="showAddCase()">Add</button>
+                <table class="pure-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Prec.</th>
+                            <th>Officer</th>
+                            <th>Opened at</th>
+                            <th>Closed</th>
+                            <th>Closed at</th>
+                            <th>Time open</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody id="casesTableBody">
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

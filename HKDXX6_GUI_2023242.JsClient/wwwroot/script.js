@@ -571,6 +571,7 @@ function showCases() {
     document.getElementById('precinctDiv').style.display = 'none';
     document.getElementById('officerDiv').style.display = 'none';
     document.getElementById('caseDiv').style.display = 'block';
+    resetCaseMenu();
     getCaseData();
 }
 
@@ -631,17 +632,73 @@ function timeSpanString(timespan) {
     return timespan;
 }
 
-function removeCase(id) {
-    fetch('http://localhost:33410/case/' + id, {
-        method: 'DELETE',
+    function removeCase(id) {
+        fetch('http://localhost:33410/case/' + id, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json', },
+            body: null
+        }).then(response => {
+            if (!response.ok) {
+                return response.json();
+            }
+            else {
+                getCaseData();
+            }
+        }).then(data => {
+            if (data != undefined) {
+                console.log(data);
+                if (data.msg != undefined) {
+                    throw new Error(data.msg);
+                }
+                if (data.status != undefined && data.status != 200) {
+                    throw new Error(data.title)
+                }
+            }
+        }).catch(error => {
+            console.error(error);
+            alert(error.message);
+        });
+    }
+
+    function showAddCase() {
+        document.getElementById('caseAddDiv').style.display = 'inline-grid';
+        document.getElementById('caseEditDiv').style.display = 'none';
+        document.getElementById('caseContentDiv').style.display = 'none';
+
+        document.getElementById('addCaseOfficerSelect').innerHTML = '';
+        document.getElementById('addCaseOfficerSelect').innerHTML += '<option value=null></option>';
+
+        officers.forEach(o => {
+            document.getElementById('addCaseOfficerSelect').innerHTML +=
+                `<option value=${o.badgeNo}>${Ranks[o.rank]} ${o.firstName} ${o.lastName} (${o.badgeNo})</option>`;
+        });
+    }
+
+function addCase() {
+
+    let inputName = document.getElementById('addCaseName').value;
+    let inputOfficerId = document.getElementById('addCaseOfficerSelect').value;
+    let inputOpenedAt = document.getElementById('addCaseOpenedAt').value;
+    let inputClosedAt = document.getElementById('addCaseClosedAt').value;
+    let inputDescription = document.getElementById('addCaseDescription').value;
+
+    if (inputClosedAt == '') {
+        inputClosedAt = null;
+    }
+
+    if (inputOfficerId == 'null' ) {
+        inputOfficerId = null;
+    }
+
+    fetch('http://localhost:33410/case', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json', },
-        body: null
+        body: JSON.stringify(
+            { name: inputName, description: inputDescription, openedAt: inputOpenedAt, closedAt: inputClosedAt, officerOnCaseID: inputOfficerId }
+        )
     }).then(response => {
         if (!response.ok) {
             return response.json();
-        }
-        else {
-            getCaseData();
         }
     }).then(data => {
         if (data != undefined) {
@@ -658,6 +715,33 @@ function removeCase(id) {
         alert(error.message);
     });
 
+    resetCaseMenu();
+    getCaseData();
+}
+
+function showEditCase(id) {
+    document.getElementById('caseAddDiv').style.display = 'none';
+    document.getElementById('caseEditDiv').style.display = 'inline-grid';
+    document.getElementById('caseContentDiv').style.display = 'none';
+}
+
+function resetCaseMenu() {
+
+    document.getElementById('addCaseName').value = '';
+    document.getElementById('addCaseOfficerSelect').value = '';
+    document.getElementById('addCaseOpenedAt').value = '';
+    document.getElementById('addCaseClosedAt').value = '';
+    document.getElementById('addCaseDescription').value = '';
+
+    document.getElementById('updateCaseName').value = '';
+    document.getElementById('updateCaseOfficerSelect').value = '';
+    document.getElementById('updateCaseOpenedAt').value = '';
+    document.getElementById('updateCaseClosedAt').value = '';
+    document.getElementById('updateCaseDescription').value = '';
+
+    document.getElementById('caseAddDiv').style.display = 'none';
+    document.getElementById('caseEditDiv').style.display = 'none';
+    document.getElementById('caseContentDiv').style.display = 'block';
 }
 
 // #endregion

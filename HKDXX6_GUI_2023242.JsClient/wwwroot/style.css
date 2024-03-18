@@ -352,3 +352,15 @@ th, td {
 #officerEditDiv {
     display: none;
 }
+
+#caseAddDiv {
+    display: none;
+}
+
+#caseEditDiv {
+    display: none;
+}
+
+textarea {
+    resize: vertical;
+}

@@ -364,3 +364,8 @@ th, td {
 textarea {
     resize: vertical;
 }
+
+.pure-button{
+    margin-right: 2px;
+    margin-left: 2px;
+}

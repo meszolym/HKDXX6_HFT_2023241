@@ -4,6 +4,7 @@ let cases = [];
 
 let precinctIdForUpdate = -1;
 let officerIdForUpdate = -1;
+let caseIdForUpdate = -1;
 
 class Case {
     id;
@@ -88,10 +89,7 @@ function displayPrecinct() {
             `<tr>
                 <td>${p.id}</td>
                 <td>${p.address}</td>
-                <td>
-                    <button class="pure-button" type="button" onclick=removePrecinct('${p.id}')>Delete</button>
-                    <button class="pure-button" type="button" onclick=showEditPrecinct('${p.id}')>Edit</button>
-                </td>
+                <td><button class="pure-button" type="button" onclick=showEditPrecinct('${p.id}')>Edit</button><button class="pure-button" type="button" onclick=removePrecinct('${p.id}')>Delete</button></td>
             </tr>`
     });
 
@@ -205,6 +203,7 @@ function editPrecinct() {
         alert(error.message);
     });
 
+    precinctIdForUpdate = -1;
     resetPrecinctMenu();
     getPrecinctData();
 }
@@ -264,10 +263,8 @@ function displayOfficer() {
         }
         let date = new Date(o.hireDate);
         elementRow += `<td>${date.toDateString()}.</td>
-                <td>
-                    <button class="pure-button" type="button" onclick=removeOfficer('${o.badgeNo}')>Delete</button>
-                    <button class="pure-button" type="button" onclick=showEditOfficer('${o.badgeNo}') > Edit</button >
-                </td></tr>`;
+                <td><button class="pure-button" type="button" onclick=showEditOfficer('${o.badgeNo}')>Edit</button><button class="pure-button" type="button" onclick=removeOfficer('${o.badgeNo}')>Delete</button></td>
+                </tr>`;
 
         document.getElementById('officersTableBody').innerHTML += elementRow;
     });
@@ -536,6 +533,7 @@ function editOfficer() {
         alert(error.message);
     });
 
+    officerIdForUpdate = -1;
     resetOfficerMenu();
     getOfficerData();
 
@@ -613,10 +611,16 @@ function displayCase() {
         }
             
 
-        elementRow += `<td>
-                    <button class="pure-button" type="button" onclick=removeCase('${c.id}')>Delete</button>
-                    <button class="pure-button" type="button" onclick=showEditCase('${c.id}') > Edit</button >
-                </td></tr>`
+        elementRow += `<td>`;
+
+        if (c.officerOnCaseID == null) {
+            elementRow += `<button class="pure-button" type="button" onclick=showAutoAssignCase('${c.id}')>AutoAssign</button>`
+        } else {
+            elementRow += `<button disabled class=pure-button type="button">AutoAssign</button>`
+        }
+
+        elementRow += `<button class="pure-button" type="button" onclick=showEditCase('${c.id}')>Edit</button><button class="pure-button" type="button" onclick=removeCase('${c.id}')>Delete</button></td>
+        </tr>`
 
         document.getElementById('casesTableBody').innerHTML += elementRow;
     })
@@ -632,47 +636,47 @@ function timeSpanString(timespan) {
     return timespan;
 }
 
-    function removeCase(id) {
-        fetch('http://localhost:33410/case/' + id, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json', },
-            body: null
-        }).then(response => {
-            if (!response.ok) {
-                return response.json();
+function removeCase(id) {
+    fetch('http://localhost:33410/case/' + id, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', },
+        body: null
+    }).then(response => {
+        if (!response.ok) {
+            return response.json();
+        }
+        else {
+            getCaseData();
+        }
+    }).then(data => {
+        if (data != undefined) {
+            console.log(data);
+            if (data.msg != undefined) {
+                throw new Error(data.msg);
             }
-            else {
-                getCaseData();
+            if (data.status != undefined && data.status != 200) {
+                throw new Error(data.title)
             }
-        }).then(data => {
-            if (data != undefined) {
-                console.log(data);
-                if (data.msg != undefined) {
-                    throw new Error(data.msg);
-                }
-                if (data.status != undefined && data.status != 200) {
-                    throw new Error(data.title)
-                }
-            }
-        }).catch(error => {
-            console.error(error);
-            alert(error.message);
-        });
-    }
+        }
+    }).catch(error => {
+        console.error(error);
+        alert(error.message);
+    });
+}
 
-    function showAddCase() {
-        document.getElementById('caseAddDiv').style.display = 'inline-grid';
-        document.getElementById('caseEditDiv').style.display = 'none';
-        document.getElementById('caseContentDiv').style.display = 'none';
+function showAddCase() {
+    document.getElementById('caseAddDiv').style.display = 'inline-grid';
+    document.getElementById('caseEditDiv').style.display = 'none';
+    document.getElementById('caseContentDiv').style.display = 'none';
 
-        document.getElementById('addCaseOfficerSelect').innerHTML = '';
-        document.getElementById('addCaseOfficerSelect').innerHTML += '<option value=null></option>';
+    document.getElementById('addCaseOfficerSelect').innerHTML = '';
+    document.getElementById('addCaseOfficerSelect').innerHTML += '<option value=null></option>';
 
-        officers.forEach(o => {
-            document.getElementById('addCaseOfficerSelect').innerHTML +=
-                `<option value=${o.badgeNo}>${Ranks[o.rank]} ${o.firstName} ${o.lastName} (${o.badgeNo})</option>`;
-        });
-    }
+    officers.forEach(o => {
+        document.getElementById('addCaseOfficerSelect').innerHTML +=
+            `<option value=${o.badgeNo}>${Ranks[o.rank]} ${o.firstName} ${o.lastName} (${o.badgeNo})</option>`;
+    });
+}
 
 function addCase() {
 
@@ -723,7 +727,83 @@ function showEditCase(id) {
     document.getElementById('caseAddDiv').style.display = 'none';
     document.getElementById('caseEditDiv').style.display = 'inline-grid';
     document.getElementById('caseContentDiv').style.display = 'none';
+
+    let updateCase = cases.find(c => c.id == id);
+    caseIdForUpdate = id;
+
+    document.getElementById('editCaseName').value = updateCase.name;
+
+    document.getElementById('editCaseOpenedAt').value = updateCase.openedAt;
+
+
+    document.getElementById('editCaseOfficerSelect').innerHTML = '';
+    document.getElementById('editCaseOfficerSelect').innerHTML += '<option value=null></option>';
+
+    officers.forEach(o => {
+        if (updateCase.officerOnCaseID == o.badgeNo) {
+            document.getElementById('editCaseOfficerSelect').innerHTML +=
+                `<option value=${o.badgeNo} selected='selected'>${Ranks[o.rank]} ${o.firstName} ${o.lastName} (${o.badgeNo})</option>`;
+        }
+        else {
+            document.getElementById('editCaseOfficerSelect').innerHTML +=
+                `<option value=${o.badgeNo}>${Ranks[o.rank]} ${o.firstName} ${o.lastName} (${o.badgeNo})</option>`;
+        }
+        
+    });
+
+    document.getElementById('editCaseClosedAt').value = updateCase.closedAt;
+
+    document.getElementById('editCaseDescription').value = updateCase.description;
+
 }
+
+function editCase() {
+    let inputName = document.getElementById('editCaseName').value;
+    let inputOfficerId = document.getElementById('editCaseOfficerSelect').value;
+    let inputOpenedAt = document.getElementById('editCaseOpenedAt').value;
+    let inputClosedAt = document.getElementById('editCaseClosedAt').value;
+    let inputDescription = document.getElementById('editCaseDescription').value;
+
+    if (inputClosedAt == '') {
+        inputClosedAt = null;
+    }
+
+    if (inputOfficerId == 'null') {
+        inputOfficerId = null;
+    }
+
+    fetch('http://localhost:33410/case', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(
+            { id: caseIdForUpdate, name: inputName, description: inputDescription, openedAt: inputOpenedAt, closedAt: inputClosedAt, officerOnCaseID: inputOfficerId }
+        )
+    }).then(response => {
+        if (!response.ok) {
+            return response.json();
+        }
+    }).then(data => {
+        if (data != undefined) {
+            console.log(data);
+            if (data.msg != undefined) {
+                throw new Error(data.msg);
+            }
+            if (data.status != undefined && data.status != 200) {
+                throw new Error(data.title)
+            }
+        }
+    }).catch(error => {
+        console.error(error);
+        alert(error.message);
+    });
+
+    caseIdForUpdate = -1;
+    resetCaseMenu();
+    getCaseData();
+
+}
+
+
 
 function resetCaseMenu() {
 
@@ -733,11 +813,12 @@ function resetCaseMenu() {
     document.getElementById('addCaseClosedAt').value = '';
     document.getElementById('addCaseDescription').value = '';
 
-    document.getElementById('updateCaseName').value = '';
-    document.getElementById('updateCaseOfficerSelect').value = '';
-    document.getElementById('updateCaseOpenedAt').value = '';
-    document.getElementById('updateCaseClosedAt').value = '';
-    document.getElementById('updateCaseDescription').value = '';
+    document.getElementById('editCaseName').value = '';
+    document.getElementById('editCaseOfficerSelect').value = '';
+    document.getElementById('editCaseOpenedAt').value = '';
+    document.getElementById('editCaseClosedAt').value = '';
+    document.getElementById('editCaseDescription').value = '';
+    caseIdForUpdate = -1;
 
     document.getElementById('caseAddDiv').style.display = 'none';
     document.getElementById('caseEditDiv').style.display = 'none';

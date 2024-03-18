@@ -135,30 +135,34 @@
             <h1>Add case</h1>
             <label>Name</label>
             <input type="text" id="addCaseName" />
-            <label>Officer</label>
-            <select id="addCaseOfficerSelect"></select>
             <label>Opened at</label>
             <input type="datetime-local" id="addCaseOpenedAt" />
+            <label>Officer</label>
+            <select id="addCaseOfficerSelect"></select>
             <label>Closed at</label>
             <input type="datetime-local" id="addCaseClosedAt" />
             <label>Description</label>
-            <textarea id="addCaseDescription" cols="32"></textarea>
+            <textarea id="addCaseDescription" cols="32" rows="8"></textarea>
             <button type="button" class="pure-button" onclick="addCase()">Add</button>
         </div>
 
         <div id="caseEditDiv">
             <h1>Edit case</h1>
             <label>Name</label>
-            <input type="text" id="updateCaseName" />
-            <label>Officer</label>
-            <select id="updateCaseOfficerSelect"></select>
+            <input type="text" id="editCaseName" />
             <label>Opened at</label>
-            <input type="datetime-local" id="updateCaseOpenedAt" />
+            <input type="datetime-local" id="editCaseOpenedAt" />
+            <label>Officer</label>
+            <select id="editCaseOfficerSelect"></select>
             <label>Closed at</label>
-            <input type="datetime-local" id="updateCaseClosedAt" />
+            <input type="datetime-local" id="editCaseClosedAt" />
             <label>Description</label>
-            <textarea id="updateCaseDescription" cols="32"></textarea>
+            <textarea id="editCaseDescription" cols="32" rows="8"></textarea>
             <button type="button" class="pure-button" onclick="editCase()">Save</button>
+        </div>
+
+        <div id="caseAutoAssign">
+            <h2>AutoAssign case</h2>
         </div>
 
         <div id="caseContentDiv">

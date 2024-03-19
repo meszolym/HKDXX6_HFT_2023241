@@ -361,6 +361,10 @@ th, td {
     display: none;
 }
 
+#caseAutoAssignDiv {
+    display: none;
+}
+
 textarea {
     resize: vertical;
 }

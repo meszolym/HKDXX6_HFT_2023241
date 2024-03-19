@@ -108,6 +108,7 @@
     border-spacing: 0;
     empty-cells: show;
     border: 1px solid #cbcbcb;
+    border-collapse:collapse;
 }
 
     .pure-table caption {
@@ -372,4 +373,27 @@ textarea {
 .pure-button{
     margin-right: 2px;
     margin-left: 2px;
+}
+
+h1 {
+    margin-bottom: -25px;
+}
+
+.descTable {
+    width: 100%;
+    border-left: 0px;
+    margin-bottom: 5px;
+}
+
+.descTable td {
+    border-left: 0px;
+    padding-bottom: 5px;
+}
+
+.descTable th {
+    border-left: 0px;
+}
+
+.pure-table tr {
+    border-top: 1px solid #cbcbcb;
 }

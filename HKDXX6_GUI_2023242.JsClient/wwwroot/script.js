@@ -659,8 +659,10 @@ function displayCase() {
             elementRow += `<button class="pure-button" type="button" disabled>Open</button><button class="pure-button" type="button" onclick=showEditCase('${c.id}')>Edit</button>`
         }
 
-        elementRow += `<button class="pure-button" type="button" onclick=removeCase('${c.id}')>Delete</button></td>
+        elementRow += `<button class="pure-button" type="button" onclick=showCaseDescription('${c.id}')>Desc.</button><button class="pure-button" type="button" onclick=removeCase('${c.id}')>Delete</button></td>
         </tr>`
+
+        elementRow += `<tr id='desc_${c.id}' style="display:none; border-top: 0px"><td colspan=8><table class="descTable"><thead><th>Description</th></thead><tbody><td>${c.description}</td></tbody></table></td></tr>`
 
         document.getElementById('casesTableBody').innerHTML += elementRow;
     })
@@ -717,6 +719,10 @@ function showAddCase() {
         document.getElementById('addCaseOfficerSelect').innerHTML +=
             `<option value=${o.badgeNo}>${Ranks[o.rank]} ${o.firstName} ${o.lastName} (${o.badgeNo})</option>`;
     });
+
+    var now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById('addCaseOpenedAt').value = now.toISOString().slice(0, 16);
 }
 
 function addCase() {
@@ -931,6 +937,21 @@ function autoAssignCase() {
     caseIdForUpdate = -1;
     resetCaseMenu();
     getCaseData();
+}
+
+function showCaseDescription(id) {
+    cases.filter(c => c.id != id).forEach(c => {
+        document.getElementById(`desc_${c.id}`).style.display = 'none';
+    })
+
+    if (document.getElementById(`desc_${id}`).style.display == 'none') {
+        document.getElementById(`desc_${id}`).style.display = 'revert';
+    }
+    else {
+        document.getElementById(`desc_${id}`).style.display = 'none';
+    }
+
+    
 }
 
 function resetCaseMenu() {

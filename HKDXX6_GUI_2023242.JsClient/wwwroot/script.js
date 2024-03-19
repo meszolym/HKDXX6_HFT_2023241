@@ -673,6 +673,7 @@ function removeCase(id) {
 function showAddCase() {
     document.getElementById('caseAddDiv').style.display = 'inline-grid';
     document.getElementById('caseEditDiv').style.display = 'none';
+    document.getElementById('caseAutoAssignDiv').style.display = 'none';
     document.getElementById('caseContentDiv').style.display = 'none';
 
     document.getElementById('addCaseOfficerSelect').innerHTML = '';
@@ -732,7 +733,9 @@ function addCase() {
 function showEditCase(id) {
     document.getElementById('caseAddDiv').style.display = 'none';
     document.getElementById('caseEditDiv').style.display = 'inline-grid';
+    document.getElementById('caseAutoAssignDiv').style.display = 'none';
     document.getElementById('caseContentDiv').style.display = 'none';
+
 
     let updateCase = cases.find(c => c.id == id);
     caseIdForUpdate = id;
@@ -858,6 +861,7 @@ function resetCaseMenu() {
 
     document.getElementById('caseAddDiv').style.display = 'none';
     document.getElementById('caseEditDiv').style.display = 'none';
+    document.getElementById('caseAutoAssignDiv').style.display = 'none';
     document.getElementById('caseContentDiv').style.display = 'block';
 }
 

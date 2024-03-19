@@ -619,7 +619,13 @@ function displayCase() {
             elementRow += `<button disabled class=pure-button type="button">AutoAssign</button>`
         }
 
-        elementRow += `<button class="pure-button" type="button" onclick=showEditCase('${c.id}')>Edit</button><button class="pure-button" type="button" onclick=removeCase('${c.id}')>Delete</button></td>
+        if (c.isClosed) {
+            elementRow += `<button class="pure-button" type="button" onclick=openCase('${c.id}')>Open</button><button class="pure-button" type="button" disabled>Edit</button>`
+        } else {
+            elementRow += `<button class="pure-button" type="button" disabled>Open</button><button class="pure-button" type="button" onclick=showEditCase('${c.id}')>Edit</button>`
+        }
+
+        elementRow += `<button class="pure-button" type="button" onclick=removeCase('${c.id}')>Delete</button></td>
         </tr>`
 
         document.getElementById('casesTableBody').innerHTML += elementRow;
@@ -803,7 +809,37 @@ function editCase() {
 
 }
 
+function openCase(id) {
 
+    let openedCase = cases.find(c => c.id == id);
+
+    fetch('http://localhost:33410/case', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(
+            { id: id, name: openedCase.name, description: openedCase.description, openedAt: openedCase.openedAt, closedAt: null, officerOnCaseID: openedCase.officerOnCaseID }
+        )
+    }).then(response => {
+        if (!response.ok) {
+            return response.json();
+        }
+    }).then(data => {
+        if (data != undefined) {
+            console.log(data);
+            if (data.msg != undefined) {
+                throw new Error(data.msg);
+            }
+            if (data.status != undefined && data.status != 200) {
+                throw new Error(data.title)
+            }
+        }
+    }).catch(error => {
+        console.error(error);
+        alert(error.message);
+    });
+
+    getCaseData();
+}
 
 function resetCaseMenu() {
 

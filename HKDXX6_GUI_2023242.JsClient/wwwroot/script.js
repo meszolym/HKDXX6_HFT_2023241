@@ -98,7 +98,7 @@ function displayPrecinct() {
 function removePrecinct(id) {
     fetch('http://localhost:33410/precinct/' + id, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', },
+        headers: { 'Content-Type': 'application/json' },
         body: null
     }).then(response => {
         if (!response.ok) {
@@ -136,7 +136,7 @@ function addPrecinct() {
 
     fetch('http://localhost:33410/precinct', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(
             { id: idInput, address: addressInput }
         )
@@ -180,7 +180,7 @@ function editPrecinct() {
 
     fetch('http://localhost:33410/precinct', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(
             { id: precinctIdForUpdate, address: addressInput }
         )
@@ -282,7 +282,7 @@ const Ranks = {
 function removeOfficer(id) {
     fetch('http://localhost:33410/officer/' + id, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', },
+        headers: { 'Content-Type': 'application/json' },
         body: null
     }).then(response => {
         if (!response.ok) {
@@ -374,7 +374,7 @@ function addOfficer() {
 
     fetch('http://localhost:33410/officer', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(
             { firstName: inputFirstName, lastName: inputLastName, hireDate: inputHireDate, precinctID: inputPrecinctID, directCO_badgeNo: inputCoID, rank: inputRankID }
         )
@@ -510,7 +510,7 @@ function editOfficer() {
 
     fetch('http://localhost:33410/officer', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(
             { badgeNo: officerIdForUpdate, firstName: inputFirstName, lastName: inputLastName, hireDate: inputHireDate, precinctID: inputPrecinctID, directCO_badgeNo: inputCoID, rank: inputRankID }
         )
@@ -645,7 +645,7 @@ function timeSpanString(timespan) {
 function removeCase(id) {
     fetch('http://localhost:33410/case/' + id, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', },
+        headers: { 'Content-Type': 'application/json' },
         body: null
     }).then(response => {
         if (!response.ok) {
@@ -703,7 +703,7 @@ function addCase() {
 
     fetch('http://localhost:33410/case', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(
             { name: inputName, description: inputDescription, openedAt: inputOpenedAt, closedAt: inputClosedAt, officerOnCaseID: inputOfficerId }
         )
@@ -783,7 +783,7 @@ function editCase() {
 
     fetch('http://localhost:33410/case', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(
             { id: caseIdForUpdate, name: inputName, description: inputDescription, openedAt: inputOpenedAt, closedAt: inputClosedAt, officerOnCaseID: inputOfficerId }
         )
@@ -818,7 +818,7 @@ function openCase(id) {
 
     fetch('http://localhost:33410/case', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(
             { id: id, name: openedCase.name, description: openedCase.description, openedAt: openedCase.openedAt, closedAt: null, officerOnCaseID: openedCase.officerOnCaseID }
         )
@@ -844,6 +844,61 @@ function openCase(id) {
     getCaseData();
 }
 
+function showAutoAssignCase(id) {
+    let caseToAssign = cases.find(c => c.id == id);
+    caseIdForUpdate = id;
+
+    document.getElementById('caseAddDiv').style.display = 'none';
+    document.getElementById('caseEditDiv').style.display = 'none';
+    document.getElementById('caseAutoAssignDiv').style.display = 'inline-grid';
+    document.getElementById('caseContentDiv').style.display = 'none';
+
+    document.getElementById('autoAssignCasePrecinctSelect').innerHTML = '';
+
+    document.getElementById('autoAssignCaseName').value = caseToAssign.name;
+    precincts.forEach(p => {
+        document.getElementById('autoAssignCasePrecinctSelect').innerHTML += `<option value='${p.id}'>${p.id} (${p.address})</option>`;
+    })
+}
+
+function autoAssignCase() {
+
+    let inputPrecinctID = document.getElementById('autoAssignCasePrecinctSelect').value;
+
+    console.log(JSON.stringify(
+        { caseID: caseIdForUpdate, precinctID: inputPrecinctID }
+    ));
+
+    fetch('http://localhost:33410/case/autoassign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(
+            { caseID: caseIdForUpdate, precinctID: inputPrecinctID }
+        )
+    }).then(response => {
+        if (!response.ok) {
+            return response.json();
+        }
+    }).then(data => {
+        if (data != undefined) {
+            console.log(data);
+            if (data.msg != undefined) {
+                throw new Error(data.msg);
+            }
+            if (data.status != undefined && data.status != 200) {
+                throw new Error(data.title)
+            }
+        }
+    }).catch(error => {
+        console.error(error);
+        alert(error.message);
+    });
+
+    caseIdForUpdate = -1;
+    resetCaseMenu();
+    getCaseData();
+}
+
 function resetCaseMenu() {
 
     document.getElementById('addCaseName').value = '';
@@ -857,6 +912,10 @@ function resetCaseMenu() {
     document.getElementById('editCaseOpenedAt').value = '';
     document.getElementById('editCaseClosedAt').value = '';
     document.getElementById('editCaseDescription').value = '';
+    
+    document.getElementById('autoAssignCaseName').value = '';
+    document.getElementById('autoAssignCasePrecinctSelect').value = '';
+
     caseIdForUpdate = -1;
 
     document.getElementById('caseAddDiv').style.display = 'none';

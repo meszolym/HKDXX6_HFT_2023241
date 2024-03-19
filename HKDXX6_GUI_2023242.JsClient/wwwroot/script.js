@@ -371,6 +371,10 @@ function showAddOfficer() {
         document.getElementById('addRankSelector').innerHTML +=
             `<option value='${r}'>${Ranks[r]}</option>`;
     });
+
+    var now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById('addOfficerHireDate').value = now.toISOString().slice(0, 16).split('T')[0];
 }
 
 function addPrecinctSelectionChanged() {

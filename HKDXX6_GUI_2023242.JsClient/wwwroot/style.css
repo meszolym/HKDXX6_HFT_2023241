@@ -376,6 +376,18 @@ textarea {
 }
 
 h1 {
+    margin-bottom: 0px;
+}
+
+#caseContentDiv h1 {
+    margin-bottom: -25px;
+}
+
+#precinctContentDiv h1 {
+    margin-bottom: -25px;
+}
+
+#officerContentDiv h1 {
     margin-bottom: -25px;
 }
 

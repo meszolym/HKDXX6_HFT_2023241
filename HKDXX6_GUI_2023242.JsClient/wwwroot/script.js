@@ -6,6 +6,40 @@ let precinctIdForUpdate = -1;
 let officerIdForUpdate = -1;
 let caseIdForUpdate = -1;
 
+let connection;
+setupSignalR();
+
+function setupSignalR() {
+    connection = new signalR.HubConnectionBuilder()
+        .withUrl("http://localhost:33410/hub")
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+    connection.on('CaseCreated', (user, message) => { getCaseData(); })
+    connection.on('CaseUpdated', (user, message) => { getCaseData() });
+    connection.on('CaseDeleted', (user, message) => { getCaseData() });
+    connection.on('PrecinctCreated', (user, message) => { getPrecinctData(); });
+    connection.on('PrecinctUpdated', (user, message) => { getPrecinctData(); });
+    connection.on('PrecinctDeleted', (user, message) => { getPrecinctData(); });
+    connection.on('OfficerCreated', (user, message) => { getOfficerData(); });
+    connection.on('OfficerUpdated', (user, message) => { getOfficerData(); });
+    connection.on('OfficerDeleted', (user, message) => { getOfficerData(); });
+
+    connection.onclose(async () => {
+        await start();
+    });
+    start();
+}
+
+async function start() {
+    try {
+        await connection.start();
+    } catch (error) {
+        console.log(error);
+        setTimeout(start, 5000);
+    }
+}
+
 class Case {
     id;
     name;

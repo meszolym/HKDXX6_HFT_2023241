@@ -17,7 +17,7 @@ using System.Windows.Input;
 namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 {
 
-    public class CaseControlViewModel : ObservableRecipient, IUserControlViewModel
+    public class CaseControlViewModel : ObservableRecipient
     {
 
         public RestCollection<FullCaseModel, MinimalCaseModel> Cases { get; set; }
@@ -146,11 +146,6 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 return SelectedItem != null && SelectedItem.OfficerOnCaseID == null;
             });
 
-        }
-
-        public async Task RefreshLists()
-        {
-            await Cases.Refresh();
         }
     }
 }

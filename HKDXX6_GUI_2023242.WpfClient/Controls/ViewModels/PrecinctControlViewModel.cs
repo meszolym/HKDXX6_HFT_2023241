@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 {
-    public class PrecinctControlViewModel : ObservableRecipient, IUserControlViewModel
+    public class PrecinctControlViewModel : ObservableRecipient
     { 
         public RestCollection<PrecinctModel, PrecinctModel> Precincts { get; set; }
 
@@ -103,11 +103,6 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                     MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
-        }
-
-        public async Task RefreshLists()
-        {
-            await Precincts.Refresh();
         }
     }
 }

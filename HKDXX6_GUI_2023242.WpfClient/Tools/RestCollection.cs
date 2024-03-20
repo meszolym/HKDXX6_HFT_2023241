@@ -496,11 +496,6 @@ namespace HKDXX6_GUI_2023242.WpfClient.Tools
             }
 
         }
-
-        internal async Task Refresh()
-        {
-            await Init();
-        }
     }
     
 }

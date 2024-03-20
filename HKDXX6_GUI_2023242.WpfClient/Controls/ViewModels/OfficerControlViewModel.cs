@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 {
-    public class OfficerControlViewModel : ObservableRecipient, IUserControlViewModel
+    public class OfficerControlViewModel : ObservableRecipient
     {
         public RestCollection<FullOfficerModel, MinimalOfficerModel> Officers { get; set; }
 
@@ -103,11 +103,6 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 }
             });
 
-        }
-
-        public async Task RefreshLists()
-        {
-            await Officers.Refresh();
         }
     }
 }

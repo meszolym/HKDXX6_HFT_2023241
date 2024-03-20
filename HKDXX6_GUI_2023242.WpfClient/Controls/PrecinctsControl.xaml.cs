@@ -25,10 +25,5 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls
         {
             InitializeComponent();
         }
-
-        public void RefreshLists()
-        {
-            (this.DataContext as IUserControlViewModel).RefreshLists();
-        }
     }
 }

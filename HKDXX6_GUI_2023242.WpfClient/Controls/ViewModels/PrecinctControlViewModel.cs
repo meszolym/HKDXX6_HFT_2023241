@@ -79,7 +79,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
-                    await Precincts.Refresh();
+                    //await Precincts.Refresh();
                 }
             },
             () =>

@@ -328,6 +328,10 @@ a.pure-button-selected {
     display: none
 }
 
+#statisticsDiv {
+    display: none
+}
+
 th, td {
     padding-right: 5px;
     padding-left: 5px

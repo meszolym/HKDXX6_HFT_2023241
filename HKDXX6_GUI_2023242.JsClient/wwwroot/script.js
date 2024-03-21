@@ -1,6 +1,7 @@
 ﻿let precincts = [];
 let officers = [];
 let cases = [];
+let precinctCaseStats = [];
 
 let precinctIdForUpdate = -1;
 let officerIdForUpdate = -1;
@@ -93,6 +94,7 @@ function showMain() {
     document.getElementById('precinctDiv').style.display = 'none';
     document.getElementById('officerDiv').style.display = 'none';
     document.getElementById('caseDiv').style.display = 'none';
+    document.getElementById('statisticsDiv').style.display = 'none';
 }
 
 // #region Precinct
@@ -102,6 +104,7 @@ function showPrecincts() {
     resetPrecinctMenu();
     document.getElementById('officerDiv').style.display = 'none';
     document.getElementById('caseDiv').style.display = 'none';
+    document.getElementById('statisticsDiv').style.display = 'none';
 
     getPrecinctData();
 }
@@ -264,6 +267,7 @@ function showOfficers() {
     document.getElementById('officerDiv').style.display = 'block';
     resetOfficerMenu();
     document.getElementById('caseDiv').style.display = 'none';
+    document.getElementById('statisticsDiv').style.display = 'none';
     getOfficerData();
 }
 
@@ -607,6 +611,7 @@ function showCases() {
     document.getElementById('precinctDiv').style.display = 'none';
     document.getElementById('officerDiv').style.display = 'none';
     document.getElementById('caseDiv').style.display = 'block';
+    document.getElementById('statisticsDiv').style.display = 'none';
     resetCaseMenu();
     getCaseData();
 }
@@ -984,3 +989,101 @@ function resetCaseMenu() {
 }
 
 // #endregion
+
+// #region stats
+
+async function getPrecinctCaseStats() {
+    await fetch('http://localhost:33410/Statistics/casesPerPrecinctStatistics')
+        .then(x => x.json())
+        .then(y => {
+            precinctCaseStats = y
+            drawCharts();
+        });
+}
+
+function showStatistics() {
+    document.getElementById('welcomeDiv').style.display = 'none';
+    document.getElementById('precinctDiv').style.display = 'none';
+    document.getElementById('officerDiv').style.display = 'none';
+    document.getElementById('caseDiv').style.display = 'none';
+    document.getElementById('statisticsDiv').style.display = 'block';
+
+    getPrecinctCaseStats();
+}
+
+let openCasesPerPrecinctChart;
+let closedCasesPerPrecinctChart;
+
+function drawCharts() {
+
+    //precincts
+    let xValues = [];
+
+    //number
+    let yValuesClosed = [];
+    let yValuesOpen = [];
+
+    precinctCaseStats.forEach(s => {
+        xValues.push(`#${s.precinct.id}`);
+        yValuesClosed.push(s.closedCases);
+        yValuesOpen.push(s.openCases);
+    });
+
+    if (openCasesPerPrecinctChart != undefined) {
+        openCasesPerPrecinctChart.destroy();
+    }
+    if (closedCasesPerPrecinctChart != undefined) {
+        closedCasesPerPrecinctChart.destroy();
+    }
+    
+
+    let barColors = "lightblue"
+
+    openCasesPerPrecinctChart = new Chart("OpenCasesPerPrecinct", {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValuesOpen
+            }]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: "Open cases per precinct"
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {beginAtZero: true}
+                }]
+            }
+        }
+    });
+
+    closedCasesPerPrecinctChart = new Chart("ClosedCasesPerPrecinct", {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValuesClosed
+            }]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: "Closed cases per precinct"
+            },
+            scales: {
+                yAxes: [{
+                    ticks: { beginAtZero: true }
+                }]
+            }
+        }
+    });
+}
+
+//#endregion

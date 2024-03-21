@@ -19,6 +19,9 @@
             <li class="pure-menu-item">
                 <label class="pure-menu-link" onclick="showCases()">Cases</label>
             </li>
+            <li class="pure-menu-item">
+                <label class="pure-menu-link" onclick="showStatistics()">Statistics</label>
+            </li>
         </ul>
     </div>
 
@@ -194,11 +197,17 @@
         </div>
     </div>
 
+    <div id="statisticsDiv">
+        <canvas id="OpenCasesPerPrecinct" style="width:100%;max-width:600px"></canvas>
+        <canvas id="ClosedCasesPerPrecinct" style="width:100%;max-width:600px"></canvas>
+    </div>
+
     <footer class="footer">
         HKDXX6 2024
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="script.js"></script>
 
 </body>

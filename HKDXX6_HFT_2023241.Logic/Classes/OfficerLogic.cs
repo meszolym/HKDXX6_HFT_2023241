@@ -176,6 +176,11 @@ namespace HKDXX6_HFT_2023241.Logic
             {
                 throw new ArgumentException("The officer that should be deleted does not exist.");
             }
+            if (o.Cases.Count() > 0)
+            {
+                throw new ArgumentException("Cannot delete officer if there are any cases to which they are attached to.");
+            }
+
             RedirectOfficersUnderCommand(o);
             OfficerRepo.Delete(ID);
         }

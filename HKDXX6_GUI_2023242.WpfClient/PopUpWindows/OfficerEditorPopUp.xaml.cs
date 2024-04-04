@@ -1,4 +1,5 @@
-﻿using HKDXX6_GUI_2023242.WpfClient.APIModels;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows.ViewModels;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
 using System;
@@ -25,64 +26,12 @@ namespace HKDXX6_GUI_2023242.WpfClient.PopUpWindows
 
         OfficerEditorPopUpViewModel viewModel;
 
-        public OfficerEditorPopUp(FullOfficerModel o)
+        public OfficerEditorPopUp(FullOfficerModel o, IMessenger messenger)
         {
             InitializeComponent();
             viewModel = new OfficerEditorPopUpViewModel();
             this.DataContext = viewModel;
-            viewModel.Init(o);
-        }
-
-        private void cb_Precinct_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (cb_DCO.SelectedItem == null || cb_Precinct.SelectedItem == null)
-            {
-                e.Handled = true;
-                return;
-            }
-            if ((cb_DCO.SelectedItem as FullOfficerModel).PrecinctID != (cb_Precinct.SelectedItem as PrecinctModel).ID)
-            {
-                cb_DCO.SelectedItem = null;
-            }
-            
-            e.Handled = true;
-        }
-
-        private void cb_DCO_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (cb_DCO.SelectedItem == null || cb_Precinct.SelectedItem == null)
-            {
-                e.Handled = true;
-                return;
-            }
-            if ((cb_DCO.SelectedItem as FullOfficerModel).PrecinctID != (cb_Precinct.SelectedItem as PrecinctModel).ID)
-            {
-                cb_Precinct.SelectedItem = null;
-            }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (var item in grid.Children)
-            {
-                if (item is TextBox tb)
-                {
-                    tb.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-                    continue;
-                }
-                if (item is DatePicker dp)
-                {
-                    dp.GetBindingExpression(DatePicker.TextProperty).UpdateSource();
-                    continue;
-                }
-                if (item is ComboBox cmb)
-                {
-                    cmb.GetBindingExpression(ComboBox.SelectedItemProperty).UpdateSource();
-                    continue;
-                }
-            }
-
-            this.DialogResult = true;
+            viewModel.Init(o, () => { this.DialogResult = true; }, messenger); 
         }
     }
 }

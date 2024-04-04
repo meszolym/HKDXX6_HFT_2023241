@@ -1,4 +1,5 @@
-﻿using HKDXX6_GUI_2023242.WpfClient.APIModels;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
 using HKDXX6_GUI_2023242.WpfClient.Services.Interfaces;
 using System;
@@ -12,15 +13,15 @@ namespace HKDXX6_GUI_2023242.WpfClient.Services
 {
     public class PrecinctEditorViaWindow : IPrecinctEditor
     {
-        public bool Add(PrecinctModel precinctModel)
+        public bool Add(PrecinctModel precinctModel, IMessenger messenger)
         {
-            var window = new PrecinctEditorPopUp(precinctModel, true);
+            var window = new PrecinctEditorPopUp(precinctModel, messenger, true);
             return window.ShowDialog().Value;
         }
 
-        public bool Edit(PrecinctModel precinctModel)
+        public bool Edit(PrecinctModel precinctModel, IMessenger messenger)
         {
-            var window = new PrecinctEditorPopUp(precinctModel);
+            var window = new PrecinctEditorPopUp(precinctModel, messenger);
             return window.ShowDialog().Value;
         }
     }

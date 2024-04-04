@@ -1,4 +1,5 @@
-﻿using HKDXX6_GUI_2023242.WpfClient.APIModels;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Services.Interfaces
 {
     public interface IOfficerEditor
     {
-        public bool Add(FullOfficerModel officerModel);
-        public bool Edit(FullOfficerModel officerModel);
+        public bool Add(FullOfficerModel officerModel, IMessenger messenger);
+        public bool Edit(FullOfficerModel officerModel, IMessenger messenger);
     }
 }

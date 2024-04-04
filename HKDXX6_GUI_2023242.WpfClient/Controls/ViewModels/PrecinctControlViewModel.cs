@@ -8,6 +8,7 @@ using HKDXX6_GUI_2023242.WpfClient.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -39,11 +40,18 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
         public ICommand DeleteCommand { get; set; }
         public ICommand AddCommand { get; set; }
 
+        private PrecinctModel ItemAddUpdate;
+
         IPrecinctEditor editor;
 
         public PrecinctControlViewModel()
         {
             Precincts = new RestCollection<PrecinctModel, PrecinctModel>("http://localhost:33410/", "Precinct", "hub");
+
+            Messenger.Register<PrecinctControlViewModel, PrecinctModel, string>(this, "PrecinctUpdateOrAddDone", (rec, msg) =>
+            {
+                ItemAddUpdate = msg;
+            });
 
             if (editor == null)
             {
@@ -52,12 +60,14 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 
             EditCommand = new RelayCommand(async () =>
             {
-                if (!editor.Edit(SelectedItem))
+                if (!editor.Edit(SelectedItem, Messenger))
                 {
                     return;
                 }
                 try
                 {
+                    SelectedItem.ID = ItemAddUpdate.ID;
+                    SelectedItem.Address = ItemAddUpdate.Address;
                     await Precincts.Update(SelectedItem);
                 }
                 catch (Exception ex)
@@ -90,13 +100,13 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
             AddCommand = new RelayCommand(async () =>
             {
                 var p = new PrecinctModel();
-                if (!editor.Add(p))
+                if (!editor.Add(p, Messenger))
                 {
                     return;
                 }
                 try
                 {
-                    await Precincts.Add(p);
+                    await Precincts.Add(ItemAddUpdate);
                 }
                 catch (Exception ex)
                 {

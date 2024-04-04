@@ -40,9 +40,16 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 
         IOfficerEditor editor;
 
+        private FullOfficerModel ItemAddUpdate;
+
         public OfficerControlViewModel()
         {
             Officers = new RestCollection<FullOfficerModel, MinimalOfficerModel>("http://localhost:33410/", "Officer", "hub");
+
+            Messenger.Register<OfficerControlViewModel, FullOfficerModel, string>(this, "OfficerUpdateOrAddDone", (rec, msg) =>
+            {
+                ItemAddUpdate = msg;
+            });
 
             if (editor == null)
             {
@@ -51,12 +58,19 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 
             EditCommand = new RelayCommand(async () =>
             {
-                if (!editor.Edit(SelectedItem))
+                if (!editor.Edit(SelectedItem,Messenger))
                 {
                     return;
                 }
                 try
                 {
+                    SelectedItem.BadgeNo = ItemAddUpdate.BadgeNo;
+                    SelectedItem.DirectCO_BadgeNo = ItemAddUpdate.DirectCO_BadgeNo;
+                    SelectedItem.FirstName = ItemAddUpdate.FirstName;
+                    SelectedItem.HireDate = ItemAddUpdate.HireDate;
+                    SelectedItem.LastName = ItemAddUpdate.LastName;
+                    SelectedItem.PrecinctID = ItemAddUpdate.PrecinctID;
+                    SelectedItem.Rank = ItemAddUpdate.Rank;
                     await Officers.Update(SelectedItem);
                 }
                 catch (Exception ex)
@@ -89,13 +103,13 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
             {
                 var o = new FullOfficerModel();
                 o.HireDate = DateTime.Today;
-                if (!editor.Add(o))
+                if (!editor.Add(o, Messenger))
                 {
                     return;
                 }
                 try
                 {
-                    await Officers.Add(o);
+                    await Officers.Add(ItemAddUpdate);
                 }
                 catch (Exception ex)
                 {

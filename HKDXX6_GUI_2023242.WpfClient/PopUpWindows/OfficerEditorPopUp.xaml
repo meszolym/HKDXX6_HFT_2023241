@@ -26,17 +26,17 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Officer" FontSize="16" FontWeight="Bold"/>
         <Label Grid.Row="1" Content="First name" Background="LightBlue"/>
-        <TextBox x:Name="tb_fName" Grid.Row="2" Margin="5" Text="{Binding Officer.FirstName, UpdateSourceTrigger=Explicit}"/>
+        <TextBox x:Name="tb_fName" Grid.Row="2" Margin="5" Text="{Binding FirstName}"/>
         <Label Grid.Row="3" Content="Last name" Background="LightBlue"/>
-        <TextBox x:Name="tb_lName" Grid.Row="4" Margin="5" Text="{Binding Officer.LastName, UpdateSourceTrigger=Explicit}"/>
+        <TextBox x:Name="tb_lName" Grid.Row="4" Margin="5" Text="{Binding LastName}"/>
         <Label Grid.Row="5" Content="Hire date" Background="LightBlue"/>
-        <DatePicker Grid.Row="6" Margin="5" Text="{Binding Officer.HireDate, UpdateSourceTrigger=Explicit}"/>
+        <DatePicker Grid.Row="6" Margin="5" Text="{Binding HireDate}"/>
         <Label Grid.Row="7" Content="Precinct" Background="LightBlue"/>
-        <ComboBox x:Name="cb_Precinct" Grid.Row="8" Margin="5" ItemsSource="{Binding Precincts, Mode=OneWay}" SelectedItem="{Binding Officer.Precinct, UpdateSourceTrigger=Explicit}" SelectionChanged="cb_Precinct_SelectionChanged"/>
+        <ComboBox x:Name="cb_Precinct" Grid.Row="8" Margin="5" ItemsSource="{Binding Precincts, Mode=OneWay}" SelectedItem="{Binding Precinct}"/>
         <Label Grid.Row="9" Content="Direct CO" Background="LightBlue"/>
-        <ComboBox x:Name="cb_DCO" Grid.Row="10" Margin="5" ItemsSource="{Binding Officers, Mode=OneWay}" SelectedItem="{Binding Officer.DirectCO, UpdateSourceTrigger=Explicit}" SelectionChanged="cb_DCO_SelectionChanged"/>
+        <ComboBox x:Name="cb_DCO" Grid.Row="10" Margin="5" ItemsSource="{Binding Officers, Mode=OneWay}" SelectedItem="{Binding DirectCO}"/>
         <Label Grid.Row="11" Content="Rank" Background="LightBlue"/>
-        <ComboBox x:Name="cb_Rank" Grid.Row="12" Margin="5" ItemsSource="{Binding Ranks, Mode=OneWay}" SelectedItem="{Binding Officer.Rank, UpdateSourceTrigger=Explicit}"/>
-        <Button Grid.Row="14" Content="Save" Padding="5" Margin="5" Click="Button_Click"/>
+        <ComboBox x:Name="cb_Rank" Grid.Row="12" Margin="5" ItemsSource="{Binding Ranks, Mode=OneWay}" SelectedItem="{Binding Rank}"/>
+        <Button Grid.Row="14" Content="Save" Padding="5" Margin="5" Command="{Binding CloseCommand}"/>
     </Grid>
 </Window>

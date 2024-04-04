@@ -1,4 +1,5 @@
-﻿using HKDXX6_GUI_2023242.WpfClient.APIModels;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Services.Interfaces
 {
     public interface IPrecinctEditor
     {
-        public bool Add(PrecinctModel precinctModel);
-        public bool Edit(PrecinctModel precinctModel);
+        public bool Add(PrecinctModel precinctModel, IMessenger messenger);
+        public bool Edit(PrecinctModel precinctModel, IMessenger messenger);
     }
 }

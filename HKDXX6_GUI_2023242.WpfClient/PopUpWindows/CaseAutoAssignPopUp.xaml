@@ -18,9 +18,9 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Case auto assign" FontSize="16" FontWeight="Bold"/>
         <Label Grid.Row="1" Content="Case" Background="LightBlue"/>
-        <TextBox Grid.Row="2" IsEnabled="False" Text="{Binding CaseName, Mode=OneWay}" Margin="5"/>
+        <TextBox Grid.Row="2" IsEnabled="False" Text="{Binding Name, Mode=OneWay}" Margin="5"/>
         <Label Grid.Row="3" Content="Precinct" Background="LightBlue"/>
         <ComboBox Grid.Row="4" ItemsSource="{Binding Precincts}" SelectedItem="{Binding SelectedItem}" Margin="5"/>
-        <Button Grid.Row="6" Content="Save" Padding="5" Margin="5" Click="Button_Click"/>
+        <Button Grid.Row="6" Content="Save" Padding="5" Margin="5" Command="{Binding CloseCommand}"/>
     </Grid>
 </Window>

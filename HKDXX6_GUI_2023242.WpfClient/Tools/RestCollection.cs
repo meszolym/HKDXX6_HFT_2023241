@@ -381,8 +381,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Tools
                 this.notify = new NotifyService(baseurl + hub);
                 this.notify.AddHandler<TItems>(endpoint + "Created", (TItems item) =>
                 {
-                    items.Add(item);
-                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                    Init();
                 });
                 this.notify.AddHandler<TItems>(endpoint + "Deleted", (TItems item) =>
                 {

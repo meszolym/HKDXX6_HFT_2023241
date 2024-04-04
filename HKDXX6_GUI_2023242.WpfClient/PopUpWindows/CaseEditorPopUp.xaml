@@ -23,15 +23,15 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Case" FontSize="16" FontWeight="Bold"/>
         <Label Grid.Row="1" Content="Name" Background="LightBlue"/>
-        <TextBox Grid.Row="2" Text="{Binding Case.Name, UpdateSourceTrigger=Explicit}" Margin="5"/>
+        <TextBox Grid.Row="2" Text="{Binding Name}" IsEnabled="{Binding Edit, Mode=OneWay}" Margin="5"/>
         <Label Grid.Row="3" Content="Opened at" Background="LightBlue"/>
-        <xctk:DateTimePicker Grid.Row="4" Margin="5" Value="{Binding Case.OpenedAt, UpdateSourceTrigger=Explicit}"/>
+        <xctk:DateTimePicker Grid.Row="4" Margin="5" Value="{Binding OpenedAt}" IsEnabled="{Binding Edit, Mode=OneWay}"/>
         <Label Grid.Row="5" Content="Officer" Background="LightBlue"/>
-        <ComboBox Grid.Row="6" Margin="5" ItemsSource="{Binding Officers}" SelectedItem="{Binding Case.OfficerOnCase, UpdateSourceTrigger=Explicit}"/>
+        <ComboBox Grid.Row="6" Margin="5" ItemsSource="{Binding Officers}" SelectedItem="{Binding OfficerOnCase}" IsEnabled="{Binding Edit, Mode=OneWay}"/>
         <Label Grid.Row="7" Content="Closed at" Background="LightBlue"/>
-        <xctk:DateTimePicker Grid.Row="8" Margin="5" Value="{Binding Case.ClosedAt, UpdateSourceTrigger=Explicit}"/>
+        <xctk:DateTimePicker Grid.Row="8" Margin="5" Value="{Binding ClosedAt}" IsEnabled="{Binding Edit, Mode=OneWay}"/>
         <Label Grid.Row="9" Content="Description" Background="LightBlue"/>
-        <TextBox Grid.Row="10" Text="{Binding Case.Description, UpdateSourceTrigger=Explicit}" Margin="5" VerticalContentAlignment="Stretch" AcceptsReturn="True" TextWrapping="Wrap"/>
-        <Button Grid.Row="11" Content="Save" Padding="5" Margin="5" Click="Button_Click"/>
+        <TextBox Grid.Row="10" Text="{Binding Description}" IsEnabled="{Binding Edit, Mode=OneWay}" Margin="5" VerticalContentAlignment="Stretch" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <Button Grid.Row="11" Content="Save" Padding="5" Margin="5" Command="{Binding CloseCommand}" IsEnabled="{Binding Edit, Mode=OneWay}"/>
     </Grid>
 </Window>

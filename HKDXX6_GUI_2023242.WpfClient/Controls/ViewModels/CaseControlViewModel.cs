@@ -47,6 +47,9 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 
         ICaseEditor editor;
 
+        private FullCaseModel ItemAddUpdate;
+        private AutoAssignCaseModel ItemAutoAssign;
+
         public CaseControlViewModel()
         {
 
@@ -56,17 +59,34 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
             {
                 editor = Ioc.Default.GetService<ICaseEditor>();
             }
-            
 
+            Messenger.Register<CaseControlViewModel, FullCaseModel, string>(this, "CaseUpdateOrAddDone", (rec, msg) =>
+            {
+                ItemAddUpdate = msg;
+            });
+
+            Messenger.Register<CaseControlViewModel, AutoAssignCaseModel, string>(this, "CaseAutoAssignDone", (rec, msg) =>
+            {
+                ItemAutoAssign = msg;
+            });
 
             EditCommand = new RelayCommand(async () =>
             {                
-                if (!editor.Edit(SelectedItem))
+                if (!editor.Edit(SelectedItem, Messenger))
                 {
                     return;
                 }
                 try
                 {
+                    SelectedItem.ClosedAt = ItemAddUpdate.ClosedAt;
+                    SelectedItem.Description = ItemAddUpdate.Description;
+                    SelectedItem.ID = ItemAddUpdate.ID;
+                    SelectedItem.Name = ItemAddUpdate.Name;
+                    SelectedItem.OfficerOnCaseID = ItemAddUpdate.OfficerOnCaseID;
+                    SelectedItem.OpenedAt = ItemAddUpdate.OpenedAt;
+
+                    SelectedItem = ItemAddUpdate;
+
                     await Cases.Update(SelectedItem);
                 }
                 catch (Exception ex)
@@ -100,13 +120,13 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 var c = new FullCaseModel();
                 c.OpenedAt = DateTime.Now;
                 
-                if (!editor.Add(c))
+                if (!editor.Add(c, Messenger))
                 {
                     return;
                 }
                 try
                 {
-                    await Cases.Add(c);
+                    await Cases.Add(ItemAddUpdate);
                 }
                 catch (Exception ex)
                 {
@@ -116,8 +136,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 
             DetailsCommand = new RelayCommand(() =>
             {
-                var window = new CaseEditorPopUp(SelectedItem, false);
-                window.ShowDialog();
+                editor.ShowDetails(SelectedItem);
             },
             () =>
             {
@@ -128,12 +147,19 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
             {
                 try
                 {
-                    var assignModel = editor.AutoAssign(SelectedItem);
-                    if (assignModel == null)
+                    
+                    if (!editor.AutoAssign(SelectedItem, Messenger))
                     {
                         return;
                     }
-                    new RestService("http://localhost:33410/", "Case").Post(assignModel, "/Case/AutoAssign");
+                    try
+                    {
+                        new RestService("http://localhost:33410/", "Case").Post(ItemAutoAssign, "/Case/AutoAssign");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
                 catch (Exception ex)
                 {

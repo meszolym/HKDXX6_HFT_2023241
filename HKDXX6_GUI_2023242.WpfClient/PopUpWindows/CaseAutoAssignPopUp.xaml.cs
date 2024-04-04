@@ -1,4 +1,5 @@
-﻿using HKDXX6_GUI_2023242.WpfClient.APIModels;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -21,17 +22,12 @@ namespace HKDXX6_GUI_2023242.WpfClient.PopUpWindows
     /// </summary>
     public partial class CaseAutoAssignPopUp : Window
     {
-        public CaseAutoAssignPopUp(string CaseName, AutoAssignCaseModel assignerModel)
+        public CaseAutoAssignPopUp(FullCaseModel caseModel, IMessenger messenger)
         {
             InitializeComponent();
             var viewModel = new CaseAutoAssignPopUpViewModel();
             this.DataContext = viewModel;
-            viewModel.Init(CaseName, assignerModel);
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = true;
+            viewModel.Init(caseModel, () => { this.DialogResult = true; }, messenger);
         }
     }
 }

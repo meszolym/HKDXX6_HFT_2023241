@@ -1,4 +1,5 @@
-﻿using HKDXX6_GUI_2023242.WpfClient.APIModels;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows;
 using HKDXX6_GUI_2023242.WpfClient.PopUpWindows.ViewModels;
 using HKDXX6_GUI_2023242.WpfClient.Services.Interfaces;
@@ -13,30 +14,28 @@ namespace HKDXX6_GUI_2023242.WpfClient.Services
 {
     public class CaseEditorViaWindow : ICaseEditor
     {
-        public bool Add(FullCaseModel caseModel)
+        public bool Add(FullCaseModel caseModel, IMessenger messenger)
         {
-            var window = new CaseEditorPopUp(caseModel);
+            var window = new CaseEditorPopUp(caseModel, messenger);
             return window.ShowDialog().Value;
         }
 
-        public AutoAssignCaseModel? AutoAssign(FullCaseModel caseModel)
+        public bool AutoAssign(FullCaseModel caseModel, IMessenger messenger)
         {
-            var AssignModel = new AutoAssignCaseModel();
-            AssignModel.CaseID = caseModel.ID;
-            PrecinctModel precinct = new PrecinctModel();
-            var window = new CaseAutoAssignPopUp(caseModel.Name, AssignModel);
-            if (!window.ShowDialog().Value)
-            {
-                return null;
-            }
-
-            return AssignModel;
+            var window = new CaseAutoAssignPopUp(caseModel, messenger);
+            return window.ShowDialog().Value;
         }
 
-        public bool Edit(FullCaseModel caseModel)
+        public bool Edit(FullCaseModel caseModel, IMessenger messenger)
         {
-            var window = new CaseEditorPopUp(caseModel);
+            var window = new CaseEditorPopUp(caseModel, messenger);
             return window.ShowDialog().Value;
+        }
+
+        public void ShowDetails(FullCaseModel caseModel)
+        {
+            var window = new CaseEditorPopUp(caseModel, null, false);
+            window.ShowDialog();
         }
     }
 }

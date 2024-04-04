@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using HKDXX6_GUI_2023242.WpfClient.APIModels;
 using HKDXX6_GUI_2023242.WpfClient.Tools;
 using System;
@@ -17,7 +18,8 @@ namespace HKDXX6_GUI_2023242.WpfClient.PopUpWindows.ViewModels
     {
         public List<PrecinctModel> Precincts { get; private set; }
 
-        public string CaseName { get; private set; }
+        private int caseID;
+        public string Name { get; private set; }
 
         PrecinctModel selectedItem;
 
@@ -29,23 +31,30 @@ namespace HKDXX6_GUI_2023242.WpfClient.PopUpWindows.ViewModels
             set
             {
                 SetProperty(ref selectedItem, value);
-                assignerModel.PrecinctID = selectedItem.ID;
             }
         }
 
-        AutoAssignCaseModel assignerModel;
-
-        ICommand SaveCommand { get; set; }
+        public ICommand CloseCommand { get; set; }
 
         public CaseAutoAssignPopUpViewModel()
         {
             Precincts = new RestService("http://localhost:33410/", "Precinct").Get<PrecinctModel>("Precinct");
         }
 
-        public void Init(string CaseName, AutoAssignCaseModel model)
+        public void Init(FullCaseModel caseModel, Action CloseAction, IMessenger messenger)
         {
-            this.CaseName = CaseName;
-            assignerModel = model;
+            Name = caseModel.Name;
+            caseID = caseModel.ID;
+
+            CloseCommand = new RelayCommand( () =>
+            {
+                messenger.Send(new AutoAssignCaseModel()
+                {
+                    CaseID = caseID,
+                    PrecinctID = (SelectedItem.ID)
+                }, "CaseAutoAssignDone");
+                CloseAction();
+            });
         }
 
 

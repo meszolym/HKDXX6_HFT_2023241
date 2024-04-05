@@ -58,6 +58,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 
             EditCommand = new RelayCommand(async () =>
             {
+                FullOfficerModel old = SelectedItem;
                 if (!editor.Edit(SelectedItem,Messenger))
                 {
                     return;
@@ -75,6 +76,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 }
                 catch (Exception ex)
                 {
+                    SelectedItem = old;
                     MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             },

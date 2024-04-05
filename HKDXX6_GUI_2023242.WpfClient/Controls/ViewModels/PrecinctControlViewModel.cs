@@ -60,18 +60,21 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 
             EditCommand = new RelayCommand(async () =>
             {
+                PrecinctModel old = SelectedItem;
                 if (!editor.Edit(SelectedItem, Messenger))
                 {
                     return;
                 }
                 try
                 {
+
                     SelectedItem.ID = ItemAddUpdate.ID;
                     SelectedItem.Address = ItemAddUpdate.Address;
                     await Precincts.Update(SelectedItem);
                 }
                 catch (Exception ex)
                 {
+                    SelectedItem = old;
                     MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             },

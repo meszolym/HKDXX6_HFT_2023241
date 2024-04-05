@@ -85,7 +85,6 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                     SelectedItem.OfficerOnCaseID = ItemAddUpdate.OfficerOnCaseID;
                     SelectedItem.OpenedAt = ItemAddUpdate.OpenedAt;
 
-                    SelectedItem = ItemAddUpdate;
 
                     await Cases.Update(SelectedItem);
                 }

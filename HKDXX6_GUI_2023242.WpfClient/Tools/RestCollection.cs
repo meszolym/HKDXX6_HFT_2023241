@@ -407,7 +407,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Tools
             Init();
         }
 
-        private async Task Init()
+        public async Task Init()
         {
             items = await rest.GetAsync<TItems>(endpoint);
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));

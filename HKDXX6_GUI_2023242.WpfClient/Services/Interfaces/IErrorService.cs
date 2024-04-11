@@ -9,6 +9,6 @@ namespace HKDXX6_GUI_2023242.WpfClient.Services.Interfaces
 {
     public interface IErrorService
     {
-        public void ShowError(string message, string caption, MessageBoxButton button, MessageBoxImage icon);
+        public void ShowError(string message, string caption);
     }
 }

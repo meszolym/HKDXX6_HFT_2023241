@@ -8,9 +8,11 @@ using System.Windows;
 
 namespace HKDXX6_GUI_2023242.WpfClient.Services
 {
-    public class ErrorServiceMessageBox : IErrorService
+    public class ErrorViaMessageBox : IErrorService
     {
-        public void ShowError(string message, string caption, MessageBoxButton button, MessageBoxImage icon)
+        public const MessageBoxButton button = MessageBoxButton.OK;
+        public const MessageBoxImage icon = MessageBoxImage.Error;
+        public void ShowError(string message, string caption)
         {
             MessageBox.Show(message, caption, button, icon);
         }

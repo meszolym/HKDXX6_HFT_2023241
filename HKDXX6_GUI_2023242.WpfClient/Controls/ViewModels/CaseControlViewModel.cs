@@ -97,7 +97,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 catch (Exception ex)
                 {
                     await Cases.Init();
-                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!");
                     
                 }
             },
@@ -114,7 +114,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!");
                 }
             },
             () =>
@@ -137,7 +137,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!");
                 }
             });
 
@@ -165,12 +165,12 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                        errorService.ShowError(ex.Message, "Error!");
                     }
                 }
                 catch (Exception ex)
                 {
-                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!");
                 }
 
             },

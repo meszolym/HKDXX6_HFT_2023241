@@ -46,6 +46,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
         public ICommand AutoAssignCommand { get; set; }
 
         ICaseEditor editor;
+        IErrorService errorService;
 
         private FullCaseModel ItemAddUpdate;
         private AutoAssignCaseModel ItemAutoAssign;
@@ -58,6 +59,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
             if (editor == null)
             {
                 editor = Ioc.Default.GetService<ICaseEditor>();
+            }
+
+            if (errorService == null)
+            {
+                errorService = Ioc.Default.GetService<IErrorService>();
             }
 
             Messenger.Register<CaseControlViewModel, FullCaseModel, string>(this, "CaseUpdateOrAddDone", (rec, msg) =>
@@ -91,7 +97,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 catch (Exception ex)
                 {
                     await Cases.Init();
-                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                     
                 }
             },
@@ -108,7 +114,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             },
             () =>
@@ -131,7 +137,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
 
@@ -159,12 +165,12 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                        errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
             },

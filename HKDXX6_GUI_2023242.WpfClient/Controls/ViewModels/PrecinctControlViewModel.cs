@@ -44,6 +44,8 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
 
         IPrecinctEditor editor;
 
+        IErrorService errorService;
+
         public PrecinctControlViewModel()
         {
             Precincts = new RestCollection<PrecinctModel, PrecinctModel>("http://localhost:33410/", "Precinct", "hub");
@@ -56,6 +58,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
             if (editor == null)
             {
                 editor = Ioc.Default.GetService<IPrecinctEditor>();
+            }
+
+            if (errorService == null)
+            {
+                errorService = Ioc.Default.GetService<IErrorService>();
             }
 
             EditCommand = new RelayCommand(async () =>
@@ -74,7 +81,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 catch (Exception ex)
                 {
                     await Precincts.Init();
-                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                     
                 }
             },
@@ -91,7 +98,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                     //await Precincts.Refresh();
                 }
             },
@@ -113,7 +120,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
         }

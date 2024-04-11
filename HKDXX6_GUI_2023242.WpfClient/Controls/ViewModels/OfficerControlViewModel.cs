@@ -39,6 +39,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
         public ICommand AddCommand { get; set; }
 
         IOfficerEditor editor;
+        IErrorService errorService;
 
         private FullOfficerModel ItemAddUpdate;
 
@@ -54,6 +55,11 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
             if (editor == null)
             {
                 editor = Ioc.Default.GetService<IOfficerEditor>();
+            }
+
+            if (errorService == null)
+            {
+                errorService = Ioc.Default.GetService<IErrorService>();
             }
 
             EditCommand = new RelayCommand(async () =>
@@ -76,7 +82,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 catch (Exception ex)
                 {
                     await Officers.Init();
-                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                     
                 }
             },
@@ -93,7 +99,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             },
             () =>
@@ -115,7 +121,7 @@ namespace HKDXX6_GUI_2023242.WpfClient.Controls.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    errorService.ShowError(ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
 
